@@ -79,7 +79,7 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: 40),
             // Optional Loading Text or Indicator
             Text(
-              'INICIANDO SISTEMAaaaa...',
+              'INICIANDO SISTEMAaa..',
               style: GoogleFonts.orbitron(
                 color: const Color(0xFF7C3AED), // Acento técnico (Morado) for visibility
                 fontSize: 18,
