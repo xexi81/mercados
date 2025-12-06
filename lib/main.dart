@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'theme/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,18 +18,17 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: const ColorScheme(
           brightness: Brightness.dark,
-          primary: Color(0xFF1E3A8A), // Azul industrial
-          onPrimary: Colors.white,
-          secondary: Color(0xFF16A34A), // Verde éxito
-          onSecondary: Colors.white,
-          error: Color(0xFFDC2626), // Rojo
-          onError: Colors.white,
-          surface: Color(0xFF0F172A), // Fondo oscuro
-          onSurface: Colors.white,
+          primary: AppColors.primary, // Azul industrial
+          onPrimary: AppColors.onPrimary,
+          secondary: AppColors.secondary, // Verde éxito
+          onSecondary: AppColors.onSecondary,
+          error: AppColors.error, // Rojo
+          onError: AppColors.onError,
+          surface: AppColors.surface, // Fondo oscuro
+          onSurface: AppColors.onSurface,
         ),
-        scaffoldBackgroundColor: const Color(0xFF0F172A), // Fondo oscuro
-        cardColor: const Color(0xFFF1F5F9), // Fondo de tarjetas (Gris claro)
-
+        scaffoldBackgroundColor: AppColors.surface, // Fondo oscuro
+        cardColor: AppColors.card, // Fondo de tarjetas (Gris claro)
         // Custom colors can be accessed via extensions or just used directly in widgets,
         // but defining the main ones here helps.
         // Advertencias: #EA580C (Orange)
@@ -79,11 +79,7 @@ class SplashScreen extends StatelessWidget {
             // Optional Loading Text or Indicator
             Text(
               'INICIANDO SISTEMAaa..',
-              style: GoogleFonts.orbitron(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 18,
-                letterSpacing: 2.0,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: 20),
             CircularProgressIndicator(
