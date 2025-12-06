@@ -28,12 +28,11 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFF0F172A), // Fondo oscuro
         cardColor: const Color(0xFFF1F5F9), // Fondo de tarjetas (Gris claro)
-        
+
         // Custom colors can be accessed via extensions or just used directly in widgets,
         // but defining the main ones here helps.
         // Advertencias: #EA580C (Orange)
         // Acentos técnicos: #7C3AED (Purple)
-
         textTheme: TextTheme(
           displayLarge: GoogleFonts.orbitron(),
           displayMedium: GoogleFonts.orbitron(),
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
           titleLarge: GoogleFonts.orbitron(),
           titleMedium: GoogleFonts.orbitron(),
           titleSmall: GoogleFonts.orbitron(),
-          
+
           bodyLarge: GoogleFonts.inter(),
           bodyMedium: GoogleFonts.inter(),
           bodySmall: GoogleFonts.inter(),
@@ -64,7 +63,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -81,14 +80,14 @@ class SplashScreen extends StatelessWidget {
             Text(
               'INICIANDO SISTEMAaa..',
               style: GoogleFonts.orbitron(
-                color: const Color(0xFF7C3AED), // Acento técnico (Morado) for visibility
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 18,
                 letterSpacing: 2.0,
               ),
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(
-              color: Color(0xFF16A34A), // Verde éxito
+            SizedBox(height: 20),
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ],
         ),
