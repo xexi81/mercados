@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_colors.dart';
+import 'data/frases_iniciales.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,13 +53,14 @@ class MyApp extends StatelessWidget {
           labelSmall: GoogleFonts.inter(),
         ),
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+  SplashScreen({super.key});
+  var frase = FrasesIniciales().generarFraseRandom();
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +80,9 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: 40),
             // Optional Loading Text or Indicator
             Text(
-              'INICIANDO SISTEMAaa..',
-              style: Theme.of(context).textTheme.bodyMedium,
+              frase,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             SizedBox(height: 20),
             CircularProgressIndicator(
