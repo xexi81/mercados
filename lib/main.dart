@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_colors.dart';
-import 'data/frases_iniciales.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,43 +54,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: SplashScreen(),
-    );
-  }
-}
-
-class SplashScreen extends StatelessWidget {
-  SplashScreen({super.key});
-  var frase = FrasesIniciales().generarFraseRandom();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo
-            Image.asset(
-              'assets/images/ejemplo2.png',
-              width: 200,
-              height: 200,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 40),
-            // Optional Loading Text or Indicator
-            Text(
-              frase,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
