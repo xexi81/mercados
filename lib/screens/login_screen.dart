@@ -23,8 +23,8 @@ class LoginScreen extends StatelessWidget {
                 Center(
                   child: Image.asset(
                     'assets/images/ejemplo2.png',
-                    width: 144,
-                    height: 144,
+                    width: 204,
+                    height: 204,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                 // Título
                 Text(
                   'SUPPLY CHAIN',
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     letterSpacing: 4,
                     fontWeight: FontWeight.w700,
                   ),
@@ -42,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 Text(
                   'TYCOON',
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     letterSpacing: 8,
                     fontWeight: FontWeight.w700,
                   ),
@@ -172,16 +172,22 @@ class _AuthButton extends StatelessWidget {
           elevation: 0,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon,
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: foregroundColor,
-              ),
+            Expanded(flex: 35, child: SizedBox.shrink()),
+            Expanded(flex: 65,
+            child: Row(
+              children: [
+                
+                SizedBox(width: 48, height: 48, child: Center(child: icon)),
+                const SizedBox(width: 12),
+                Text(
+                  text,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: foregroundColor,
+                  ),
+                ),
+              ]),
             ),
           ],
         ),
