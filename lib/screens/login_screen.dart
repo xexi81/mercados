@@ -23,8 +23,8 @@ class LoginScreen extends StatelessWidget {
                 Center(
                   child: Image.asset(
                     'assets/images/ejemplo2.png',
-                    width: 204,
-                    height: 204,
+                    width: 228,
+                    height: 228,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -158,7 +158,6 @@ class _AuthButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: 56,
       child: ElevatedButton(
         onPressed: () {
           // TODO: integrar con tu lógica de autenticación
@@ -173,11 +172,6 @@ class _AuthButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Expanded(flex: 35, child: SizedBox.shrink()),
-            Expanded(flex: 65,
-            child: Row(
-              children: [
-                
                 SizedBox(width: 48, height: 48, child: Center(child: icon)),
                 const SizedBox(width: 12),
                 Text(
@@ -187,10 +181,8 @@ class _AuthButton extends StatelessWidget {
                     color: foregroundColor,
                   ),
                 ),
-              ]),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
