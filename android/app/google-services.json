@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "1045025384818",
+    "project_id": "mercados-tycoon",
+    "storage_bucket": "mercados-tycoon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045025384818:android:b4359f2eb5fdf549cc55eb",
+        "android_client_info": {
+          "package_name": "com.example.industrial_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoW9sJEvuQ5K_3B3UxsZsO0USFgHjfHRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045025384818:android:c6ea0a52612de24bcc55eb",
+        "android_client_info": {
+          "package_name": "com.example.mercados"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoW9sJEvuQ5K_3B3UxsZsO0USFgHjfHRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045025384818:android:5699e1a649d12887cc55eb",
+        "android_client_info": {
+          "package_name": "com.example.mercados_tycoon_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoW9sJEvuQ5K_3B3UxsZsO0USFgHjfHRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045025384818:android:6bb821cd701b9871cc55eb",
+        "android_client_info": {
+          "package_name": "com.example.pruebas_sergio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoW9sJEvuQ5K_3B3UxsZsO0USFgHjfHRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
