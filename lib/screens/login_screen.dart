@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
-import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,39 +16,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // Listen to auth events for both Web and Mobile flows
-    GoogleSignIn.instance.authenticationEvents.listen((
-      GoogleSignInAuthenticationEvent event,
-    ) {
-      debugPrint('Auth Event received: $event');
-      if (event is GoogleSignInAuthenticationEventSignIn) {
-        debugPrint('Sign in event detected. User: ${event.user}');
-        _handleFirebaseLogin(event.user);
-      }
-    });
-
-    // Check if already signed in (formerly signInSilently)
-    _ensureWebInitialization().then((_) {
-      GoogleSignIn.instance.attemptLightweightAuthentication();
-    });
-  }
-
-  Future<void> _ensureWebInitialization() async {
-    if (kIsWeb) {
-      try {
-        final plugin = GoogleSignInPlatform.instance as GoogleSignInPlugin;
-        await plugin.init(
-          InitParameters(
-            clientId:
-                '1045025384818-m2i4o55sq3o26ju9g2ua1p2batva55di.apps.googleusercontent.com',
-          ),
-        );
-      } catch (e) {
-        debugPrint(
-          'Web initialization error (ignored if already initialized): $e',
-        );
-      }
-    }
+    // In v6, simple signInSilently works for persisting session
+    GoogleSignIn()
+        .signInSilently()
+        .then((user) {
+          if (user != null) {
+            debugPrint('Sign in silently success: ${user.email}');
+            _handleFirebaseLogin(user);
+          }
+        })
+        .catchError((e) {
+          debugPrint('Sign in silently failed: $e');
+        });
   }
 
   Future<void> _handleFirebaseLogin(GoogleSignInAccount googleUser) async {
@@ -62,7 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
-        accessToken: null,
+        accessToken: googleAuth
+            .accessToken, // AccessToken is often needed/available in v6
       );
 
       // Sign in to Firebase
@@ -91,13 +69,23 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _triggerMobileAuth() async {
+  Future<void> _triggerAuth() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Iniciando Google Sign-In (Popup)...')),
+    );
+
     try {
-      // authenticate() triggers the stream event internally
-      await GoogleSignIn.instance.authenticate();
-    } on Exception catch (e) {
-      // Only show error if strictly necessary, as stream handles success
-      // But if user cancels, we might want to know.
+      // PROPER v6 METHOD: signIn() works on Web as a Popup!
+      final googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser != null) {
+        debugPrint('User signed in: ${googleUser.email}');
+        await _handleFirebaseLogin(googleUser);
+      } else {
+        debugPrint('Sign in aborted by user (null result)');
+      }
+    } catch (e) {
+      debugPrint('Auth Exception: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -124,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Spacer(flex: 2),
 
-                // Icono de la app (PNG, esto está bien)
+                // Icono de la app
                 Center(
                   child: Image.asset(
                     'assets/images/ejemplo2.png',
@@ -167,23 +155,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 40),
 
-                // Button: Dynamic based on platform
-                if (kIsWeb)
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: (GoogleSignInPlatform.instance as dynamic)
-                        .renderButton(),
-                  )
-                else
-                  _AuthButton(
-                    text: 'Continuar con Google',
-                    backgroundColor: const Color(0xFFF8FAFC),
-                    foregroundColor: const Color(0xFF111827),
-                    iconAsset: 'assets/images/google.svg',
-                    isSvg: true,
-                    onPressed: _triggerMobileAuth,
-                  ),
+                // Button: Standard Flutter Button for ALL platforms now
+                _AuthButton(
+                  text: 'Continuar con Google',
+                  backgroundColor: const Color(0xFFF8FAFC),
+                  foregroundColor: const Color(0xFF111827),
+                  iconAsset: 'assets/images/google.svg',
+                  isSvg: true,
+                  onPressed: _triggerAuth,
+                ),
 
                 const SizedBox(height: 16),
 
