@@ -1,8 +1,113 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // 👈 IMPORTANTE
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
+import 'package:google_sign_in_web/google_sign_in_web.dart';
+import 'main_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Listen to auth events for both Web and Mobile flows
+    GoogleSignIn.instance.authenticationEvents.listen((
+      GoogleSignInAuthenticationEvent event,
+    ) {
+      debugPrint('Auth Event received: $event');
+      if (event is GoogleSignInAuthenticationEventSignIn) {
+        debugPrint('Sign in event detected. User: ${event.user}');
+        _handleFirebaseLogin(event.user);
+      }
+    });
+
+    // Check if already signed in (formerly signInSilently)
+    _ensureWebInitialization().then((_) {
+      GoogleSignIn.instance.attemptLightweightAuthentication();
+    });
+  }
+
+  Future<void> _ensureWebInitialization() async {
+    if (kIsWeb) {
+      try {
+        final plugin = GoogleSignInPlatform.instance as GoogleSignInPlugin;
+        await plugin.init(
+          InitParameters(
+            clientId:
+                '1045025384818-m2i4o55sq3o26ju9g2ua1p2batva55di.apps.googleusercontent.com',
+          ),
+        );
+      } catch (e) {
+        debugPrint(
+          'Web initialization error (ignored if already initialized): $e',
+        );
+      }
+    }
+  }
+
+  Future<void> _handleFirebaseLogin(GoogleSignInAccount googleUser) async {
+    debugPrint('_handleFirebaseLogin called for ${googleUser.email}');
+    try {
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      debugPrint('Got googleAuth. idToken: ${googleAuth.idToken != null}');
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: null,
+      );
+
+      // Sign in to Firebase
+      debugPrint('Signing in to Firebase...');
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      debugPrint('Firebase sign in successful');
+
+      if (mounted) {
+        debugPrint('Navigating to MainScreen...');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainScreen()),
+        );
+      } else {
+        debugPrint('Widget not mounted, skipping navigation');
+      }
+    } catch (e) {
+      debugPrint('Error in _handleFirebaseLogin: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error en Firebase Auth: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _triggerMobileAuth() async {
+    try {
+      // authenticate() triggers the stream event internally
+      await GoogleSignIn.instance.authenticate();
+    } on Exception catch (e) {
+      // Only show error if strictly necessary, as stream handles success
+      // But if user cancels, we might want to know.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error de autenticación: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +167,24 @@ class LoginScreen extends StatelessWidget {
 
                 const SizedBox(height: 40),
 
-                // Botón Google
-                _AuthButton(
-                  text: 'Continuar con Google',
-                  backgroundColor: const Color(0xFFF8FAFC),
-                  foregroundColor: const Color(0xFF111827),
-                  iconAsset: 'assets/images/google.svg',
-                  isSvg: true, // 👈 IMPORTANTE
-                ),
+                // Button: Dynamic based on platform
+                if (kIsWeb)
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: (GoogleSignInPlatform.instance as dynamic)
+                        .renderButton(),
+                  )
+                else
+                  _AuthButton(
+                    text: 'Continuar con Google',
+                    backgroundColor: const Color(0xFFF8FAFC),
+                    foregroundColor: const Color(0xFF111827),
+                    iconAsset: 'assets/images/google.svg',
+                    isSvg: true,
+                    onPressed: _triggerMobileAuth,
+                  ),
+
                 const SizedBox(height: 16),
 
                 // Botón Apple
@@ -79,6 +194,7 @@ class LoginScreen extends StatelessWidget {
                   foregroundColor: Colors.white,
                   iconAsset: 'assets/images/apple.svg',
                   isSvg: true,
+                  onPressed: () {},
                 ),
                 const SizedBox(height: 16),
 
@@ -89,6 +205,7 @@ class LoginScreen extends StatelessWidget {
                   foregroundColor: Colors.white,
                   iconAsset: 'assets/images/facebook.svg',
                   isSvg: true,
+                  onPressed: () {},
                 ),
 
                 const Spacer(flex: 3),
@@ -139,12 +256,14 @@ class _AuthButton extends StatelessWidget {
   final Color foregroundColor;
   final String iconAsset;
   final bool isSvg;
+  final VoidCallback onPressed;
 
   const _AuthButton({
     required this.text,
     required this.backgroundColor,
     required this.foregroundColor,
     required this.iconAsset,
+    required this.onPressed,
     this.isSvg = false,
   });
 
@@ -159,9 +278,7 @@ class _AuthButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          // TODO: integrar con tu lógica de autenticación
-        },
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
@@ -172,17 +289,17 @@ class _AuthButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-                SizedBox(width: 48, height: 48, child: Center(child: icon)),
-                const SizedBox(width: 12),
-                Text(
-                  text,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: foregroundColor,
-                  ),
-                ),
-              ],
+            SizedBox(width: 48, height: 48, child: Center(child: icon)),
+            const SizedBox(width: 12),
+            Text(
+              text,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: foregroundColor,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
