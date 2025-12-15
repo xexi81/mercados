@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<<<<<<< HEAD
+=======
+	<key>CLIENT_ID</key>
+	<string>1045025384818-2hicqgu371jq230etpb7bvof0o9s9n1c.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1045025384818-2hicqgu371jq230etpb7bvof0o9s9n1c</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1045025384818-cct3qtlrthvrhqt1ed0v388fibabpm1d.apps.googleusercontent.com</string>
+>>>>>>> conectar_firebase
 	<key>API_KEY</key>
 	<string>AIzaSyDkjuXYFWoj9YSl-A5BfXAo828wJSJaUcU</string>
 	<key>GCM_SENDER_ID</key>

@@ -64,6 +64,11 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1045025384818',
     projectId: 'mercados-tycoon',
     storageBucket: 'mercados-tycoon.firebasestorage.app',
+<<<<<<< HEAD
+=======
+    androidClientId: '1045025384818-cct3qtlrthvrhqt1ed0v388fibabpm1d.apps.googleusercontent.com',
+    iosClientId: '1045025384818-2hicqgu371jq230etpb7bvof0o9s9n1c.apps.googleusercontent.com',
+>>>>>>> conectar_firebase
     iosBundleId: 'com.example.industrialApp',
   );
 
@@ -73,6 +78,11 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1045025384818',
     projectId: 'mercados-tycoon',
     storageBucket: 'mercados-tycoon.firebasestorage.app',
+<<<<<<< HEAD
+=======
+    androidClientId: '1045025384818-cct3qtlrthvrhqt1ed0v388fibabpm1d.apps.googleusercontent.com',
+    iosClientId: '1045025384818-2hicqgu371jq230etpb7bvof0o9s9n1c.apps.googleusercontent.com',
+>>>>>>> conectar_firebase
     iosBundleId: 'com.example.industrialApp',
   );
 
