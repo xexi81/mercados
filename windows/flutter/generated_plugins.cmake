@@ -3,10 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
-=======
   firebase_auth
->>>>>>> conectar_firebase
   firebase_core
 )
 
