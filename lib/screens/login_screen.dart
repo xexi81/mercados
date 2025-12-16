@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,6 +30,43 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
+  /// Registra o actualiza el usuario en Firestore
+  Future<void> _saveUserToFirestore(User firebaseUser) async {
+    final userRef = FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(firebaseUser.uid);
+
+    final now = DateTime.now();
+
+    try {
+      final docSnapshot = await userRef.get();
+
+      if (docSnapshot.exists) {
+        // Usuario existente: solo actualizar fecha_modificacion
+        await userRef.update({
+          'fecha_modificacion': now,
+          'email': firebaseUser.email,
+          'nombre': firebaseUser.displayName,
+          'foto_url': firebaseUser.photoURL,
+        });
+        debugPrint('Usuario existente actualizado en Firestore');
+      } else {
+        // Usuario nuevo: crear documento con fecha_alta y fecha_modificacion
+        await userRef.set({
+          'uid': firebaseUser.uid,
+          'email': firebaseUser.email,
+          'nombre': firebaseUser.displayName,
+          'foto_url': firebaseUser.photoURL,
+          'fecha_alta': now,
+          'fecha_modificacion': now,
+        });
+        debugPrint('Nuevo usuario creado en Firestore');
+      }
+    } catch (e) {
+      debugPrint('Error al guardar usuario en Firestore: $e');
+    }
+  }
+
   Future<void> _handleFirebaseLogin(GoogleSignInAccount googleUser) async {
     debugPrint('_handleFirebaseLogin called for ${googleUser.email}');
     try {
@@ -45,8 +82,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Sign in to Firebase
       debugPrint('Signing in to Firebase...');
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       debugPrint('Firebase sign in successful');
+
+      // Guardar/actualizar usuario en Firestore
+      if (userCredential.user != null) {
+        await _saveUserToFirestore(userCredential.user!);
+      }
 
       if (mounted) {
         debugPrint('Navigating to MainScreen...');
@@ -163,29 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   iconAsset: 'assets/images/google.svg',
                   isSvg: true,
                   onPressed: _triggerAuth,
-                ),
-
-                const SizedBox(height: 16),
-
-                // Botón Apple
-                _AuthButton(
-                  text: 'Continuar con Apple',
-                  backgroundColor: const Color(0xFF020617),
-                  foregroundColor: Colors.white,
-                  iconAsset: 'assets/images/apple.svg',
-                  isSvg: true,
-                  onPressed: () {},
-                ),
-                const SizedBox(height: 16),
-
-                // Botón Facebook
-                _AuthButton(
-                  text: 'Continuar con Facebook',
-                  backgroundColor: const Color(0xFF2563EB),
-                  foregroundColor: Colors.white,
-                  iconAsset: 'assets/images/facebook.svg',
-                  isSvg: true,
-                  onPressed: () {},
                 ),
 
                 const Spacer(flex: 3),
