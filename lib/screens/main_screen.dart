@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:industrial_app/screens/association_screen.dart';
+import 'package:industrial_app/screens/parking_screen.dart';
+import 'package:industrial_app/screens/user_data_screen.dart';
+import 'package:industrial_app/screens/warehouses_screen.dart';
 import 'markets_screen.dart';
 import 'shop_screen.dart';
 import 'factories_screen.dart';
@@ -32,9 +36,9 @@ class MainScreen extends StatelessWidget {
                 width: 1340,
                 height: 900,
               ),
-              // Edificio MAKE IT - Supermercado
+              // Mercados
               Positioned(
-                left: 760,
+                left: 720,
                 top: 80,
                 child: ClickableBuilding(
                   width: 180,
@@ -49,7 +53,7 @@ class MainScreen extends StatelessWidget {
                   },
                 ),
               ),
-              // Edificio STOKEE - Tienda
+              // Tienda in game
               Positioned(
                 left: 950,
                 top: 280,
@@ -66,7 +70,24 @@ class MainScreen extends StatelessWidget {
                   },
                 ),
               ),
-              // Área de Fábricas - Almacenes
+              // Fábricas
+              Positioned(
+                left: 340,
+                top: 320,
+                child: ClickableBuilding(
+                  width: 200,
+                  height: 180,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FactoriesScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Parking camiones
               Positioned(
                 left: 280,
                 top: 100,
@@ -77,7 +98,58 @@ class MainScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const FactoriesScreen(),
+                        builder: (context) => const ParkingScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Warehouses
+              Positioned(
+                left: 500,
+                top: 250,
+                child: ClickableBuilding(
+                  width: 250,
+                  height: 150,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WarehousesScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // User info
+              Positioned(
+                left: 980,
+                top: 100,
+                child: ClickableBuilding(
+                  width: 100,
+                  height: 80,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserDataScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Asociación
+              Positioned(
+                left: 390,
+                top: 500,
+                child: ClickableBuilding(
+                  width: 200,
+                  height: 170,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AssociationScreen(),
                       ),
                     );
                   },
