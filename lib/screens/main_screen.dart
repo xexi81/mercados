@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 import 'package:industrial_app/screens/association_screen.dart';
 import 'package:industrial_app/screens/parking_screen.dart';
 import 'package:industrial_app/screens/user_data_screen.dart';
@@ -38,12 +39,14 @@ class MainScreen extends StatelessWidget {
               ),
               // Mercados
               Positioned(
-                left: 720,
-                top: 80,
+                left: 718,
+                top: 83,
                 child: ClickableBuilding(
-                  width: 180,
-                  height: 100,
+                  width: 190, // Aumentado de 180
+                  height: 150, // Aumentado de 100
                   label: 'Mercado',
+                  imageAsset: 'assets/images/market-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -56,12 +59,14 @@ class MainScreen extends StatelessWidget {
               ),
               // Tienda in game
               Positioned(
-                left: 950,
-                top: 280,
+                left: 948,
+                top: 271,
                 child: ClickableBuilding(
-                  width: 160,
-                  height: 120,
+                  width: 180,
+                  height: 140,
                   label: 'Tienda',
+                  imageAsset: 'assets/images/compras-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -74,12 +79,14 @@ class MainScreen extends StatelessWidget {
               ),
               // Fábricas
               Positioned(
-                left: 340,
-                top: 320,
+                left: 305,
+                top: 280,
                 child: ClickableBuilding(
-                  width: 200,
-                  height: 120,
+                  width: 260,
+                  height: 180,
                   label: 'Fábrica',
+                  imageAsset: 'assets/images/fabrica-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -92,12 +99,14 @@ class MainScreen extends StatelessWidget {
               ),
               // Parking camiones
               Positioned(
-                left: 280,
-                top: 100,
+                left: 286,
+                top: 120,
                 child: ClickableBuilding(
                   width: 350,
                   height: 100,
                   label: 'Aparcamiento',
+                  imageAsset: 'assets/images/parking-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -116,6 +125,8 @@ class MainScreen extends StatelessWidget {
                   width: 250,
                   height: 120,
                   label: 'Almacén',
+                  imageAsset: 'assets/images/almacen-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -128,12 +139,14 @@ class MainScreen extends StatelessWidget {
               ),
               // User info
               Positioned(
-                left: 980,
-                top: 100,
+                left: 974,
+                top: 103,
                 child: ClickableBuilding(
                   width: 100,
                   height: 70,
                   label: 'Oficina',
+                  imageAsset: 'assets/images/usuario-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -175,14 +188,20 @@ class ClickableBuilding extends StatefulWidget {
   final double width;
   final double height;
   final String label;
-  final VoidCallback onTap;
+  final String? imageAsset;
+  final bool enableDarken;
+  final VoidCallback? onTap; // Made optional
+  final Widget? destination; // New parameter for OpenContainer transition
 
   const ClickableBuilding({
     Key? key,
     required this.width,
     required this.height,
     required this.label,
-    required this.onTap,
+    this.imageAsset,
+    this.enableDarken = true,
+    this.onTap,
+    this.destination,
   }) : super(key: key);
 
   @override
@@ -193,6 +212,7 @@ class _ClickableBuildingState extends State<ClickableBuilding>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  late Animation<Color?> _colorAnimation;
   bool _isPressed = false;
 
   @override
@@ -219,6 +239,23 @@ class _ClickableBuildingState extends State<ClickableBuilding>
         weight: 50,
       ),
     ]).animate(_controller);
+
+    _colorAnimation = TweenSequence<Color?>([
+      TweenSequenceItem(
+        tween: ColorTween(
+          begin: Colors.transparent,
+          end: Colors.black.withOpacity(0.5), // Darken effect
+        ),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(
+          begin: Colors.black.withOpacity(0.5),
+          end: Colors.transparent,
+        ),
+        weight: 50,
+      ),
+    ]).animate(_controller);
   }
 
   @override
@@ -228,73 +265,123 @@ class _ClickableBuildingState extends State<ClickableBuilding>
   }
 
   void _handleTapDown(TapDownDetails details) {
-    setState(() {
-      _isPressed = true;
-    });
-    _controller.forward(from: 0);
+    if (widget.destination == null) {
+      setState(() {
+        _isPressed = true;
+      });
+      _controller.forward(from: 0);
+    }
   }
 
   void _handleTapUp(TapUpDetails details) {
-    setState(() {
-      _isPressed = false;
-    });
-    Future.delayed(const Duration(milliseconds: 300), () {
-      widget.onTap();
-    });
+    if (widget.destination == null) {
+      setState(() {
+        _isPressed = false;
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        widget.onTap?.call();
+      });
+    }
   }
 
   void _handleTapCancel() {
-    setState(() {
-      _isPressed = false;
-    });
+    if (widget.destination == null) {
+      setState(() {
+        _isPressed = false;
+      });
+    }
+  }
+
+  Widget _buildBuildingContent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedBuilder(
+          animation: _scaleAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _scaleAnimation.value,
+              child: widget.imageAsset != null
+                  ? Container(
+                      width: widget.width,
+                      height: widget.height,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            widget.imageAsset!,
+                            fit: BoxFit.contain,
+                            width: widget.width,
+                            height: widget.height,
+                          ),
+                          // Dark overlay for animation
+                          if (widget.enableDarken)
+                            Container(
+                              decoration: BoxDecoration(
+                                color: _colorAnimation.value,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      width: widget.width,
+                      height: widget.height,
+                      decoration: BoxDecoration(
+                        color: _isPressed
+                            ? Colors.blue.withOpacity(0.2)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+            );
+          },
+        ),
+        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            widget.label,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.destination != null) {
+      return OpenContainer(
+        transitionType: ContainerTransitionType.fadeThrough,
+        closedElevation: 0,
+        openElevation: 0,
+        closedColor: Colors.transparent,
+        openColor: Colors.transparent, // Or background of new screen
+        middleColor: Colors.transparent,
+        tappable: true,
+        transitionDuration: const Duration(milliseconds: 500),
+        closedBuilder: (context, action) {
+          return _buildBuildingContent();
+        },
+        openBuilder: (context, action) {
+          return widget.destination!;
+        },
+      );
+    }
+
     return GestureDetector(
       onTapDown: _handleTapDown,
       onTapUp: _handleTapUp,
       onTapCancel: _handleTapCancel,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedBuilder(
-            animation: _scaleAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _scaleAnimation.value,
-                child: Container(
-                  width: widget.width,
-                  height: widget.height,
-                  decoration: BoxDecoration(
-                    color: _isPressed
-                        ? Colors.blue.withOpacity(0.2)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                    // Descomenta la siguiente línea para ver el área clicable durante desarrollo
-                    // border: Border.all(color: Colors.red, width: 2),
-                  ),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 4),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              widget.label,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white, // Usamos blanco explícito como se pidió
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: _buildBuildingContent(),
     );
   }
 }
