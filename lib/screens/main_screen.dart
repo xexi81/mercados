@@ -42,7 +42,8 @@ class MainScreen extends StatelessWidget {
                 top: 80,
                 child: ClickableBuilding(
                   width: 180,
-                  height: 140,
+                  height: 100,
+                  label: 'Mercado',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -59,7 +60,8 @@ class MainScreen extends StatelessWidget {
                 top: 280,
                 child: ClickableBuilding(
                   width: 160,
-                  height: 130,
+                  height: 120,
+                  label: 'Tienda',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -76,7 +78,8 @@ class MainScreen extends StatelessWidget {
                 top: 320,
                 child: ClickableBuilding(
                   width: 200,
-                  height: 180,
+                  height: 120,
+                  label: 'Fábrica',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -93,7 +96,8 @@ class MainScreen extends StatelessWidget {
                 top: 100,
                 child: ClickableBuilding(
                   width: 350,
-                  height: 150,
+                  height: 100,
+                  label: 'Aparcamiento',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -110,7 +114,8 @@ class MainScreen extends StatelessWidget {
                 top: 250,
                 child: ClickableBuilding(
                   width: 250,
-                  height: 150,
+                  height: 120,
+                  label: 'Almacén',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -127,7 +132,8 @@ class MainScreen extends StatelessWidget {
                 top: 100,
                 child: ClickableBuilding(
                   width: 100,
-                  height: 80,
+                  height: 70,
+                  label: 'Oficina',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -144,7 +150,8 @@ class MainScreen extends StatelessWidget {
                 top: 500,
                 child: ClickableBuilding(
                   width: 200,
-                  height: 170,
+                  height: 130,
+                  label: 'Asociación',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -167,12 +174,14 @@ class MainScreen extends StatelessWidget {
 class ClickableBuilding extends StatefulWidget {
   final double width;
   final double height;
+  final String label;
   final VoidCallback onTap;
 
   const ClickableBuilding({
     Key? key,
     required this.width,
     required this.height,
+    required this.label,
     required this.onTap,
   }) : super(key: key);
 
@@ -246,25 +255,45 @@ class _ClickableBuildingState extends State<ClickableBuilding>
       onTapDown: _handleTapDown,
       onTapUp: _handleTapUp,
       onTapCancel: _handleTapCancel,
-      child: AnimatedBuilder(
-        animation: _scaleAnimation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              width: widget.width,
-              height: widget.height,
-              decoration: BoxDecoration(
-                color: _isPressed
-                    ? Colors.blue.withOpacity(0.2)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-                // Descomenta la siguiente línea para ver el área clicable durante desarrollo
-                // border: Border.all(color: Colors.red, width: 2),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedBuilder(
+            animation: _scaleAnimation,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Container(
+                  width: widget.width,
+                  height: widget.height,
+                  decoration: BoxDecoration(
+                    color: _isPressed
+                        ? Colors.blue.withOpacity(0.2)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    // Descomenta la siguiente línea para ver el área clicable durante desarrollo
+                    // border: Border.all(color: Colors.red, width: 2),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              widget.label,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Colors.white, // Usamos blanco explícito como se pidió
+                fontWeight: FontWeight.bold,
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
