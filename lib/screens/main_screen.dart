@@ -165,6 +165,8 @@ class MainScreen extends StatelessWidget {
                   width: 200,
                   height: 130,
                   label: 'Asociación',
+                  imageAsset: 'assets/images/asociacion-building.png',
+                  enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
