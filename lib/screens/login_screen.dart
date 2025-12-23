@@ -57,8 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
           'email': firebaseUser.email,
           'nombre': firebaseUser.displayName,
           'foto_url': firebaseUser.photoURL,
-          'dinero': 10000, // Dinero inicial
-          'gemas': 50, // Gemas iniciales
+          'dinero': 100000, // Dinero inicial
+          'gemas': 10, // Gemas iniciales
           'fecha_alta': now,
           'fecha_modificacion': now,
         });

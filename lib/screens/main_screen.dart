@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 import 'package:industrial_app/screens/association_screen.dart';
 import 'package:industrial_app/screens/parking_screen.dart';
 import 'package:industrial_app/screens/user_data_screen.dart';
@@ -218,7 +217,6 @@ class ClickableBuilding extends StatefulWidget {
   final String? imageAsset;
   final bool enableDarken;
   final VoidCallback? onTap; // Made optional
-  final Widget? destination; // New parameter for OpenContainer transition
 
   const ClickableBuilding({
     Key? key,
@@ -228,7 +226,6 @@ class ClickableBuilding extends StatefulWidget {
     this.imageAsset,
     this.enableDarken = true,
     this.onTap,
-    this.destination,
   }) : super(key: key);
 
   @override
@@ -292,31 +289,25 @@ class _ClickableBuildingState extends State<ClickableBuilding>
   }
 
   void _handleTapDown(TapDownDetails details) {
-    if (widget.destination == null) {
-      setState(() {
-        _isPressed = true;
-      });
-      _controller.forward(from: 0);
-    }
+    setState(() {
+      _isPressed = true;
+    });
+    _controller.forward(from: 0);
   }
 
   void _handleTapUp(TapUpDetails details) {
-    if (widget.destination == null) {
-      setState(() {
-        _isPressed = false;
-      });
-      Future.delayed(const Duration(milliseconds: 300), () {
-        widget.onTap?.call();
-      });
-    }
+    setState(() {
+      _isPressed = false;
+    });
+    Future.delayed(const Duration(milliseconds: 300), () {
+      widget.onTap?.call();
+    });
   }
 
   void _handleTapCancel() {
-    if (widget.destination == null) {
-      setState(() {
-        _isPressed = false;
-      });
-    }
+    setState(() {
+      _isPressed = false;
+    });
   }
 
   Widget _buildBuildingContent() {
@@ -385,25 +376,6 @@ class _ClickableBuildingState extends State<ClickableBuilding>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.destination != null) {
-      return OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
-        closedElevation: 0,
-        openElevation: 0,
-        closedColor: Colors.transparent,
-        openColor: Colors.transparent, // Or background of new screen
-        middleColor: Colors.transparent,
-        tappable: true,
-        transitionDuration: const Duration(milliseconds: 500),
-        closedBuilder: (context, action) {
-          return _buildBuildingContent();
-        },
-        openBuilder: (context, action) {
-          return widget.destination!;
-        },
-      );
-    }
-
     return GestureDetector(
       onTapDown: _handleTapDown,
       onTapUp: _handleTapUp,
