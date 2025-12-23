@@ -13,16 +13,16 @@ class UserConfigScreen extends StatefulWidget {
 
 class _UserConfigScreenState extends State<UserConfigScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Controllers para los campos editables
   final _nicknameController = TextEditingController();
   final _empresaController = TextEditingController();
-  
+
   // Preferencias
   bool _notificacionesActivas = true;
   bool _sonidosActivos = true;
   String _idiomaSeleccionado = 'Español';
-  
+
   bool _isLoading = true;
   User? _user;
 
@@ -43,7 +43,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
 
   Future<void> _loadUserData() async {
     _user = FirebaseAuth.instance.currentUser;
-    
+
     if (_user != null) {
       try {
         final docSnapshot = await FirebaseFirestore.instance
@@ -79,13 +79,13 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
           .collection('usuarios')
           .doc(_user!.uid)
           .update({
-        'nickname': _nicknameController.text.trim(),
-        'empresa': _empresaController.text.trim(),
-        'notificaciones': _notificacionesActivas,
-        'sonidos': _sonidosActivos,
-        'idioma': _idiomaSeleccionado,
-        'fecha_modificacion': DateTime.now(),
-      });
+            'nickname': _nicknameController.text.trim(),
+            'empresa': _empresaController.text.trim(),
+            'notificaciones': _notificacionesActivas,
+            'sonidos': _sonidosActivos,
+            'idioma': _idiomaSeleccionado,
+            'fecha_modificacion': DateTime.now(),
+          });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +112,7 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
     try {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
-      
+
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -144,13 +144,6 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text('Configuración'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveUserConfig,
-            tooltip: 'Guardar',
-          ),
-        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -172,7 +165,11 @@ class _UserConfigScreenState extends State<UserConfigScreen> {
                                 : null,
                             backgroundColor: colorScheme.primary,
                             child: _user?.photoURL == null
-                                ? const Icon(Icons.person, size: 50, color: Colors.white)
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.white,
+                                  )
                                 : null,
                           ),
                           const SizedBox(height: 12),

@@ -4,21 +4,46 @@ import 'package:industrial_app/screens/association_screen.dart';
 import 'package:industrial_app/screens/parking_screen.dart';
 import 'package:industrial_app/screens/user_data_screen.dart';
 import 'package:industrial_app/screens/warehouses_screen.dart';
+import 'package:industrial_app/widgets/custom_game_appbar.dart';
 import 'markets_screen.dart';
 import 'shop_screen.dart';
 import 'factories_screen.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  late TransformationController _transformationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _transformationController = TransformationController();
+
+    // Set initial scale to 0.7 (more zoomed out)
+    // The matrix is set after the first frame to ensure proper initialization
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final Matrix4 matrix = Matrix4.identity()..scale(0.7);
+      _transformationController.value = matrix;
+    });
+  }
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mapa de la Ciudad'),
-        backgroundColor: Colors.blue,
-      ),
+      appBar: const CustomGameAppBar(),
       body: InteractiveViewer(
+        transformationController: _transformationController,
         boundaryMargin: const EdgeInsets.all(0),
         panEnabled: true,
         scaleEnabled: true,

@@ -57,6 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
           'email': firebaseUser.email,
           'nombre': firebaseUser.displayName,
           'foto_url': firebaseUser.photoURL,
+          'dinero': 10000, // Dinero inicial
+          'gemas': 50, // Gemas iniciales
           'fecha_alta': now,
           'fecha_modificacion': now,
         });
@@ -82,7 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Sign in to Firebase
       debugPrint('Signing in to Firebase...');
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
       debugPrint('Firebase sign in successful');
 
       // Guardar/actualizar usuario en Firestore
