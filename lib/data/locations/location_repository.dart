@@ -1,0 +1,17 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'location_model.dart';
+
+class LocationsRepository {
+  static Future<List<LocationModel>> loadLocations() async {
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/locations.json',
+    );
+
+    final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+
+    final List<dynamic> locationsJson = jsonMap['locations'];
+
+    return locationsJson.map((json) => LocationModel.fromJson(json)).toList();
+  }
+}

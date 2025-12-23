@@ -1,0 +1,4004 @@
+{
+    "locations": [
+        {
+            "id": 1,
+            "city": "Madrid",
+            "latitude": 40.4168,
+            "longitude": -3.7038,
+            "countryIso": "ES",
+            "hasMarket": true
+        },
+        {
+            "id": 2,
+            "city": "Barcelona",
+            "latitude": 41.3851,
+            "longitude": 2.1734,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 3,
+            "city": "Paris",
+            "latitude": 48.8566,
+            "longitude": 2.3522,
+            "countryIso": "FR",
+            "hasMarket": true
+        },
+        {
+            "id": 4,
+            "city": "Berlin",
+            "latitude": 52.5200,
+            "longitude": 13.4050,
+            "countryIso": "DE",
+            "hasMarket": true
+        },
+        {
+            "id": 5,
+            "city": "Rome",
+            "latitude": 41.9028,
+            "longitude": 12.4964,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 6,
+            "city": "London",
+            "latitude": 51.5074,
+            "longitude": -0.1278,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 7,
+            "city": "Amsterdam",
+            "latitude": 52.3676,
+            "longitude": 4.9041,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 8,
+            "city": "Valencia",
+            "latitude": 39.4699,
+            "longitude": -0.3763,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 9,
+            "city": "Sevilla",
+            "latitude": 37.3891,
+            "longitude": -5.9845,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 10,
+            "city": "Zaragoza",
+            "latitude": 41.6488,
+            "longitude": -0.8891,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 11,
+            "city": "Malaga",
+            "latitude": 36.7213,
+            "longitude": -4.4214,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 12,
+            "city": "Murcia",
+            "latitude": 37.9922,
+            "longitude": -1.1307,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 13,
+            "city": "Bilbao",
+            "latitude": 43.2630,
+            "longitude": -2.9350,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 14,
+            "city": "Alicante",
+            "latitude": 38.3452,
+            "longitude": -0.4810,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 15,
+            "city": "Valladolid",
+            "latitude": 41.6523,
+            "longitude": -4.7245,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 16,
+            "city": "Lyon",
+            "latitude": 45.7640,
+            "longitude": 4.8357,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 17,
+            "city": "Marseille",
+            "latitude": 43.2965,
+            "longitude": 5.3698,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 18,
+            "city": "Toulouse",
+            "latitude": 43.6047,
+            "longitude": 1.4442,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 19,
+            "city": "Nice",
+            "latitude": 43.7102,
+            "longitude": 7.2620,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 20,
+            "city": "Nantes",
+            "latitude": 47.2184,
+            "longitude": -1.5536,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 21,
+            "city": "Munich",
+            "latitude": 48.1351,
+            "longitude": 11.5820,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 22,
+            "city": "Hamburg",
+            "latitude": 53.5511,
+            "longitude": 9.9937,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 23,
+            "city": "Frankfurt",
+            "latitude": 50.1109,
+            "longitude": 8.6821,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 24,
+            "city": "Cologne",
+            "latitude": 50.9375,
+            "longitude": 6.9603,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 25,
+            "city": "Stuttgart",
+            "latitude": 48.7758,
+            "longitude": 9.1829,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 26,
+            "city": "Milan",
+            "latitude": 45.4642,
+            "longitude": 9.1900,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 27,
+            "city": "Turin",
+            "latitude": 45.0703,
+            "longitude": 7.6869,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 28,
+            "city": "Naples",
+            "latitude": 40.8518,
+            "longitude": 14.2681,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 29,
+            "city": "Bologna",
+            "latitude": 44.4949,
+            "longitude": 11.3426,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 30,
+            "city": "Florence",
+            "latitude": 43.7696,
+            "longitude": 11.2558,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 31,
+            "city": "Manchester",
+            "latitude": 53.4808,
+            "longitude": -2.2426,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 32,
+            "city": "Birmingham",
+            "latitude": 52.4862,
+            "longitude": -1.8904,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 33,
+            "city": "Leeds",
+            "latitude": 53.8008,
+            "longitude": -1.5491,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 34,
+            "city": "Liverpool",
+            "latitude": 53.4084,
+            "longitude": -2.9916,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 35,
+            "city": "Bristol",
+            "latitude": 51.4545,
+            "longitude": -2.5879,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 36,
+            "city": "Rotterdam",
+            "latitude": 51.9244,
+            "longitude": 4.4777,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 37,
+            "city": "Utrecht",
+            "latitude": 52.0907,
+            "longitude": 5.1214,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 38,
+            "city": "Eindhoven",
+            "latitude": 51.4416,
+            "longitude": 5.4697,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 39,
+            "city": "Groningen",
+            "latitude": 53.2194,
+            "longitude": 6.5665,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 40,
+            "city": "Arnhem",
+            "latitude": 51.9851,
+            "longitude": 5.8987,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 41,
+            "city": "Porto",
+            "latitude": 41.1579,
+            "longitude": -8.6291,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 42,
+            "city": "Lisbon",
+            "latitude": 38.7223,
+            "longitude": -9.1393,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 43,
+            "city": "Braga",
+            "latitude": 41.5454,
+            "longitude": -8.4265,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 44,
+            "city": "Coimbra",
+            "latitude": 40.2033,
+            "longitude": -8.4103,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 45,
+            "city": "Brussels",
+            "latitude": 50.8503,
+            "longitude": 4.3517,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 46,
+            "city": "Antwerp",
+            "latitude": 51.2194,
+            "longitude": 4.4025,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 47,
+            "city": "Ghent",
+            "latitude": 51.0543,
+            "longitude": 3.7174,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 48,
+            "city": "Liege",
+            "latitude": 50.6326,
+            "longitude": 5.5797,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 49,
+            "city": "Zurich",
+            "latitude": 47.3769,
+            "longitude": 8.5417,
+            "countryIso": "CH",
+            "hasMarket": false
+        },
+        {
+            "id": 50,
+            "city": "Geneva",
+            "latitude": 46.2044,
+            "longitude": 6.1432,
+            "countryIso": "CH",
+            "hasMarket": false
+        },
+        {
+            "id": 51,
+            "city": "Basel",
+            "latitude": 47.5596,
+            "longitude": 7.5886,
+            "countryIso": "CH",
+            "hasMarket": false
+        },
+        {
+            "id": 52,
+            "city": "Bern",
+            "latitude": 46.9480,
+            "longitude": 7.4474,
+            "countryIso": "CH",
+            "hasMarket": false
+        },
+        {
+            "id": 53,
+            "city": "Vienna",
+            "latitude": 48.2082,
+            "longitude": 16.3738,
+            "countryIso": "AT",
+            "hasMarket": false
+        },
+        {
+            "id": 54,
+            "city": "Graz",
+            "latitude": 47.0707,
+            "longitude": 15.4395,
+            "countryIso": "AT",
+            "hasMarket": false
+        },
+        {
+            "id": 55,
+            "city": "Linz",
+            "latitude": 48.3069,
+            "longitude": 14.2858,
+            "countryIso": "AT",
+            "hasMarket": false
+        },
+        {
+            "id": 56,
+            "city": "Salzburg",
+            "latitude": 47.8095,
+            "longitude": 13.0550,
+            "countryIso": "AT",
+            "hasMarket": false
+        },
+        {
+            "id": 57,
+            "city": "Warsaw",
+            "latitude": 52.2297,
+            "longitude": 21.0122,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 58,
+            "city": "Krakow",
+            "latitude": 50.0647,
+            "longitude": 19.9450,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 59,
+            "city": "Wroclaw",
+            "latitude": 51.1079,
+            "longitude": 17.0385,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 60,
+            "city": "Poznan",
+            "latitude": 52.4064,
+            "longitude": 16.9252,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 61,
+            "city": "Prague",
+            "latitude": 50.0755,
+            "longitude": 14.4378,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 62,
+            "city": "Brno",
+            "latitude": 49.1951,
+            "longitude": 16.6068,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 63,
+            "city": "Ostrava",
+            "latitude": 49.8209,
+            "longitude": 18.2625,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 64,
+            "city": "Budapest",
+            "latitude": 47.4979,
+            "longitude": 19.0402,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 65,
+            "city": "Debrecen",
+            "latitude": 47.5316,
+            "longitude": 21.6273,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 66,
+            "city": "Copenhagen",
+            "latitude": 55.6761,
+            "longitude": 12.5683,
+            "countryIso": "DK",
+            "hasMarket": false
+        },
+        {
+            "id": 67,
+            "city": "Aarhus",
+            "latitude": 56.1629,
+            "longitude": 10.2039,
+            "countryIso": "DK",
+            "hasMarket": false
+        },
+        {
+            "id": 68,
+            "city": "Stockholm",
+            "latitude": 59.3293,
+            "longitude": 18.0686,
+            "countryIso": "SE",
+            "hasMarket": true
+        },
+        {
+            "id": 69,
+            "city": "Gothenburg",
+            "latitude": 57.7089,
+            "longitude": 11.9746,
+            "countryIso": "SE",
+            "hasMarket": false
+        },
+        {
+            "id": 70,
+            "city": "Malmo",
+            "latitude": 55.6049,
+            "longitude": 13.0038,
+            "countryIso": "SE",
+            "hasMarket": false
+        },
+        {
+            "id": 71,
+            "city": "Oslo",
+            "latitude": 59.9139,
+            "longitude": 10.7522,
+            "countryIso": "NO",
+            "hasMarket": false
+        },
+        {
+            "id": 72,
+            "city": "Bergen",
+            "latitude": 60.3913,
+            "longitude": 5.3221,
+            "countryIso": "NO",
+            "hasMarket": false
+        },
+        {
+            "id": 73,
+            "city": "Helsinki",
+            "latitude": 60.1699,
+            "longitude": 24.9384,
+            "countryIso": "FI",
+            "hasMarket": false
+        },
+        {
+            "id": 74,
+            "city": "Tampere",
+            "latitude": 61.4978,
+            "longitude": 23.7610,
+            "countryIso": "FI",
+            "hasMarket": false
+        },
+        {
+            "id": 75,
+            "city": "Dublin",
+            "latitude": 53.3498,
+            "longitude": -6.2603,
+            "countryIso": "IE",
+            "hasMarket": false
+        },
+        {
+            "id": 76,
+            "city": "Cork",
+            "latitude": 51.8985,
+            "longitude": -8.4756,
+            "countryIso": "IE",
+            "hasMarket": false
+        },
+        {
+            "id": 77,
+            "city": "Athens",
+            "latitude": 37.9838,
+            "longitude": 23.7275,
+            "countryIso": "GR",
+            "hasMarket": true
+        },
+        {
+            "id": 78,
+            "city": "Thessaloniki",
+            "latitude": 40.6401,
+            "longitude": 22.9444,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 79,
+            "city": "Sofia",
+            "latitude": 42.6977,
+            "longitude": 23.3219,
+            "countryIso": "BG",
+            "hasMarket": false
+        },
+        {
+            "id": 80,
+            "city": "Plovdiv",
+            "latitude": 42.1354,
+            "longitude": 24.7453,
+            "countryIso": "BG",
+            "hasMarket": false
+        },
+        {
+            "id": 81,
+            "city": "Bucharest",
+            "latitude": 44.4268,
+            "longitude": 26.1025,
+            "countryIso": "RO",
+            "hasMarket": true
+        },
+        {
+            "id": 82,
+            "city": "Cluj-Napoca",
+            "latitude": 46.7712,
+            "longitude": 23.6236,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 83,
+            "city": "Zagreb",
+            "latitude": 45.8150,
+            "longitude": 15.9819,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 84,
+            "city": "Split",
+            "latitude": 43.5081,
+            "longitude": 16.4402,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 85,
+            "city": "Ljubljana",
+            "latitude": 46.0569,
+            "longitude": 14.5058,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 86,
+            "city": "Bratislava",
+            "latitude": 48.1486,
+            "longitude": 17.1077,
+            "countryIso": "SK",
+            "hasMarket": false
+        },
+        {
+            "id": 87,
+            "city": "Tallinn",
+            "latitude": 59.4370,
+            "longitude": 24.7536,
+            "countryIso": "EE",
+            "hasMarket": false
+        },
+        {
+            "id": 88,
+            "city": "Riga",
+            "latitude": 56.9496,
+            "longitude": 24.1052,
+            "countryIso": "LV",
+            "hasMarket": false
+        },
+        {
+            "id": 89,
+            "city": "Vilnius",
+            "latitude": 54.6872,
+            "longitude": 25.2797,
+            "countryIso": "LT",
+            "hasMarket": false
+        },
+        {
+            "id": 90,
+            "city": "Luxembourg",
+            "latitude": 49.6116,
+            "longitude": 6.1319,
+            "countryIso": "LU",
+            "hasMarket": false
+        },
+        {
+            "id": 91,
+            "city": "Monaco",
+            "latitude": 43.7384,
+            "longitude": 7.4246,
+            "countryIso": "MC",
+            "hasMarket": false
+        },
+        {
+            "id": 92,
+            "city": "San Marino",
+            "latitude": 43.9424,
+            "longitude": 12.4578,
+            "countryIso": "SM",
+            "hasMarket": false
+        },
+        {
+            "id": 93,
+            "city": "Andorra la Vella",
+            "latitude": 42.5063,
+            "longitude": 1.5218,
+            "countryIso": "AD",
+            "hasMarket": false
+        },
+        {
+            "id": 94,
+            "city": "Reykjavik",
+            "latitude": 64.1466,
+            "longitude": -21.9426,
+            "countryIso": "IS",
+            "hasMarket": true
+        },
+        {
+            "id": 95,
+            "city": "Valletta",
+            "latitude": 35.8989,
+            "longitude": 14.5146,
+            "countryIso": "MT",
+            "hasMarket": false
+        },
+        {
+            "id": 96,
+            "city": "Nicosia",
+            "latitude": 35.1856,
+            "longitude": 33.3823,
+            "countryIso": "CY",
+            "hasMarket": false
+        },
+        {
+            "id": 97,
+            "city": "Sarajevo",
+            "latitude": 43.8563,
+            "longitude": 18.4131,
+            "countryIso": "BA",
+            "hasMarket": false
+        },
+        {
+            "id": 98,
+            "city": "Belgrade",
+            "latitude": 44.7866,
+            "longitude": 20.4489,
+            "countryIso": "RS",
+            "hasMarket": false
+        },
+        {
+            "id": 99,
+            "city": "Skopje",
+            "latitude": 41.9973,
+            "longitude": 21.4280,
+            "countryIso": "MK",
+            "hasMarket": false
+        },
+        {
+            "id": 100,
+            "city": "Tirana",
+            "latitude": 41.3275,
+            "longitude": 19.8187,
+            "countryIso": "AL",
+            "hasMarket": false
+        },
+        {
+            "id": 101,
+            "city": "Albacete",
+            "latitude": 38.9943,
+            "longitude": -1.8564,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 102,
+            "city": "Ciudad Real",
+            "latitude": 38.9848,
+            "longitude": -3.9270,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 103,
+            "city": "Cuenca",
+            "latitude": 40.0704,
+            "longitude": -2.1374,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 104,
+            "city": "Toledo",
+            "latitude": 39.8628,
+            "longitude": -4.0273,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 105,
+            "city": "Guadalajara",
+            "latitude": 40.6333,
+            "longitude": -3.1667,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 106,
+            "city": "Huesca",
+            "latitude": 42.1318,
+            "longitude": -0.4088,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 107,
+            "city": "Teruel",
+            "latitude": 40.3456,
+            "longitude": -1.1065,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 108,
+            "city": "Lleida",
+            "latitude": 41.6176,
+            "longitude": 0.6200,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 109,
+            "city": "Tarragona",
+            "latitude": 41.1189,
+            "longitude": 1.2445,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 110,
+            "city": "Girona",
+            "latitude": 41.9794,
+            "longitude": 2.8214,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 111,
+            "city": "Perpignan",
+            "latitude": 42.6887,
+            "longitude": 2.8948,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 112,
+            "city": "Montpellier",
+            "latitude": 43.6108,
+            "longitude": 3.8767,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 113,
+            "city": "Avignon",
+            "latitude": 43.9493,
+            "longitude": 4.8055,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 114,
+            "city": "Grenoble",
+            "latitude": 45.1885,
+            "longitude": 5.7245,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 115,
+            "city": "Chambery",
+            "latitude": 45.5646,
+            "longitude": 5.9178,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 116,
+            "city": "Annecy",
+            "latitude": 45.8992,
+            "longitude": 6.1294,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 117,
+            "city": "Dijon",
+            "latitude": 47.3220,
+            "longitude": 5.0415,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 118,
+            "city": "Besancon",
+            "latitude": 47.2378,
+            "longitude": 6.0241,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 119,
+            "city": "Metz",
+            "latitude": 49.1193,
+            "longitude": 6.1757,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 120,
+            "city": "Reims",
+            "latitude": 49.2583,
+            "longitude": 4.0317,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 121,
+            "city": "Saarbrucken",
+            "latitude": 49.2402,
+            "longitude": 6.9969,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 122,
+            "city": "Kaiserslautern",
+            "latitude": 49.4447,
+            "longitude": 7.7680,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 123,
+            "city": "Karlsruhe",
+            "latitude": 49.0069,
+            "longitude": 8.4037,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 124,
+            "city": "Heidelberg",
+            "latitude": 49.3988,
+            "longitude": 8.6724,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 125,
+            "city": "Mannheim",
+            "latitude": 49.4875,
+            "longitude": 8.4660,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 126,
+            "city": "Ulm",
+            "latitude": 48.4011,
+            "longitude": 9.9876,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 127,
+            "city": "Augsburg",
+            "latitude": 48.3705,
+            "longitude": 10.8978,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 128,
+            "city": "Regensburg",
+            "latitude": 49.0134,
+            "longitude": 12.1016,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 129,
+            "city": "Passau",
+            "latitude": 48.5667,
+            "longitude": 13.4319,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 130,
+            "city": "Rosenheim",
+            "latitude": 47.8561,
+            "longitude": 12.1286,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 131,
+            "city": "Verona",
+            "latitude": 45.4384,
+            "longitude": 10.9916,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 132,
+            "city": "Vicenza",
+            "latitude": 45.5455,
+            "longitude": 11.5354,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 133,
+            "city": "Padua",
+            "latitude": 45.4064,
+            "longitude": 11.8768,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 134,
+            "city": "Treviso",
+            "latitude": 45.6669,
+            "longitude": 12.2430,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 135,
+            "city": "Udine",
+            "latitude": 46.0711,
+            "longitude": 13.2346,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 136,
+            "city": "Trieste",
+            "latitude": 45.6495,
+            "longitude": 13.7768,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 137,
+            "city": "Parma",
+            "latitude": 44.8015,
+            "longitude": 10.3279,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 138,
+            "city": "Modena",
+            "latitude": 44.6471,
+            "longitude": 10.9252,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 139,
+            "city": "Reggio Emilia",
+            "latitude": 44.6983,
+            "longitude": 10.6313,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 140,
+            "city": "Ferrara",
+            "latitude": 44.8350,
+            "longitude": 11.6198,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 141,
+            "city": "Rimini",
+            "latitude": 44.0678,
+            "longitude": 12.5695,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 142,
+            "city": "Ancona",
+            "latitude": 43.6158,
+            "longitude": 13.5189,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 143,
+            "city": "Perugia",
+            "latitude": 43.1107,
+            "longitude": 12.3908,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 144,
+            "city": "Terni",
+            "latitude": 42.5630,
+            "longitude": 12.6437,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 145,
+            "city": "Arezzo",
+            "latitude": 43.4633,
+            "longitude": 11.8796,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 146,
+            "city": "Siena",
+            "latitude": 43.3188,
+            "longitude": 11.3308,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 147,
+            "city": "Pisa",
+            "latitude": 43.7228,
+            "longitude": 10.4017,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 148,
+            "city": "Livorno",
+            "latitude": 43.5485,
+            "longitude": 10.3106,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 149,
+            "city": "La Spezia",
+            "latitude": 44.1025,
+            "longitude": 9.8241,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 150,
+            "city": "Genoa",
+            "latitude": 44.4056,
+            "longitude": 8.9463,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 151,
+            "city": "Savona",
+            "latitude": 44.3091,
+            "longitude": 8.4772,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 152,
+            "city": "Cuneo",
+            "latitude": 44.3842,
+            "longitude": 7.5427,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 153,
+            "city": "Aosta",
+            "latitude": 45.7372,
+            "longitude": 7.3201,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 154,
+            "city": "Innsbruck",
+            "latitude": 47.2692,
+            "longitude": 11.4041,
+            "countryIso": "AT",
+            "hasMarket": false
+        },
+        {
+            "id": 155,
+            "city": "Bolzano",
+            "latitude": 46.4983,
+            "longitude": 11.3548,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 156,
+            "city": "Mulhouse",
+            "latitude": 47.7508,
+            "longitude": 7.3359,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 157,
+            "city": "Colmar",
+            "latitude": 48.0795,
+            "longitude": 7.3585,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 158,
+            "city": "Strasbourg",
+            "latitude": 48.5734,
+            "longitude": 7.7521,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 159,
+            "city": "Freiburg",
+            "latitude": 47.9990,
+            "longitude": 7.8421,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 160,
+            "city": "Konstanz",
+            "latitude": 47.6779,
+            "longitude": 9.1732,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 161,
+            "city": "Brescia",
+            "latitude": 45.5416,
+            "longitude": 10.2118,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 162,
+            "city": "Como",
+            "latitude": 45.8081,
+            "longitude": 9.0852,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 163,
+            "city": "Trento",
+            "latitude": 46.0748,
+            "longitude": 11.1217,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 164,
+            "city": "Belluno",
+            "latitude": 46.1408,
+            "longitude": 12.2156,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 165,
+            "city": "Forli",
+            "latitude": 44.2227,
+            "longitude": 12.0400,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 166,
+            "city": "Cesena",
+            "latitude": 44.1396,
+            "longitude": 12.2464,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 167,
+            "city": "Ravenna",
+            "latitude": 44.4184,
+            "longitude": 12.2035,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 168,
+            "city": "Imola",
+            "latitude": 44.3559,
+            "longitude": 11.7166,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 169,
+            "city": "Faenza",
+            "latitude": 44.2856,
+            "longitude": 11.8836,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 170,
+            "city": "Piacenza",
+            "latitude": 45.0522,
+            "longitude": 9.6930,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 171,
+            "city": "Cremona",
+            "latitude": 45.1333,
+            "longitude": 10.0227,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 172,
+            "city": "Lodi",
+            "latitude": 45.3167,
+            "longitude": 9.5000,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 173,
+            "city": "Pavia",
+            "latitude": 45.1847,
+            "longitude": 9.1582,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 174,
+            "city": "Vigevano",
+            "latitude": 45.3177,
+            "longitude": 8.8587,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 175,
+            "city": "Novara",
+            "latitude": 45.4469,
+            "longitude": 8.6212,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 176,
+            "city": "Biella",
+            "latitude": 45.5629,
+            "longitude": 8.0580,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 177,
+            "city": "Vercelli",
+            "latitude": 45.3236,
+            "longitude": 8.4230,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 178,
+            "city": "Asti",
+            "latitude": 44.9008,
+            "longitude": 8.2060,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 179,
+            "city": "Alessandria",
+            "latitude": 44.9128,
+            "longitude": 8.6150,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 180,
+            "city": "Savona Porto",
+            "latitude": 44.3100,
+            "longitude": 8.4800,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 181,
+            "city": "La Rochelle",
+            "latitude": 46.1603,
+            "longitude": -1.1511,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 182,
+            "city": "Bordeaux",
+            "latitude": 44.8378,
+            "longitude": -0.5792,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 183,
+            "city": "Bayonne",
+            "latitude": 43.4929,
+            "longitude": -1.4748,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 184,
+            "city": "Pau",
+            "latitude": 43.2951,
+            "longitude": -0.3708,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 185,
+            "city": "Tarbes",
+            "latitude": 43.2327,
+            "longitude": 0.0781,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 186,
+            "city": "Auch",
+            "latitude": 43.6455,
+            "longitude": 0.5881,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 187,
+            "city": "Agen",
+            "latitude": 44.2031,
+            "longitude": 0.6208,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 188,
+            "city": "Montauban",
+            "latitude": 44.0176,
+            "longitude": 1.3542,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 189,
+            "city": "Cahors",
+            "latitude": 44.4491,
+            "longitude": 1.4366,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 190,
+            "city": "Albi",
+            "latitude": 43.9278,
+            "longitude": 2.1480,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 191,
+            "city": "Rodez",
+            "latitude": 44.3514,
+            "longitude": 2.5737,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 192,
+            "city": "Millau",
+            "latitude": 44.0994,
+            "longitude": 3.0785,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 193,
+            "city": "Beziers",
+            "latitude": 43.3442,
+            "longitude": 3.2158,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 194,
+            "city": "Narbonne",
+            "latitude": 43.1836,
+            "longitude": 3.0042,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 195,
+            "city": "Sete",
+            "latitude": 43.4020,
+            "longitude": 3.6976,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 196,
+            "city": "Nimes",
+            "latitude": 43.8367,
+            "longitude": 4.3601,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 197,
+            "city": "Arles",
+            "latitude": 43.6766,
+            "longitude": 4.6278,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 198,
+            "city": "Orange",
+            "latitude": 44.1380,
+            "longitude": 4.8080,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 199,
+            "city": "Valence",
+            "latitude": 44.9334,
+            "longitude": 4.8924,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 200,
+            "city": "Gap",
+            "latitude": 44.5583,
+            "longitude": 6.0780,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 201,
+            "city": "Katowice",
+            "latitude": 50.2649,
+            "longitude": 19.0238,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 202,
+            "city": "Gliwice",
+            "latitude": 50.2945,
+            "longitude": 18.6714,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 203,
+            "city": "Bytom",
+            "latitude": 50.3484,
+            "longitude": 18.9157,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 204,
+            "city": "Rybnik",
+            "latitude": 50.1022,
+            "longitude": 18.5463,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 205,
+            "city": "Opole",
+            "latitude": 50.6751,
+            "longitude": 17.9213,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 206,
+            "city": "Lodz",
+            "latitude": 51.7592,
+            "longitude": 19.4550,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 207,
+            "city": "Radom",
+            "latitude": 51.4027,
+            "longitude": 21.1471,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 208,
+            "city": "Kielce",
+            "latitude": 50.8661,
+            "longitude": 20.6286,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 209,
+            "city": "Lublin",
+            "latitude": 51.2465,
+            "longitude": 22.5684,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 210,
+            "city": "Rzeszow",
+            "latitude": 50.0412,
+            "longitude": 21.9991,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 211,
+            "city": "Kosice",
+            "latitude": 48.7164,
+            "longitude": 21.2611,
+            "countryIso": "SK",
+            "hasMarket": false
+        },
+        {
+            "id": 212,
+            "city": "Presov",
+            "latitude": 49.0018,
+            "longitude": 21.2393,
+            "countryIso": "SK",
+            "hasMarket": false
+        },
+        {
+            "id": 213,
+            "city": "Zilina",
+            "latitude": 49.2234,
+            "longitude": 18.7394,
+            "countryIso": "SK",
+            "hasMarket": false
+        },
+        {
+            "id": 214,
+            "city": "Timisoara",
+            "latitude": 45.7489,
+            "longitude": 21.2087,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 215,
+            "city": "Arad",
+            "latitude": 46.1667,
+            "longitude": 21.3167,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 216,
+            "city": "Oradea",
+            "latitude": 47.0465,
+            "longitude": 21.9189,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 217,
+            "city": "Sibiu",
+            "latitude": 45.7983,
+            "longitude": 24.1256,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 218,
+            "city": "Brasov",
+            "latitude": 45.6579,
+            "longitude": 25.6012,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 219,
+            "city": "Iasi",
+            "latitude": 47.1585,
+            "longitude": 27.6014,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 220,
+            "city": "Bacau",
+            "latitude": 46.5670,
+            "longitude": 26.9146,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 221,
+            "city": "Galati",
+            "latitude": 45.4353,
+            "longitude": 28.0080,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 222,
+            "city": "Novi Sad",
+            "latitude": 45.2671,
+            "longitude": 19.8335,
+            "countryIso": "RS",
+            "hasMarket": false
+        },
+        {
+            "id": 223,
+            "city": "Subotica",
+            "latitude": 46.1006,
+            "longitude": 19.6656,
+            "countryIso": "RS",
+            "hasMarket": false
+        },
+        {
+            "id": 224,
+            "city": "Nis",
+            "latitude": 43.3209,
+            "longitude": 21.8958,
+            "countryIso": "RS",
+            "hasMarket": false
+        },
+        {
+            "id": 225,
+            "city": "Kragujevac",
+            "latitude": 44.0128,
+            "longitude": 20.9114,
+            "countryIso": "RS",
+            "hasMarket": false
+        },
+        {
+            "id": 226,
+            "city": "Banja Luka",
+            "latitude": 44.7722,
+            "longitude": 17.1910,
+            "countryIso": "BA",
+            "hasMarket": false
+        },
+        {
+            "id": 227,
+            "city": "Mostar",
+            "latitude": 43.3438,
+            "longitude": 17.8078,
+            "countryIso": "BA",
+            "hasMarket": false
+        },
+        {
+            "id": 228,
+            "city": "Podgorica",
+            "latitude": 42.4304,
+            "longitude": 19.2594,
+            "countryIso": "ME",
+            "hasMarket": false
+        },
+        {
+            "id": 229,
+            "city": "Kotor",
+            "latitude": 42.4247,
+            "longitude": 18.7712,
+            "countryIso": "ME",
+            "hasMarket": false
+        },
+        {
+            "id": 230,
+            "city": "Pristina",
+            "latitude": 42.6629,
+            "longitude": 21.1655,
+            "countryIso": "XK",
+            "hasMarket": false
+        },
+        {
+            "id": 231,
+            "city": "Skadar",
+            "latitude": 42.0683,
+            "longitude": 19.5126,
+            "countryIso": "AL",
+            "hasMarket": false
+        },
+        {
+            "id": 232,
+            "city": "Durres",
+            "latitude": 41.3231,
+            "longitude": 19.4414,
+            "countryIso": "AL",
+            "hasMarket": false
+        },
+        {
+            "id": 233,
+            "city": "Varna",
+            "latitude": 43.2141,
+            "longitude": 27.9147,
+            "countryIso": "BG",
+            "hasMarket": false
+        },
+        {
+            "id": 234,
+            "city": "Burgas",
+            "latitude": 42.5048,
+            "longitude": 27.4626,
+            "countryIso": "BG",
+            "hasMarket": false
+        },
+        {
+            "id": 235,
+            "city": "Ruse",
+            "latitude": 43.8356,
+            "longitude": 25.9657,
+            "countryIso": "BG",
+            "hasMarket": false
+        },
+        {
+            "id": 236,
+            "city": "Thessaly",
+            "latitude": 39.3667,
+            "longitude": 22.9500,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 237,
+            "city": "Patras",
+            "latitude": 38.2466,
+            "longitude": 21.7346,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 238,
+            "city": "Larissa",
+            "latitude": 39.6390,
+            "longitude": 22.4191,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 239,
+            "city": "Uppsala",
+            "latitude": 59.8586,
+            "longitude": 17.6389,
+            "countryIso": "SE",
+            "hasMarket": false
+        },
+        {
+            "id": 240,
+            "city": "Vasteras",
+            "latitude": 59.6099,
+            "longitude": 16.5448,
+            "countryIso": "SE",
+            "hasMarket": false
+        },
+        {
+            "id": 241,
+            "city": "Orebro",
+            "latitude": 59.2753,
+            "longitude": 15.2134,
+            "countryIso": "SE",
+            "hasMarket": false
+        },
+        {
+            "id": 242,
+            "city": "Trondheim",
+            "latitude": 63.4305,
+            "longitude": 10.3951,
+            "countryIso": "NO",
+            "hasMarket": false
+        },
+        {
+            "id": 243,
+            "city": "Stavanger",
+            "latitude": 58.9690,
+            "longitude": 5.7331,
+            "countryIso": "NO",
+            "hasMarket": false
+        },
+        {
+            "id": 244,
+            "city": "Turku",
+            "latitude": 60.4518,
+            "longitude": 22.2666,
+            "countryIso": "FI",
+            "hasMarket": false
+        },
+        {
+            "id": 245,
+            "city": "Oulu",
+            "latitude": 65.0121,
+            "longitude": 25.4651,
+            "countryIso": "FI",
+            "hasMarket": false
+        },
+        {
+            "id": 246,
+            "city": "Kaunas",
+            "latitude": 54.8985,
+            "longitude": 23.9036,
+            "countryIso": "LT",
+            "hasMarket": false
+        },
+        {
+            "id": 247,
+            "city": "Klaipeda",
+            "latitude": 55.7033,
+            "longitude": 21.1443,
+            "countryIso": "LT",
+            "hasMarket": false
+        },
+        {
+            "id": 248,
+            "city": "Daugavpils",
+            "latitude": 55.8747,
+            "longitude": 26.5353,
+            "countryIso": "LV",
+            "hasMarket": false
+        },
+        {
+            "id": 249,
+            "city": "Tartu",
+            "latitude": 58.3776,
+            "longitude": 26.7290,
+            "countryIso": "EE",
+            "hasMarket": false
+        },
+        {
+            "id": 250,
+            "city": "Pecs",
+            "latitude": 46.0727,
+            "longitude": 18.2323,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 251,
+            "city": "Szeged",
+            "latitude": 46.2530,
+            "longitude": 20.1414,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 252,
+            "city": "Gyor",
+            "latitude": 47.6875,
+            "longitude": 17.6504,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 253,
+            "city": "Miskolc",
+            "latitude": 48.1031,
+            "longitude": 20.7903,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 254,
+            "city": "Satu Mare",
+            "latitude": 47.8017,
+            "longitude": 22.8576,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 255,
+            "city": "Baia Mare",
+            "latitude": 47.6597,
+            "longitude": 23.5795,
+            "countryIso": "RO",
+            "hasMarket": false
+        },
+        {
+            "id": 256,
+            "city": "Zalaegerszeg",
+            "latitude": 46.8417,
+            "longitude": 16.8416,
+            "countryIso": "HU",
+            "hasMarket": false
+        },
+        {
+            "id": 257,
+            "city": "Maribor",
+            "latitude": 46.5547,
+            "longitude": 15.6459,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 258,
+            "city": "Celje",
+            "latitude": 46.2310,
+            "longitude": 15.2600,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 259,
+            "city": "Koper",
+            "latitude": 45.5481,
+            "longitude": 13.7302,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 260,
+            "city": "Pula",
+            "latitude": 44.8666,
+            "longitude": 13.8496,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 261,
+            "city": "Zadar",
+            "latitude": 44.1194,
+            "longitude": 15.2314,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 262,
+            "city": "Sibenik",
+            "latitude": 43.7350,
+            "longitude": 15.8952,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 263,
+            "city": "Dubrovnik",
+            "latitude": 42.6507,
+            "longitude": 18.0944,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 264,
+            "city": "Kiel",
+            "latitude": 54.3233,
+            "longitude": 10.1228,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 265,
+            "city": "Lubeck",
+            "latitude": 53.8655,
+            "longitude": 10.6866,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 266,
+            "city": "Rostock",
+            "latitude": 54.0924,
+            "longitude": 12.0991,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 267,
+            "city": "Greifswald",
+            "latitude": 54.0958,
+            "longitude": 13.3815,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 268,
+            "city": "Neubrandenburg",
+            "latitude": 53.5587,
+            "longitude": 13.2610,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 269,
+            "city": "Frankfurt Oder",
+            "latitude": 52.3471,
+            "longitude": 14.5506,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 270,
+            "city": "Cottbus",
+            "latitude": 51.7563,
+            "longitude": 14.3329,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 271,
+            "city": "Gorlitz",
+            "latitude": 51.1561,
+            "longitude": 14.9885,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 272,
+            "city": "Zittau",
+            "latitude": 50.8987,
+            "longitude": 14.8070,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 273,
+            "city": "Chemnitz",
+            "latitude": 50.8278,
+            "longitude": 12.9214,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 274,
+            "city": "Zwickau",
+            "latitude": 50.7189,
+            "longitude": 12.4951,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 275,
+            "city": "Plauen",
+            "latitude": 50.4973,
+            "longitude": 12.1378,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 276,
+            "city": "Hof",
+            "latitude": 50.3176,
+            "longitude": 11.9167,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 277,
+            "city": "Bayreuth",
+            "latitude": 49.9456,
+            "longitude": 11.5713,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 278,
+            "city": "Bamberg",
+            "latitude": 49.8988,
+            "longitude": 10.9028,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 279,
+            "city": "Coburg",
+            "latitude": 50.2590,
+            "longitude": 10.9636,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 280,
+            "city": "Fulda",
+            "latitude": 50.5558,
+            "longitude": 9.6808,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 281,
+            "city": "Kassel",
+            "latitude": 51.3127,
+            "longitude": 9.4797,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 282,
+            "city": "Gottingen",
+            "latitude": 51.5413,
+            "longitude": 9.9158,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 283,
+            "city": "Hildesheim",
+            "latitude": 52.1548,
+            "longitude": 9.9579,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 284,
+            "city": "Celle",
+            "latitude": 52.6226,
+            "longitude": 10.0819,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 285,
+            "city": "Luneburg",
+            "latitude": 53.2493,
+            "longitude": 10.4140,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 286,
+            "city": "Emden",
+            "latitude": 53.3675,
+            "longitude": 7.2050,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 287,
+            "city": "Wilhelmshaven",
+            "latitude": 53.5299,
+            "longitude": 8.1120,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 288,
+            "city": "Bremerhaven",
+            "latitude": 53.5396,
+            "longitude": 8.5809,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 289,
+            "city": "Oldenburg",
+            "latitude": 53.1435,
+            "longitude": 8.2146,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 290,
+            "city": "Cloppenburg",
+            "latitude": 52.8475,
+            "longitude": 8.0454,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 291,
+            "city": "Meppen",
+            "latitude": 52.6926,
+            "longitude": 7.2921,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 292,
+            "city": "Nordhorn",
+            "latitude": 52.4308,
+            "longitude": 7.0683,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 293,
+            "city": "Lingen",
+            "latitude": 52.5214,
+            "longitude": 7.3180,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 294,
+            "city": "Rheine",
+            "latitude": 52.2799,
+            "longitude": 7.4406,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 295,
+            "city": "Ibbenburen",
+            "latitude": 52.2794,
+            "longitude": 7.7147,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 296,
+            "city": "Osnabruck",
+            "latitude": 52.2799,
+            "longitude": 8.0472,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 297,
+            "city": "Bielefeld",
+            "latitude": 52.0302,
+            "longitude": 8.5325,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 298,
+            "city": "Paderborn",
+            "latitude": 51.7189,
+            "longitude": 8.7575,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 299,
+            "city": "Detmold",
+            "latitude": 51.9385,
+            "longitude": 8.8739,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 300,
+            "city": "Gutersloh",
+            "latitude": 51.9069,
+            "longitude": 8.3785,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 301,
+            "city": "Herford",
+            "latitude": 52.1146,
+            "longitude": 8.6734,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 302,
+            "city": "Minden",
+            "latitude": 52.2896,
+            "longitude": 8.9146,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 303,
+            "city": "Hameln",
+            "latitude": 52.1037,
+            "longitude": 9.3568,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 304,
+            "city": "Hannover",
+            "latitude": 52.3759,
+            "longitude": 9.7320,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 305,
+            "city": "Peine",
+            "latitude": 52.3204,
+            "longitude": 10.2340,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 306,
+            "city": "Wolfenbuttel",
+            "latitude": 52.1640,
+            "longitude": 10.5408,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 307,
+            "city": "Braunschweig",
+            "latitude": 52.2689,
+            "longitude": 10.5268,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 308,
+            "city": "Salzgitter",
+            "latitude": 52.1500,
+            "longitude": 10.3333,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 309,
+            "city": "Magdeburg",
+            "latitude": 52.1205,
+            "longitude": 11.6276,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 310,
+            "city": "Dessau-Rosslau",
+            "latitude": 51.8339,
+            "longitude": 12.2425,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 311,
+            "city": "Wittenberg",
+            "latitude": 51.8767,
+            "longitude": 12.6517,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 312,
+            "city": "Halle",
+            "latitude": 51.4969,
+            "longitude": 11.9688,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 313,
+            "city": "Merseburg",
+            "latitude": 51.3543,
+            "longitude": 11.9896,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 314,
+            "city": "Leipzig",
+            "latitude": 51.3397,
+            "longitude": 12.3731,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 315,
+            "city": "Delitzsch",
+            "latitude": 51.5260,
+            "longitude": 12.3425,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 316,
+            "city": "Torgau",
+            "latitude": 51.5617,
+            "longitude": 13.0066,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 317,
+            "city": "Riesa",
+            "latitude": 51.3078,
+            "longitude": 13.2935,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 318,
+            "city": "Dresden",
+            "latitude": 51.0504,
+            "longitude": 13.7373,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 319,
+            "city": "Meissen",
+            "latitude": 51.1616,
+            "longitude": 13.4730,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 320,
+            "city": "Pirna",
+            "latitude": 50.9626,
+            "longitude": 13.9370,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 321,
+            "city": "Bautzen",
+            "latitude": 51.1805,
+            "longitude": 14.4345,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 322,
+            "city": "Hoyerswerda",
+            "latitude": 51.4349,
+            "longitude": 14.2500,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 323,
+            "city": "Gorlitz Ost",
+            "latitude": 51.1527,
+            "longitude": 14.9870,
+            "countryIso": "DE",
+            "hasMarket": false
+        },
+        {
+            "id": 324,
+            "city": "Jelenia Gora",
+            "latitude": 50.9044,
+            "longitude": 15.7194,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 325,
+            "city": "Legnica",
+            "latitude": 51.2100,
+            "longitude": 16.1619,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 326,
+            "city": "Walbrzych",
+            "latitude": 50.7840,
+            "longitude": 16.2844,
+            "countryIso": "PL",
+            "hasMarket": false
+        },
+        {
+            "id": 327,
+            "city": "Liberec",
+            "latitude": 50.7671,
+            "longitude": 15.0562,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 328,
+            "city": "Usti nad Labem",
+            "latitude": 50.6607,
+            "longitude": 14.0323,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 329,
+            "city": "Decin",
+            "latitude": 50.7730,
+            "longitude": 14.1966,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 330,
+            "city": "Plzen",
+            "latitude": 49.7384,
+            "longitude": 13.3736,
+            "countryIso": "CZ",
+            "hasMarket": false
+        },
+        {
+            "id": 331,
+            "city": "Lille",
+            "latitude": 50.6292,
+            "longitude": 3.0573,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 332,
+            "city": "Roubaix",
+            "latitude": 50.6927,
+            "longitude": 3.1746,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 333,
+            "city": "Tourcoing",
+            "latitude": 50.7239,
+            "longitude": 3.1612,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 334,
+            "city": "Dunkerque",
+            "latitude": 51.0344,
+            "longitude": 2.3768,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 335,
+            "city": "Calais",
+            "latitude": 50.9513,
+            "longitude": 1.8587,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 336,
+            "city": "Arras",
+            "latitude": 50.2910,
+            "longitude": 2.7775,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 337,
+            "city": "Lens",
+            "latitude": 50.4322,
+            "longitude": 2.8336,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 338,
+            "city": "Valenciennes",
+            "latitude": 50.3570,
+            "longitude": 3.5237,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 339,
+            "city": "Amiens",
+            "latitude": 49.8941,
+            "longitude": 2.2957,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 340,
+            "city": "Beauvais",
+            "latitude": 49.4295,
+            "longitude": 2.0807,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 341,
+            "city": "Compiegne",
+            "latitude": 49.4170,
+            "longitude": 2.8261,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 342,
+            "city": "Soissons",
+            "latitude": 49.3817,
+            "longitude": 3.3230,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 343,
+            "city": "Saint-Quentin",
+            "latitude": 49.8489,
+            "longitude": 3.2876,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 344,
+            "city": "Reims Nord",
+            "latitude": 49.2800,
+            "longitude": 4.0200,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 345,
+            "city": "Chalons-en-Champagne",
+            "latitude": 48.9567,
+            "longitude": 4.3631,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 346,
+            "city": "Troyes",
+            "latitude": 48.2973,
+            "longitude": 4.0744,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 347,
+            "city": "Chaumont",
+            "latitude": 48.1113,
+            "longitude": 5.1413,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 348,
+            "city": "Nancy",
+            "latitude": 48.6921,
+            "longitude": 6.1844,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 349,
+            "city": "Epinal",
+            "latitude": 48.1748,
+            "longitude": 6.4500,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 350,
+            "city": "Charleville-Mezieres",
+            "latitude": 49.7725,
+            "longitude": 4.7207,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 351,
+            "city": "Lievin",
+            "latitude": 50.4223,
+            "longitude": 2.7747,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 352,
+            "city": "Maastricht",
+            "latitude": 50.8514,
+            "longitude": 5.6900,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 353,
+            "city": "Venlo",
+            "latitude": 51.3704,
+            "longitude": 6.1724,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 354,
+            "city": "Roermond",
+            "latitude": 51.1942,
+            "longitude": 5.9870,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 355,
+            "city": "Hasselt",
+            "latitude": 50.9307,
+            "longitude": 5.3325,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 356,
+            "city": "Genk",
+            "latitude": 50.9650,
+            "longitude": 5.5008,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 357,
+            "city": "Eupen",
+            "latitude": 50.6319,
+            "longitude": 6.0367,
+            "countryIso": "BE",
+            "hasMarket": false
+        },
+        {
+            "id": 358,
+            "city": "Tilburg",
+            "latitude": 51.5555,
+            "longitude": 5.0913,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 359,
+            "city": "Breda",
+            "latitude": 51.5719,
+            "longitude": 4.7683,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 360,
+            "city": "Dordrecht",
+            "latitude": 51.8133,
+            "longitude": 4.6901,
+            "countryIso": "NL",
+            "hasMarket": false
+        },
+        {
+            "id": 361,
+            "city": "Reading",
+            "latitude": 51.4543,
+            "longitude": -0.9781,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 362,
+            "city": "Slough",
+            "latitude": 51.5105,
+            "longitude": -0.5950,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 363,
+            "city": "Milton Keynes",
+            "latitude": 52.0406,
+            "longitude": -0.7594,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 364,
+            "city": "Luton",
+            "latitude": 51.8787,
+            "longitude": -0.4200,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 365,
+            "city": "Oxford",
+            "latitude": 51.7520,
+            "longitude": -1.2577,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 366,
+            "city": "Cambridge",
+            "latitude": 52.2053,
+            "longitude": 0.1218,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 367,
+            "city": "Peterborough",
+            "latitude": 52.5695,
+            "longitude": -0.2405,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 368,
+            "city": "Northampton",
+            "latitude": 52.2405,
+            "longitude": -0.9027,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 369,
+            "city": "Leicester",
+            "latitude": 52.6369,
+            "longitude": -1.1398,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 370,
+            "city": "Derby",
+            "latitude": 52.9225,
+            "longitude": -1.4746,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 371,
+            "city": "Nottingham",
+            "latitude": 52.9548,
+            "longitude": -1.1581,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 372,
+            "city": "Sheffield",
+            "latitude": 53.3811,
+            "longitude": -1.4701,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 373,
+            "city": "York",
+            "latitude": 53.9590,
+            "longitude": -1.0815,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 374,
+            "city": "Hull",
+            "latitude": 53.7676,
+            "longitude": -0.3274,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 375,
+            "city": "Middlesbrough",
+            "latitude": 54.5742,
+            "longitude": -1.2350,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 376,
+            "city": "Sunderland",
+            "latitude": 54.9069,
+            "longitude": -1.3838,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 377,
+            "city": "Newcastle upon Tyne",
+            "latitude": 54.9783,
+            "longitude": -1.6178,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 378,
+            "city": "Durham",
+            "latitude": 54.7753,
+            "longitude": -1.5849,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 379,
+            "city": "Carlisle",
+            "latitude": 54.8925,
+            "longitude": -2.9329,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 380,
+            "city": "Lancaster",
+            "latitude": 54.0466,
+            "longitude": -2.8007,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 381,
+            "city": "Blackpool",
+            "latitude": 53.8175,
+            "longitude": -3.0357,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 382,
+            "city": "Preston",
+            "latitude": 53.7632,
+            "longitude": -2.7031,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 383,
+            "city": "Bolton",
+            "latitude": 53.5769,
+            "longitude": -2.4282,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 384,
+            "city": "Wigan",
+            "latitude": 53.5450,
+            "longitude": -2.6320,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 385,
+            "city": "Stockport",
+            "latitude": 53.4106,
+            "longitude": -2.1575,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 386,
+            "city": "Macclesfield",
+            "latitude": 53.2596,
+            "longitude": -2.1256,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 387,
+            "city": "Chester",
+            "latitude": 53.1934,
+            "longitude": -2.8931,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 388,
+            "city": "Wrexham",
+            "latitude": 53.0465,
+            "longitude": -2.9936,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 389,
+            "city": "Shrewsbury",
+            "latitude": 52.7073,
+            "longitude": -2.7553,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 390,
+            "city": "Telford",
+            "latitude": 52.6766,
+            "longitude": -2.4493,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 391,
+            "city": "Hereford",
+            "latitude": 52.0567,
+            "longitude": -2.7160,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 392,
+            "city": "Worcester",
+            "latitude": 52.1920,
+            "longitude": -2.2200,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 393,
+            "city": "Gloucester",
+            "latitude": 51.8642,
+            "longitude": -2.2382,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 394,
+            "city": "Cheltenham",
+            "latitude": 51.9000,
+            "longitude": -2.0833,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 395,
+            "city": "Swindon",
+            "latitude": 51.5558,
+            "longitude": -1.7797,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 396,
+            "city": "Bath",
+            "latitude": 51.3758,
+            "longitude": -2.3599,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 397,
+            "city": "Exeter",
+            "latitude": 50.7184,
+            "longitude": -3.5339,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 398,
+            "city": "Plymouth",
+            "latitude": 50.3755,
+            "longitude": -4.1427,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 399,
+            "city": "Truro",
+            "latitude": 50.2632,
+            "longitude": -5.0510,
+            "countryIso": "GB",
+            "hasMarket": false
+        },
+        {
+            "id": 400,
+            "city": "Galway",
+            "latitude": 53.2707,
+            "longitude": -9.0568,
+            "countryIso": "IE",
+            "hasMarket": false
+        },
+        {
+            "id": 401,
+            "city": "Santander",
+            "latitude": 43.4623,
+            "longitude": -3.8099,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 402,
+            "city": "Torrelavega",
+            "latitude": 43.3515,
+            "longitude": -4.0470,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 403,
+            "city": "Gijon",
+            "latitude": 43.5322,
+            "longitude": -5.6611,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 404,
+            "city": "Oviedo",
+            "latitude": 43.3619,
+            "longitude": -5.8494,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 405,
+            "city": "Aviles",
+            "latitude": 43.5547,
+            "longitude": -5.9248,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 406,
+            "city": "Leon",
+            "latitude": 42.5987,
+            "longitude": -5.5671,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 407,
+            "city": "Ponferrada",
+            "latitude": 42.5463,
+            "longitude": -6.5908,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 408,
+            "city": "Lugo",
+            "latitude": 43.0125,
+            "longitude": -7.5550,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 409,
+            "city": "Ourense",
+            "latitude": 42.3358,
+            "longitude": -7.8639,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 410,
+            "city": "Pontevedra",
+            "latitude": 42.4299,
+            "longitude": -8.6444,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 411,
+            "city": "Vigo",
+            "latitude": 42.2406,
+            "longitude": -8.7207,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 412,
+            "city": "Ferrol",
+            "latitude": 43.4840,
+            "longitude": -8.2329,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 413,
+            "city": "A Coruna",
+            "latitude": 43.3623,
+            "longitude": -8.4115,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 414,
+            "city": "Zamora",
+            "latitude": 41.5035,
+            "longitude": -5.7468,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 415,
+            "city": "Salamanca",
+            "latitude": 40.9701,
+            "longitude": -5.6635,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 416,
+            "city": "Avila",
+            "latitude": 40.6567,
+            "longitude": -4.6812,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 417,
+            "city": "Segovia",
+            "latitude": 40.9429,
+            "longitude": -4.1088,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 418,
+            "city": "Caceres",
+            "latitude": 39.4753,
+            "longitude": -6.3722,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 419,
+            "city": "Badajoz",
+            "latitude": 38.8794,
+            "longitude": -6.9707,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 420,
+            "city": "Merida",
+            "latitude": 38.9170,
+            "longitude": -6.3442,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 421,
+            "city": "Huelva",
+            "latitude": 37.2614,
+            "longitude": -6.9447,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 422,
+            "city": "Jaen",
+            "latitude": 37.7796,
+            "longitude": -3.7849,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 423,
+            "city": "Linares",
+            "latitude": 38.0959,
+            "longitude": -3.6369,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 424,
+            "city": "Almeria",
+            "latitude": 36.8340,
+            "longitude": -2.4637,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 425,
+            "city": "Motril",
+            "latitude": 36.7466,
+            "longitude": -3.5200,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 426,
+            "city": "Setubal",
+            "latitude": 38.5244,
+            "longitude": -8.8882,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 427,
+            "city": "Evora",
+            "latitude": 38.5714,
+            "longitude": -7.9135,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 428,
+            "city": "Faro",
+            "latitude": 37.0194,
+            "longitude": -7.9304,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 429,
+            "city": "Portimao",
+            "latitude": 37.1366,
+            "longitude": -8.5377,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 430,
+            "city": "Coimbra Norte",
+            "latitude": 40.2300,
+            "longitude": -8.4200,
+            "countryIso": "PT",
+            "hasMarket": false
+        },
+        {
+            "id": 431,
+            "city": "Brest",
+            "latitude": 48.3904,
+            "longitude": -4.4861,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 432,
+            "city": "Quimper",
+            "latitude": 47.9961,
+            "longitude": -4.1029,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 433,
+            "city": "Lorient",
+            "latitude": 47.7480,
+            "longitude": -3.3661,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 434,
+            "city": "Vannes",
+            "latitude": 47.6582,
+            "longitude": -2.7608,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 435,
+            "city": "Saint-Nazaire",
+            "latitude": 47.2730,
+            "longitude": -2.2137,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 436,
+            "city": "Cholet",
+            "latitude": 47.0594,
+            "longitude": -0.8798,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 437,
+            "city": "Angers",
+            "latitude": 47.4784,
+            "longitude": -0.5632,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 438,
+            "city": "Le Mans",
+            "latitude": 48.0061,
+            "longitude": 0.1996,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 439,
+            "city": "Chartres",
+            "latitude": 48.4469,
+            "longitude": 1.4890,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 440,
+            "city": "Orleans",
+            "latitude": 47.9029,
+            "longitude": 1.9093,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 441,
+            "city": "Blois",
+            "latitude": 47.5861,
+            "longitude": 1.3359,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 442,
+            "city": "Tours",
+            "latitude": 47.3941,
+            "longitude": 0.6848,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 443,
+            "city": "Poitiers",
+            "latitude": 46.5802,
+            "longitude": 0.3404,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 444,
+            "city": "Niort",
+            "latitude": 46.3237,
+            "longitude": -0.4588,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 445,
+            "city": "La Roche-sur-Yon",
+            "latitude": 46.6705,
+            "longitude": -1.4262,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 446,
+            "city": "Taranto",
+            "latitude": 40.4644,
+            "longitude": 17.2470,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 447,
+            "city": "Brindisi",
+            "latitude": 40.6327,
+            "longitude": 17.9418,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 448,
+            "city": "Lecce",
+            "latitude": 40.3529,
+            "longitude": 18.1743,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 449,
+            "city": "Cosenza",
+            "latitude": 39.2983,
+            "longitude": 16.2530,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 450,
+            "city": "Reggio Calabria",
+            "latitude": 38.1140,
+            "longitude": 15.6500,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 451,
+            "city": "Messina",
+            "latitude": 38.1938,
+            "longitude": 15.5540,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 452,
+            "city": "Catania",
+            "latitude": 37.5079,
+            "longitude": 15.0830,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 453,
+            "city": "Siracusa",
+            "latitude": 37.0755,
+            "longitude": 15.2866,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 454,
+            "city": "Ragusa",
+            "latitude": 36.9269,
+            "longitude": 14.7255,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 455,
+            "city": "Trapani",
+            "latitude": 38.0184,
+            "longitude": 12.5143,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 456,
+            "city": "Palermo",
+            "latitude": 38.1157,
+            "longitude": 13.3615,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 457,
+            "city": "Cagliari",
+            "latitude": 39.2238,
+            "longitude": 9.1217,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 458,
+            "city": "Olbia",
+            "latitude": 40.9230,
+            "longitude": 9.4964,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 459,
+            "city": "Nuoro",
+            "latitude": 40.3200,
+            "longitude": 9.3300,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 460,
+            "city": "Sassari",
+            "latitude": 40.7267,
+            "longitude": 8.5592,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 461,
+            "city": "Ibiza",
+            "latitude": 38.9067,
+            "longitude": 1.4206,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 462,
+            "city": "Palma de Mallorca",
+            "latitude": 39.5696,
+            "longitude": 2.6502,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 463,
+            "city": "Mahon",
+            "latitude": 39.8886,
+            "longitude": 4.2658,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 464,
+            "city": "Las Palmas",
+            "latitude": 28.1235,
+            "longitude": -15.4363,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 465,
+            "city": "Santa Cruz de Tenerife",
+            "latitude": 28.4636,
+            "longitude": -16.2518,
+            "countryIso": "ES",
+            "hasMarket": false
+        },
+        {
+            "id": 466,
+            "city": "Perpignan Sud",
+            "latitude": 42.6750,
+            "longitude": 2.8950,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 467,
+            "city": "Carcassonne",
+            "latitude": 43.2130,
+            "longitude": 2.3510,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 468,
+            "city": "Foix",
+            "latitude": 42.9653,
+            "longitude": 1.6070,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 469,
+            "city": "Montauban Sud",
+            "latitude": 44.0000,
+            "longitude": 1.3500,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 470,
+            "city": "Avignon Sud",
+            "latitude": 43.9000,
+            "longitude": 4.8000,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 471,
+            "city": "Aix-en-Provence",
+            "latitude": 43.5297,
+            "longitude": 5.4474,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 472,
+            "city": "Draguignan",
+            "latitude": 43.5372,
+            "longitude": 6.4636,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 473,
+            "city": "Toulon",
+            "latitude": 43.1242,
+            "longitude": 5.9280,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 474,
+            "city": "Frejus",
+            "latitude": 43.4331,
+            "longitude": 6.7356,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 475,
+            "city": "Cannes",
+            "latitude": 43.5528,
+            "longitude": 7.0174,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 476,
+            "city": "Kalamata",
+            "latitude": 37.0389,
+            "longitude": 22.1142,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 477,
+            "city": "Sparta",
+            "latitude": 37.0755,
+            "longitude": 22.4297,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 478,
+            "city": "Corinth",
+            "latitude": 37.9407,
+            "longitude": 22.9513,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 479,
+            "city": "Chalcis",
+            "latitude": 38.4625,
+            "longitude": 23.5945,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 480,
+            "city": "Volos",
+            "latitude": 39.3610,
+            "longitude": 22.9425,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 481,
+            "city": "Kavala",
+            "latitude": 40.9396,
+            "longitude": 24.4018,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 482,
+            "city": "Alexandroupoli",
+            "latitude": 40.8487,
+            "longitude": 25.8744,
+            "countryIso": "GR",
+            "hasMarket": false
+        },
+        {
+            "id": 483,
+            "city": "Izmir",
+            "latitude": 38.4237,
+            "longitude": 27.1428,
+            "countryIso": "TR",
+            "hasMarket": false
+        },
+        {
+            "id": 484,
+            "city": "Edirne",
+            "latitude": 41.6771,
+            "longitude": 26.5557,
+            "countryIso": "TR",
+            "hasMarket": false
+        },
+        {
+            "id": 485,
+            "city": "Tekirdag",
+            "latitude": 40.9780,
+            "longitude": 27.5110,
+            "countryIso": "TR",
+            "hasMarket": false
+        },
+        {
+            "id": 486,
+            "city": "Marseille Est",
+            "latitude": 43.3000,
+            "longitude": 5.4500,
+            "countryIso": "FR",
+            "hasMarket": false
+        },
+        {
+            "id": 487,
+            "city": "Rijeka",
+            "latitude": 45.3271,
+            "longitude": 14.4422,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 488,
+            "city": "Porec",
+            "latitude": 45.2270,
+            "longitude": 13.5950,
+            "countryIso": "HR",
+            "hasMarket": false
+        },
+        {
+            "id": 489,
+            "city": "Kranj",
+            "latitude": 46.2389,
+            "longitude": 14.3556,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 490,
+            "city": "Novo Mesto",
+            "latitude": 45.8034,
+            "longitude": 15.1689,
+            "countryIso": "SI",
+            "hasMarket": false
+        },
+        {
+            "id": 491,
+            "city": "Trieste Porto",
+            "latitude": 45.6500,
+            "longitude": 13.7700,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 492,
+            "city": "Monfalcone",
+            "latitude": 45.8030,
+            "longitude": 13.5320,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 493,
+            "city": "Anzio",
+            "latitude": 41.4476,
+            "longitude": 12.6289,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 494,
+            "city": "Gaeta",
+            "latitude": 41.2147,
+            "longitude": 13.5700,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 495,
+            "city": "Frosinone",
+            "latitude": 41.6400,
+            "longitude": 13.3400,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 496,
+            "city": "Cassino",
+            "latitude": 41.4900,
+            "longitude": 13.8300,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 497,
+            "city": "Benevento",
+            "latitude": 41.1300,
+            "longitude": 14.7800,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 498,
+            "city": "Campobasso",
+            "latitude": 41.5600,
+            "longitude": 14.6600,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 499,
+            "city": "Isernia",
+            "latitude": 41.5900,
+            "longitude": 14.2300,
+            "countryIso": "IT",
+            "hasMarket": false
+        },
+        {
+            "id": 500,
+            "city": "Termoli",
+            "latitude": 41.9990,
+            "longitude": 14.9950,
+            "countryIso": "IT",
+            "hasMarket": false
+        }
+    ]
+}

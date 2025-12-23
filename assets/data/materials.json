@@ -1,185 +1,875 @@
 {
   "materials": [
-    { "id": 1, "name": "Agua", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 2, "name": "Electricidad", "category": "Energia", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 3, "name": "Petroleo crudo", "category": "Energia", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 4, "name": "Gas natural", "category": "Energia", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 5, "name": "Carbon", "category": "Energia", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 6, "name": "Arena", "category": "Construccion", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 7, "name": "Piedra", "category": "Construccion", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 8, "name": "Madera", "category": "Construccion", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 9, "name": "Madera dura", "category": "Construccion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 10, "name": "Hierro bruto", "category": "Industria", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 11, "name": "Cobre bruto", "category": "Industria", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 12, "name": "Aluminio bruto", "category": "Industria", "grade": 1, "components": [], "basePrice": 30 },
-    { "id": 13, "name": "Silicio", "category": "Electronica", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 14, "name": "Litio", "category": "Electronica", "grade": 1, "components": [], "basePrice": 30 },
-    { "id": 15, "name": "Oro bruto", "category": "Industria", "grade": 1, "components": [], "basePrice": 40 },
-    { "id": 16, "name": "Plata bruta", "category": "Industria", "grade": 1, "components": [], "basePrice": 35 },
-    { "id": 17, "name": "Uranio", "category": "Energia", "grade": 1, "components": [], "basePrice": 50 },
-    { "id": 18, "name": "Fosfato", "category": "Quimica", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 19, "name": "Caliza", "category": "Construccion", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 20, "name": "Agua salada", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-
-    { "id": 21, "name": "Semillas", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 22, "name": "Trigo", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 23, "name": "Maiz", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 24, "name": "Arroz", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 25, "name": "Ganado", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 30 },
-    { "id": 26, "name": "Pescado", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 27, "name": "Sal", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 15 },
-    { "id": 28, "name": "Azucar", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 29, "name": "Aceite vegetal crudo", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 30, "name": "Leche cruda", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 31, "name": "Huevos", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 32, "name": "Frutas", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 33, "name": "Verduras", "category": "Alimentacion", "grade": 1, "components": [], "basePrice": 20 },
-
-    { "id": 34, "name": "Caucho natural", "category": "Automocion", "grade": 1, "components": [], "basePrice": 25 },
-    { "id": 35, "name": "Algodon", "category": "Consumo", "grade": 1, "components": [], "basePrice": 20 },
-    { "id": 36, "name": "Lana", "category": "Consumo", "grade": 1, "components": [], "basePrice": 25 },
-
-    { "id": 37, "name": "Residuos organicos", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 38, "name": "Residuos plasticos", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 39, "name": "Residuos metalicos", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 40, "name": "Aire comprimido", "category": "Basicos", "grade": 1, "components": [], "basePrice": 10 },
-    { "id": 41, "name": "Agua potable", "category": "Basicos", "grade": 2,
-      "components": [{ "materialId": 1, "quantity": 2 }], "basePrice": 25 },
-
-    { "id": 42, "name": "Harina", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 22, "quantity": 2 }], "basePrice": 45 },
-
-    { "id": 43, "name": "Aceite refinado", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 29, "quantity": 2 }], "basePrice": 60 },
-
-    { "id": 44, "name": "Azucar refinada", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 28, "quantity": 2 }], "basePrice": 50 },
-
-    { "id": 45, "name": "Sal refinada", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 27, "quantity": 2 }], "basePrice": 40 },
-
-    { "id": 46, "name": "Carne limpia", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 25, "quantity": 1 }], "basePrice": 55 },
-
-    { "id": 47, "name": "Pescado limpio", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 26, "quantity": 1 }], "basePrice": 50 },
-
-    { "id": 48, "name": "Leche pasteurizada", "category": "Alimentacion", "grade": 2,
-      "components": [{ "materialId": 30, "quantity": 1 }], "basePrice": 45 },
-
-    { "id": 49, "name": "Aceite lubricante basico", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 3, "quantity": 1 }], "basePrice": 70 },
-
-    { "id": 50, "name": "Plastico", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 3, "quantity": 2 }], "basePrice": 75 },
-
-    { "id": 51, "name": "Vidrio", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 6, "quantity": 2 }], "basePrice": 40 },
-
-    { "id": 52, "name": "Cemento", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 19, "quantity": 2 }], "basePrice": 50 },
-
-    { "id": 53, "name": "Ladrillos", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 7, "quantity": 2 }], "basePrice": 45 },
-
-    { "id": 54, "name": "Madera tratada", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 8, "quantity": 2 }], "basePrice": 45 },
-
-    { "id": 55, "name": "Acero", "category": "Industria", "grade": 2,
+    {
+      "id": 1,
+      "name": "Agua",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 2,
+      "name": "Electricidad",
+      "category": "Energia",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 3,
+      "name": "Petroleo crudo",
+      "category": "Energia",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 4,
+      "name": "Gas natural",
+      "category": "Energia",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 5,
+      "name": "Carbon",
+      "category": "Energia",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 6,
+      "name": "Arena",
+      "category": "Construccion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 7,
+      "name": "Piedra",
+      "category": "Construccion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 8,
+      "name": "Madera",
+      "category": "Construccion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 9,
+      "name": "Madera dura",
+      "category": "Construccion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 10,
+      "name": "Hierro bruto",
+      "category": "Industria",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 11,
+      "name": "Cobre bruto",
+      "category": "Industria",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 12,
+      "name": "Aluminio bruto",
+      "category": "Industria",
+      "grade": 1,
+      "components": [],
+      "basePrice": 30
+    },
+    {
+      "id": 13,
+      "name": "Silicio",
+      "category": "Electronica",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 14,
+      "name": "Litio",
+      "category": "Electronica",
+      "grade": 1,
+      "components": [],
+      "basePrice": 30
+    },
+    {
+      "id": 15,
+      "name": "Oro bruto",
+      "category": "Industria",
+      "grade": 1,
+      "components": [],
+      "basePrice": 40
+    },
+    {
+      "id": 16,
+      "name": "Plata bruta",
+      "category": "Industria",
+      "grade": 1,
+      "components": [],
+      "basePrice": 35
+    },
+    {
+      "id": 17,
+      "name": "Uranio",
+      "category": "Energia",
+      "grade": 1,
+      "components": [],
+      "basePrice": 50
+    },
+    {
+      "id": 18,
+      "name": "Fosfato",
+      "category": "Quimica",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 19,
+      "name": "Caliza",
+      "category": "Construccion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 20,
+      "name": "Agua salada",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 21,
+      "name": "Semillas",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 22,
+      "name": "Trigo",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 23,
+      "name": "Maiz",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 24,
+      "name": "Arroz",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 25,
+      "name": "Ganado",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 30
+    },
+    {
+      "id": 26,
+      "name": "Pescado",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 27,
+      "name": "Sal",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 15
+    },
+    {
+      "id": 28,
+      "name": "Azucar",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 29,
+      "name": "Aceite vegetal crudo",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 30,
+      "name": "Leche cruda",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 31,
+      "name": "Huevos",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 32,
+      "name": "Frutas",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 33,
+      "name": "Verduras",
+      "category": "Alimentacion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 34,
+      "name": "Caucho natural",
+      "category": "Automocion",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 35,
+      "name": "Algodon",
+      "category": "Consumo",
+      "grade": 1,
+      "components": [],
+      "basePrice": 20
+    },
+    {
+      "id": 36,
+      "name": "Lana",
+      "category": "Consumo",
+      "grade": 1,
+      "components": [],
+      "basePrice": 25
+    },
+    {
+      "id": 37,
+      "name": "Residuos organicos",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 38,
+      "name": "Residuos plasticos",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 39,
+      "name": "Residuos metalicos",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 40,
+      "name": "Aire comprimido",
+      "category": "Basicos",
+      "grade": 1,
+      "components": [],
+      "basePrice": 10
+    },
+    {
+      "id": 41,
+      "name": "Agua potable",
+      "category": "Basicos",
+      "grade": 2,
       "components": [
-        { "materialId": 10, "quantity": 2 },
-        { "materialId": 5, "quantity": 1 }
-      ], "basePrice": 90 },
-
-    { "id": 56, "name": "Cobre refinado", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 11, "quantity": 2 }], "basePrice": 75 },
-
-    { "id": 57, "name": "Aluminio refinado", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 12, "quantity": 2 }], "basePrice": 95 },
-
-    { "id": 58, "name": "Silicio purificado", "category": "Electronica", "grade": 2,
-      "components": [{ "materialId": 13, "quantity": 2 }], "basePrice": 80 },
-
-    { "id": 59, "name": "Bateria quimica simple", "category": "Electronica", "grade": 2,
+        {
+          "materialId": 1,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 25
+    },
+    {
+      "id": 42,
+      "name": "Harina",
+      "category": "Alimentacion",
+      "grade": 2,
       "components": [
-        { "materialId": 14, "quantity": 1 },
-        { "materialId": 50, "quantity": 1 }
-      ], "basePrice": 120 },
-
-    { "id": 60, "name": "Fertilizante basico", "category": "Quimica", "grade": 2,
-      "components": [{ "materialId": 18, "quantity": 2 }], "basePrice": 60 },
-
-    { "id": 61, "name": "Combustible", "category": "Energia", "grade": 2,
-      "components": [{ "materialId": 3, "quantity": 2 }], "basePrice": 95 },
-
-    { "id": 62, "name": "Gas licuado", "category": "Energia", "grade": 2,
-      "components": [{ "materialId": 4, "quantity": 2 }], "basePrice": 85 },
-
-    { "id": 63, "name": "Electricidad industrial", "category": "Energia", "grade": 2,
-      "components": [{ "materialId": 2, "quantity": 2 }], "basePrice": 40 },
-
-    { "id": 64, "name": "Caucho procesado", "category": "Automocion", "grade": 2,
-      "components": [{ "materialId": 34, "quantity": 2 }], "basePrice": 60 },
-
-    { "id": 65, "name": "Tejido", "category": "Consumo", "grade": 2,
-      "components": [{ "materialId": 35, "quantity": 2 }], "basePrice": 50 },
-
-    { "id": 66, "name": "Cuero", "category": "Consumo", "grade": 2,
-      "components": [{ "materialId": 25, "quantity": 1 }], "basePrice": 70 },
-
-    { "id": 67, "name": "Papel", "category": "Consumo", "grade": 2,
-      "components": [{ "materialId": 8, "quantity": 1 }], "basePrice": 35 },
-
-    { "id": 68, "name": "Carton", "category": "Consumo", "grade": 2,
-      "components": [{ "materialId": 67, "quantity": 2 }], "basePrice": 55 },
-
-    { "id": 69, "name": "Aleacion basica", "category": "Industria", "grade": 2,
+        {
+          "materialId": 22,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 43,
+      "name": "Aceite refinado",
+      "category": "Alimentacion",
+      "grade": 2,
       "components": [
-        { "materialId": 10, "quantity": 1 },
-        { "materialId": 11, "quantity": 1 }
-      ], "basePrice": 85 },
-
-    { "id": 70, "name": "Agua destilada", "category": "Basicos", "grade": 2,
-      "components": [{ "materialId": 1, "quantity": 2 }], "basePrice": 30 },
-
-    { "id": 71, "name": "Quimicos basicos", "category": "Quimica", "grade": 2,
-      "components": [{ "materialId": 18, "quantity": 1 }], "basePrice": 55 },
-
-    { "id": 72, "name": "Plastico reciclado", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 38, "quantity": 2 }], "basePrice": 45 },
-
-    { "id": 73, "name": "Metal reciclado", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 39, "quantity": 2 }], "basePrice": 45 },
-
-    { "id": 74, "name": "Biocombustible", "category": "Energia", "grade": 2,
-      "components": [{ "materialId": 37, "quantity": 2 }], "basePrice": 65 },
-
-    { "id": 75, "name": "Compuesto organico", "category": "Quimica", "grade": 2,
-      "components": [{ "materialId": 37, "quantity": 1 }], "basePrice": 50 },
-
-    { "id": 76, "name": "Plastico tecnico", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 50, "quantity": 2 }], "basePrice": 95 },
-
-    { "id": 77, "name": "Fibra sintetica", "category": "Consumo", "grade": 2,
-      "components": [{ "materialId": 50, "quantity": 1 }], "basePrice": 80 },
-
-    { "id": 78, "name": "Aislante termico", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 51, "quantity": 1 }], "basePrice": 70 },
-
-    { "id": 79, "name": "Panel simple", "category": "Construccion", "grade": 2,
-      "components": [{ "materialId": 54, "quantity": 2 }], "basePrice": 85 },
-
-    { "id": 80, "name": "Componente mecanico basico", "category": "Industria", "grade": 2,
-      "components": [{ "materialId": 55, "quantity": 1 }], "basePrice": 100 },
+        {
+          "materialId": 29,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 60
+    },
+    {
+      "id": 44,
+      "name": "Azucar refinada",
+      "category": "Alimentacion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 28,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 50
+    },
+    {
+      "id": 45,
+      "name": "Sal refinada",
+      "category": "Alimentacion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 27,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 40
+    },
+    {
+      "id": 46,
+      "name": "Carne limpia",
+      "category": "Alimentacion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 25,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 55
+    },
+    {
+      "id": 47,
+      "name": "Pescado limpio",
+      "category": "Alimentacion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 26,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 50
+    },
+    {
+      "id": 48,
+      "name": "Leche pasteurizada",
+      "category": "Alimentacion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 30,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 49,
+      "name": "Aceite lubricante basico",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 3,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 70
+    },
+    {
+      "id": 50,
+      "name": "Plastico",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 3,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 75
+    },
+    {
+      "id": 51,
+      "name": "Vidrio",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 6,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 40
+    },
+    {
+      "id": 52,
+      "name": "Cemento",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 19,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 50
+    },
+    {
+      "id": 53,
+      "name": "Ladrillos",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 7,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 54,
+      "name": "Madera tratada",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 8,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 55,
+      "name": "Acero",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 10,
+          "quantity": 2
+        },
+        {
+          "materialId": 5,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 90
+    },
+    {
+      "id": 56,
+      "name": "Cobre refinado",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 11,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 75
+    },
+    {
+      "id": 57,
+      "name": "Aluminio refinado",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 12,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 95
+    },
+    {
+      "id": 58,
+      "name": "Silicio purificado",
+      "category": "Electronica",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 13,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 80
+    },
+    {
+      "id": 59,
+      "name": "Bateria quimica simple",
+      "category": "Electronica",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 14,
+          "quantity": 1
+        },
+        {
+          "materialId": 50,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 120
+    },
+    {
+      "id": 60,
+      "name": "Fertilizante basico",
+      "category": "Quimica",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 18,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 60
+    },
+    {
+      "id": 61,
+      "name": "Combustible",
+      "category": "Energia",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 3,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 95
+    },
+    {
+      "id": 62,
+      "name": "Gas licuado",
+      "category": "Energia",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 4,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 85
+    },
+    {
+      "id": 63,
+      "name": "Electricidad industrial",
+      "category": "Energia",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 2,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 40
+    },
+    {
+      "id": 64,
+      "name": "Caucho procesado",
+      "category": "Automocion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 34,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 60
+    },
+    {
+      "id": 65,
+      "name": "Tejido",
+      "category": "Consumo",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 35,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 50
+    },
+    {
+      "id": 66,
+      "name": "Cuero",
+      "category": "Consumo",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 25,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 70
+    },
+    {
+      "id": 67,
+      "name": "Papel",
+      "category": "Consumo",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 8,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 35
+    },
+    {
+      "id": 68,
+      "name": "Carton",
+      "category": "Consumo",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 67,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 55
+    },
+    {
+      "id": 69,
+      "name": "Aleacion basica",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 10,
+          "quantity": 1
+        },
+        {
+          "materialId": 11,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 85
+    },
+    {
+      "id": 70,
+      "name": "Agua destilada",
+      "category": "Basicos",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 1,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 30
+    },
+    {
+      "id": 71,
+      "name": "Quimicos basicos",
+      "category": "Quimica",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 18,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 55
+    },
+    {
+      "id": 72,
+      "name": "Plastico reciclado",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 38,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 73,
+      "name": "Metal reciclado",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 39,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 45
+    },
+    {
+      "id": 74,
+      "name": "Biocombustible",
+      "category": "Energia",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 37,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 65
+    },
+    {
+      "id": 75,
+      "name": "Compuesto organico",
+      "category": "Quimica",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 37,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 50
+    },
+    {
+      "id": 76,
+      "name": "Plastico tecnico",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 50,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 95
+    },
+    {
+      "id": 77,
+      "name": "Fibra sintetica",
+      "category": "Consumo",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 50,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 80
+    },
+    {
+      "id": 78,
+      "name": "Aislante termico",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 51,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 70
+    },
+    {
+      "id": 79,
+      "name": "Panel simple",
+      "category": "Construccion",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 54,
+          "quantity": 2
+        }
+      ],
+      "basePrice": 85
+    },
+    {
+      "id": 80,
+      "name": "Componente mecanico basico",
+      "category": "Industria",
+      "grade": 2,
+      "components": [
+        {
+          "materialId": 55,
+          "quantity": 1
+        }
+      ],
+      "basePrice": 100
+    },
     {
       "id": 81,
       "name": "Pan",
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 42, "quantity": 2 },
-        { "materialId": 41, "quantity": 1 },
-        { "materialId": 2, "quantity": 1 }
+        {
+          "materialId": 42,
+          "quantity": 2
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        },
+        {
+          "materialId": 2,
+          "quantity": 1
+        }
       ],
       "basePrice": 170
     },
@@ -189,9 +879,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 42, "quantity": 2 },
-        { "materialId": 41, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 42,
+          "quantity": 2
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 180
     },
@@ -201,9 +900,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 46, "quantity": 2 },
-        { "materialId": 45, "quantity": 1 },
-        { "materialId": 41, "quantity": 1 }
+        {
+          "materialId": 46,
+          "quantity": 2
+        },
+        {
+          "materialId": 45,
+          "quantity": 1
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        }
       ],
       "basePrice": 240
     },
@@ -213,9 +921,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 47, "quantity": 2 },
-        { "materialId": 78, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 47,
+          "quantity": 2
+        },
+        {
+          "materialId": 78,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 250
     },
@@ -225,9 +942,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 48, "quantity": 2 },
-        { "materialId": 44, "quantity": 1 },
-        { "materialId": 41, "quantity": 1 }
+        {
+          "materialId": 48,
+          "quantity": 2
+        },
+        {
+          "materialId": 44,
+          "quantity": 1
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        }
       ],
       "basePrice": 230
     },
@@ -237,9 +963,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 83, "quantity": 1 },
-        { "materialId": 84, "quantity": 1 },
-        { "materialId": 105, "quantity": 1 }
+        {
+          "materialId": 83,
+          "quantity": 1
+        },
+        {
+          "materialId": 84,
+          "quantity": 1
+        },
+        {
+          "materialId": 105,
+          "quantity": 1
+        }
       ],
       "basePrice": 280
     },
@@ -249,9 +984,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 43, "quantity": 2 },
-        { "materialId": 41, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 43,
+          "quantity": 2
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 220
     },
@@ -261,9 +1005,18 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 41, "quantity": 2 },
-        { "materialId": 44, "quantity": 1 },
-        { "materialId": 105, "quantity": 1 }
+        {
+          "materialId": 41,
+          "quantity": 2
+        },
+        {
+          "materialId": 44,
+          "quantity": 1
+        },
+        {
+          "materialId": 105,
+          "quantity": 1
+        }
       ],
       "basePrice": 210
     },
@@ -273,23 +1026,43 @@
       "category": "Alimentacion",
       "grade": 3,
       "components": [
-        { "materialId": 81, "quantity": 1 },
-        { "materialId": 83, "quantity": 1 },
-        { "materialId": 45, "quantity": 1 },
-        { "materialId": 41, "quantity": 1 }
+        {
+          "materialId": 81,
+          "quantity": 1
+        },
+        {
+          "materialId": 83,
+          "quantity": 1
+        },
+        {
+          "materialId": 45,
+          "quantity": 1
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        }
       ],
       "basePrice": 320
     },
-
     {
       "id": 90,
       "name": "Fertilizante avanzado",
       "category": "Quimica",
       "grade": 3,
       "components": [
-        { "materialId": 60, "quantity": 2 },
-        { "materialId": 75, "quantity": 1 },
-        { "materialId": 41, "quantity": 1 }
+        {
+          "materialId": 60,
+          "quantity": 2
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        }
       ],
       "basePrice": 280
     },
@@ -299,9 +1072,18 @@
       "category": "Quimica",
       "grade": 3,
       "components": [
-        { "materialId": 71, "quantity": 2 },
-        { "materialId": 41, "quantity": 1 },
-        { "materialId": 75, "quantity": 1 }
+        {
+          "materialId": 71,
+          "quantity": 2
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        }
       ],
       "basePrice": 260
     },
@@ -311,9 +1093,18 @@
       "category": "Quimica",
       "grade": 3,
       "components": [
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 71, "quantity": 1 },
-        { "materialId": 41, "quantity": 1 }
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 71,
+          "quantity": 1
+        },
+        {
+          "materialId": 41,
+          "quantity": 1
+        }
       ],
       "basePrice": 250
     },
@@ -323,9 +1114,18 @@
       "category": "Electronica",
       "grade": 3,
       "components": [
-        { "materialId": 59, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 },
-        { "materialId": 75, "quantity": 1 }
+        {
+          "materialId": 59,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        }
       ],
       "basePrice": 380
     },
@@ -335,9 +1135,18 @@
       "category": "Electronica",
       "grade": 3,
       "components": [
-        { "materialId": 56, "quantity": 1 },
-        { "materialId": 58, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 56,
+          "quantity": 1
+        },
+        {
+          "materialId": 58,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 340
     },
@@ -347,8 +1156,14 @@
       "category": "Electronica",
       "grade": 3,
       "components": [
-        { "materialId": 56, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 56,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 280
     },
@@ -358,9 +1173,18 @@
       "category": "Energia",
       "grade": 3,
       "components": [
-        { "materialId": 58, "quantity": 1 },
-        { "materialId": 51, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 58,
+          "quantity": 1
+        },
+        {
+          "materialId": 51,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 420
     },
@@ -370,10 +1194,22 @@
       "category": "Automocion",
       "grade": 3,
       "components": [
-        { "materialId": 55, "quantity": 2 },
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 56, "quantity": 1 },
-        { "materialId": 61, "quantity": 1 }
+        {
+          "materialId": 55,
+          "quantity": 2
+        },
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 56,
+          "quantity": 1
+        },
+        {
+          "materialId": 61,
+          "quantity": 1
+        }
       ],
       "basePrice": 420
     },
@@ -383,9 +1219,18 @@
       "category": "Automocion",
       "grade": 3,
       "components": [
-        { "materialId": 64, "quantity": 2 },
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 61, "quantity": 1 }
+        {
+          "materialId": 64,
+          "quantity": 2
+        },
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 61,
+          "quantity": 1
+        }
       ],
       "basePrice": 300
     },
@@ -395,9 +1240,18 @@
       "category": "Automocion",
       "grade": 3,
       "components": [
-        { "materialId": 55, "quantity": 1 },
-        { "materialId": 73, "quantity": 1 },
-        { "materialId": 49, "quantity": 1 }
+        {
+          "materialId": 55,
+          "quantity": 1
+        },
+        {
+          "materialId": 73,
+          "quantity": 1
+        },
+        {
+          "materialId": 49,
+          "quantity": 1
+        }
       ],
       "basePrice": 380
     },
@@ -407,21 +1261,35 @@
       "category": "Automocion",
       "grade": 3,
       "components": [
-        { "materialId": 57, "quantity": 2 },
-        { "materialId": 55, "quantity": 1 }
+        {
+          "materialId": 57,
+          "quantity": 2
+        },
+        {
+          "materialId": 55,
+          "quantity": 1
+        }
       ],
       "basePrice": 450
     },
-
     {
       "id": 101,
       "name": "Electrodomestico simple",
       "category": "Consumo",
       "grade": 3,
       "components": [
-        { "materialId": 50, "quantity": 1 },
-        { "materialId": 94, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 50,
+          "quantity": 1
+        },
+        {
+          "materialId": 94,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 380
     },
@@ -431,8 +1299,14 @@
       "category": "Consumo",
       "grade": 3,
       "components": [
-        { "materialId": 54, "quantity": 2 },
-        { "materialId": 67, "quantity": 1 }
+        {
+          "materialId": 54,
+          "quantity": 2
+        },
+        {
+          "materialId": 67,
+          "quantity": 1
+        }
       ],
       "basePrice": 300
     },
@@ -442,8 +1316,14 @@
       "category": "Consumo",
       "grade": 3,
       "components": [
-        { "materialId": 65, "quantity": 2 },
-        { "materialId": 44, "quantity": 1 }
+        {
+          "materialId": 65,
+          "quantity": 2
+        },
+        {
+          "materialId": 44,
+          "quantity": 1
+        }
       ],
       "basePrice": 260
     },
@@ -453,9 +1333,18 @@
       "category": "Industria",
       "grade": 3,
       "components": [
-        { "materialId": 50, "quantity": 1 },
-        { "materialId": 68, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 50,
+          "quantity": 1
+        },
+        {
+          "materialId": 68,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 300
     },
@@ -465,8 +1354,14 @@
       "category": "Industria",
       "grade": 3,
       "components": [
-        { "materialId": 80, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 80,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 480
     },
@@ -476,8 +1371,14 @@
       "category": "Construccion",
       "grade": 3,
       "components": [
-        { "materialId": 79, "quantity": 2 },
-        { "materialId": 55, "quantity": 1 }
+        {
+          "materialId": 79,
+          "quantity": 2
+        },
+        {
+          "materialId": 55,
+          "quantity": 1
+        }
       ],
       "basePrice": 360
     },
@@ -487,8 +1388,14 @@
       "category": "Construccion",
       "grade": 3,
       "components": [
-        { "materialId": 55, "quantity": 1 },
-        { "materialId": 50, "quantity": 1 }
+        {
+          "materialId": 55,
+          "quantity": 1
+        },
+        {
+          "materialId": 50,
+          "quantity": 1
+        }
       ],
       "basePrice": 330
     },
@@ -498,8 +1405,14 @@
       "category": "Construccion",
       "grade": 3,
       "components": [
-        { "materialId": 51, "quantity": 2 },
-        { "materialId": 54, "quantity": 1 }
+        {
+          "materialId": 51,
+          "quantity": 2
+        },
+        {
+          "materialId": 54,
+          "quantity": 1
+        }
       ],
       "basePrice": 310
     },
@@ -509,8 +1422,14 @@
       "category": "Construccion",
       "grade": 3,
       "components": [
-        { "materialId": 54, "quantity": 1 },
-        { "materialId": 55, "quantity": 1 }
+        {
+          "materialId": 54,
+          "quantity": 1
+        },
+        {
+          "materialId": 55,
+          "quantity": 1
+        }
       ],
       "basePrice": 340
     },
@@ -520,8 +1439,14 @@
       "category": "Industria",
       "grade": 3,
       "components": [
-        { "materialId": 104, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 104,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 360
     },
@@ -531,11 +1456,26 @@
       "category": "Automocion",
       "grade": 4,
       "components": [
-        { "materialId": 97, "quantity": 2 },
-        { "materialId": 55, "quantity": 2 },
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 56, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 97,
+          "quantity": 2
+        },
+        {
+          "materialId": 55,
+          "quantity": 2
+        },
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 56,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1200
     },
@@ -545,10 +1485,22 @@
       "category": "Automocion",
       "grade": 4,
       "components": [
-        { "materialId": 100, "quantity": 2 },
-        { "materialId": 55, "quantity": 2 },
-        { "materialId": 69, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 100,
+          "quantity": 2
+        },
+        {
+          "materialId": 55,
+          "quantity": 2
+        },
+        {
+          "materialId": 69,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1050
     },
@@ -558,10 +1510,22 @@
       "category": "Automocion",
       "grade": 4,
       "components": [
-        { "materialId": 99, "quantity": 2 },
-        { "materialId": 55, "quantity": 1 },
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 99,
+          "quantity": 2
+        },
+        {
+          "materialId": 55,
+          "quantity": 1
+        },
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 980
     },
@@ -571,24 +1535,47 @@
       "category": "Automocion",
       "grade": 4,
       "components": [
-        { "materialId": 94, "quantity": 2 },
-        { "materialId": 95, "quantity": 1 },
-        { "materialId": 93, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 94,
+          "quantity": 2
+        },
+        {
+          "materialId": 95,
+          "quantity": 1
+        },
+        {
+          "materialId": 93,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1100
     },
-
     {
       "id": 145,
       "name": "Microchip",
       "category": "Electronica",
       "grade": 4,
       "components": [
-        { "materialId": 94, "quantity": 2 },
-        { "materialId": 58, "quantity": 1 },
-        { "materialId": 75, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 94,
+          "quantity": 2
+        },
+        {
+          "materialId": 58,
+          "quantity": 1
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1400
     },
@@ -598,10 +1585,22 @@
       "category": "Electronica",
       "grade": 4,
       "components": [
-        { "materialId": 93, "quantity": 2 },
-        { "materialId": 14, "quantity": 1 },
-        { "materialId": 75, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 93,
+          "quantity": 2
+        },
+        {
+          "materialId": 14,
+          "quantity": 1
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1350
     },
@@ -611,23 +1610,43 @@
       "category": "Electronica",
       "grade": 4,
       "components": [
-        { "materialId": 94, "quantity": 2 },
-        { "materialId": 56, "quantity": 1 },
-        { "materialId": 159, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 94,
+          "quantity": 2
+        },
+        {
+          "materialId": 56,
+          "quantity": 1
+        },
+        {
+          "materialId": 159,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1250
     },
-
     {
       "id": 148,
       "name": "Panel solar avanzado",
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 96, "quantity": 2 },
-        { "materialId": 145, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 96,
+          "quantity": 2
+        },
+        {
+          "materialId": 145,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1500
     },
@@ -637,9 +1656,18 @@
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 97, "quantity": 1 },
-        { "materialId": 95, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 97,
+          "quantity": 1
+        },
+        {
+          "materialId": 95,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 1200
     },
@@ -649,23 +1677,43 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 49, "quantity": 1 },
-        { "materialId": 95, "quantity": 1 },
-        { "materialId": 78, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 49,
+          "quantity": 1
+        },
+        {
+          "materialId": 95,
+          "quantity": 1
+        },
+        {
+          "materialId": 78,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1150
     },
-
     {
       "id": 151,
       "name": "Maquinaria industrial avanzada",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 105, "quantity": 2 },
-        { "materialId": 97, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 105,
+          "quantity": 2
+        },
+        {
+          "materialId": 97,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1600
     },
@@ -675,22 +1723,39 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 151, "quantity": 1 },
-        { "materialId": 110, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 151,
+          "quantity": 1
+        },
+        {
+          "materialId": 110,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1750
     },
-
     {
       "id": 153,
       "name": "Electrodomestico avanzado",
       "category": "Consumo",
       "grade": 4,
       "components": [
-        { "materialId": 101, "quantity": 2 },
-        { "materialId": 146, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 101,
+          "quantity": 2
+        },
+        {
+          "materialId": 146,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1400
     },
@@ -700,9 +1765,18 @@
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 145, "quantity": 2 },
-        { "materialId": 146, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 145,
+          "quantity": 2
+        },
+        {
+          "materialId": 146,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1800
     },
@@ -712,22 +1786,39 @@
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 101, "quantity": 2 },
-        { "materialId": 94, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 101,
+          "quantity": 2
+        },
+        {
+          "materialId": 94,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1500
     },
-
     {
       "id": 156,
       "name": "Estructura metalica",
       "category": "Construccion",
       "grade": 4,
       "components": [
-        { "materialId": 55, "quantity": 3 },
-        { "materialId": 69, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 55,
+          "quantity": 3
+        },
+        {
+          "materialId": 69,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1000
     },
@@ -737,9 +1828,18 @@
       "category": "Construccion",
       "grade": 4,
       "components": [
-        { "materialId": 106, "quantity": 2 },
-        { "materialId": 78, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 106,
+          "quantity": 2
+        },
+        {
+          "materialId": 78,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1100
     },
@@ -749,22 +1849,39 @@
       "category": "Construccion",
       "grade": 4,
       "components": [
-        { "materialId": 150, "quantity": 1 },
-        { "materialId": 95, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 150,
+          "quantity": 1
+        },
+        {
+          "materialId": 95,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1250
     },
-
     {
       "id": 159,
       "name": "Plastico avanzado",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 76, "quantity": 2 },
-        { "materialId": 75, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 76,
+          "quantity": 2
+        },
+        {
+          "materialId": 75,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1150
     },
@@ -774,22 +1891,39 @@
       "category": "Electronica",
       "grade": 4,
       "components": [
-        { "materialId": 147, "quantity": 1 },
-        { "materialId": 159, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 147,
+          "quantity": 1
+        },
+        {
+          "materialId": 159,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1300
     },
-
     {
       "id": 161,
       "name": "Sistema logistico automatizado",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 110, "quantity": 2 },
-        { "materialId": 105, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 110,
+          "quantity": 2
+        },
+        {
+          "materialId": 105,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1500
     },
@@ -799,9 +1933,18 @@
       "category": "Construccion",
       "grade": 4,
       "components": [
-        { "materialId": 97, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 97,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1650
     },
@@ -811,22 +1954,39 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 94, "quantity": 1 },
-        { "materialId": 147, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 94,
+          "quantity": 1
+        },
+        {
+          "materialId": 147,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1450
     },
-
     {
       "id": 164,
       "name": "Equipo de comunicaciones",
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 145, "quantity": 1 },
-        { "materialId": 101, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 145,
+          "quantity": 1
+        },
+        {
+          "materialId": 101,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1550
     },
@@ -836,21 +1996,35 @@
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 146, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 146,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1600
     },
-
     {
       "id": 166,
       "name": "Planta industrial modular",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 152, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 152,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1800
     },
@@ -860,9 +2034,18 @@
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 149, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 149,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1700
     },
@@ -872,21 +2055,35 @@
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 164, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 164,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1850
     },
-
     {
       "id": 169,
       "name": "Sistema de produccion automatizada",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 152, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 152,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1900
     },
@@ -896,21 +2093,35 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 141, "quantity": 1 },
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 141,
+          "quantity": 1
+        },
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2000
     },
-
     {
       "id": 171,
       "name": "Sistema de gestion logistica",
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 155, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 155,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1750
     },
@@ -920,22 +2131,39 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 166, "quantity": 1 },
-        { "materialId": 169, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 166,
+          "quantity": 1
+        },
+        {
+          "materialId": 169,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2100
     },
-
     {
       "id": 173,
       "name": "Sistema de transporte automatizado",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 161, "quantity": 1 },
-        { "materialId": 170, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 161,
+          "quantity": 1
+        },
+        {
+          "materialId": 170,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1950
     },
@@ -945,22 +2173,39 @@
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 165, "quantity": 1 },
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 165,
+          "quantity": 1
+        },
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 1800
     },
-
     {
       "id": 175,
       "name": "Sistema de automatizacion integral",
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 168, "quantity": 1 },
-        { "materialId": 171, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 168,
+          "quantity": 1
+        },
+        {
+          "materialId": 171,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2200
     },
@@ -970,22 +2215,39 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 172, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 172,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2300
     },
-
     {
       "id": 177,
       "name": "Sistema energetico modular",
       "category": "Energia",
       "grade": 4,
       "components": [
-        { "materialId": 174, "quantity": 1 },
-        { "materialId": 167, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 174,
+          "quantity": 1
+        },
+        {
+          "materialId": 167,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2250
     },
@@ -995,21 +2257,35 @@
       "category": "Tecnologia",
       "grade": 4,
       "components": [
-        { "materialId": 175, "quantity": 1 },
-        { "materialId": 176, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 175,
+          "quantity": 1
+        },
+        {
+          "materialId": 176,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2500
     },
-
     {
       "id": 179,
       "name": "Complejo industrial avanzado",
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 176, "quantity": 2 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 176,
+          "quantity": 2
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 2700
     },
@@ -1019,9 +2295,18 @@
       "category": "Industria",
       "grade": 4,
       "components": [
-        { "materialId": 179, "quantity": 1 },
-        { "materialId": 172, "quantity": 1 },
-        { "materialId": 63, "quantity": 1 }
+        {
+          "materialId": 179,
+          "quantity": 1
+        },
+        {
+          "materialId": 172,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 1
+        }
       ],
       "basePrice": 3000
     },
@@ -1031,12 +2316,30 @@
       "category": "Automocion",
       "grade": 5,
       "components": [
-        { "materialId": 141, "quantity": 1 },
-        { "materialId": 142, "quantity": 1 },
-        { "materialId": 143, "quantity": 1 },
-        { "materialId": 144, "quantity": 1 },
-        { "materialId": 98, "quantity": 4 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 141,
+          "quantity": 1
+        },
+        {
+          "materialId": 142,
+          "quantity": 1
+        },
+        {
+          "materialId": 143,
+          "quantity": 1
+        },
+        {
+          "materialId": 144,
+          "quantity": 1
+        },
+        {
+          "materialId": 98,
+          "quantity": 4
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 6200
     },
@@ -1046,12 +2349,30 @@
       "category": "Automocion",
       "grade": 5,
       "components": [
-        { "materialId": 141, "quantity": 2 },
-        { "materialId": 142, "quantity": 1 },
-        { "materialId": 143, "quantity": 1 },
-        { "materialId": 144, "quantity": 1 },
-        { "materialId": 98, "quantity": 6 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 141,
+          "quantity": 2
+        },
+        {
+          "materialId": 142,
+          "quantity": 1
+        },
+        {
+          "materialId": 143,
+          "quantity": 1
+        },
+        {
+          "materialId": 144,
+          "quantity": 1
+        },
+        {
+          "materialId": 98,
+          "quantity": 6
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 8800
     },
@@ -1061,11 +2382,26 @@
       "category": "Automocion",
       "grade": 5,
       "components": [
-        { "materialId": 141, "quantity": 1 },
-        { "materialId": 142, "quantity": 1 },
-        { "materialId": 144, "quantity": 1 },
-        { "materialId": 98, "quantity": 4 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 141,
+          "quantity": 1
+        },
+        {
+          "materialId": 142,
+          "quantity": 1
+        },
+        {
+          "materialId": 144,
+          "quantity": 1
+        },
+        {
+          "materialId": 98,
+          "quantity": 4
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 5400
     },
@@ -1075,27 +2411,59 @@
       "category": "Automocion",
       "grade": 5,
       "components": [
-        { "materialId": 141, "quantity": 2 },
-        { "materialId": 142, "quantity": 2 },
-        { "materialId": 143, "quantity": 1 },
-        { "materialId": 144, "quantity": 1 },
-        { "materialId": 98, "quantity": 8 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 141,
+          "quantity": 2
+        },
+        {
+          "materialId": 142,
+          "quantity": 2
+        },
+        {
+          "materialId": 143,
+          "quantity": 1
+        },
+        {
+          "materialId": 144,
+          "quantity": 1
+        },
+        {
+          "materialId": 98,
+          "quantity": 8
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 10500
     },
-
     {
       "id": 185,
       "name": "Smartphone",
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 145, "quantity": 2 },
-        { "materialId": 146, "quantity": 1 },
-        { "materialId": 147, "quantity": 1 },
-        { "materialId": 159, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 145,
+          "quantity": 2
+        },
+        {
+          "materialId": 146,
+          "quantity": 1
+        },
+        {
+          "materialId": 147,
+          "quantity": 1
+        },
+        {
+          "materialId": 159,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 7200
     },
@@ -1105,11 +2473,26 @@
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 154, "quantity": 1 },
-        { "materialId": 145, "quantity": 2 },
-        { "materialId": 146, "quantity": 1 },
-        { "materialId": 159, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 154,
+          "quantity": 1
+        },
+        {
+          "materialId": 145,
+          "quantity": 2
+        },
+        {
+          "materialId": 146,
+          "quantity": 1
+        },
+        {
+          "materialId": 159,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 9800
     },
@@ -1119,26 +2502,55 @@
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 154, "quantity": 2 },
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 147, "quantity": 1 },
-        { "materialId": 165, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 154,
+          "quantity": 2
+        },
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 147,
+          "quantity": 1
+        },
+        {
+          "materialId": 165,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 14500
     },
-
     {
       "id": 188,
       "name": "Robot industrial",
       "category": "Industria",
       "grade": 5,
       "components": [
-        { "materialId": 170, "quantity": 1 },
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 141, "quantity": 1 },
-        { "materialId": 160, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 170,
+          "quantity": 1
+        },
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 141,
+          "quantity": 1
+        },
+        {
+          "materialId": 160,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 11200
     },
@@ -1148,11 +2560,26 @@
       "category": "Industria",
       "grade": 5,
       "components": [
-        { "materialId": 151, "quantity": 2 },
-        { "materialId": 141, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 150, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 151,
+          "quantity": 2
+        },
+        {
+          "materialId": 141,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 150,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 13200
     },
@@ -1162,25 +2589,51 @@
       "category": "Industria",
       "grade": 5,
       "components": [
-        { "materialId": 152, "quantity": 2 },
-        { "materialId": 169, "quantity": 1 },
-        { "materialId": 155, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 152,
+          "quantity": 2
+        },
+        {
+          "materialId": 169,
+          "quantity": 1
+        },
+        {
+          "materialId": 155,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 15800
     },
-
     {
       "id": 191,
       "name": "Planta solar",
       "category": "Energia",
       "grade": 5,
       "components": [
-        { "materialId": 147, "quantity": 2 },
-        { "materialId": 165, "quantity": 1 },
-        { "materialId": 167, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 147,
+          "quantity": 2
+        },
+        {
+          "materialId": 165,
+          "quantity": 1
+        },
+        {
+          "materialId": 167,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 16500
     },
@@ -1190,26 +2643,55 @@
       "category": "Energia",
       "grade": 5,
       "components": [
-        { "materialId": 148, "quantity": 2 },
-        { "materialId": 149, "quantity": 1 },
-        { "materialId": 174, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 148,
+          "quantity": 2
+        },
+        {
+          "materialId": 149,
+          "quantity": 1
+        },
+        {
+          "materialId": 174,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 18500
     },
-
     {
       "id": 193,
       "name": "Centro de datos",
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 187, "quantity": 1 },
-        { "materialId": 168, "quantity": 1 },
-        { "materialId": 165, "quantity": 1 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 187,
+          "quantity": 1
+        },
+        {
+          "materialId": 168,
+          "quantity": 1
+        },
+        {
+          "materialId": 165,
+          "quantity": 1
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 21000
     },
@@ -1219,24 +2701,47 @@
       "category": "Consumo",
       "grade": 5,
       "components": [
-        { "materialId": 153, "quantity": 2 },
-        { "materialId": 146, "quantity": 1 },
-        { "materialId": 147, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 153,
+          "quantity": 2
+        },
+        {
+          "materialId": 146,
+          "quantity": 1
+        },
+        {
+          "materialId": 147,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 8900
     },
-
     {
       "id": 195,
       "name": "Edificio prefabricado",
       "category": "Construccion",
       "grade": 5,
       "components": [
-        { "materialId": 157, "quantity": 2 },
-        { "materialId": 156, "quantity": 1 },
-        { "materialId": 158, "quantity": 1 },
-        { "materialId": 63, "quantity": 2 }
+        {
+          "materialId": 157,
+          "quantity": 2
+        },
+        {
+          "materialId": 156,
+          "quantity": 1
+        },
+        {
+          "materialId": 158,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 2
+        }
       ],
       "basePrice": 12000
     },
@@ -1246,24 +2751,47 @@
       "category": "Construccion",
       "grade": 5,
       "components": [
-        { "materialId": 166, "quantity": 1 },
-        { "materialId": 176, "quantity": 1 },
-        { "materialId": 158, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 166,
+          "quantity": 1
+        },
+        {
+          "materialId": 176,
+          "quantity": 1
+        },
+        {
+          "materialId": 158,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 17500
     },
-
     {
       "id": 197,
       "name": "Infraestructura logistica",
       "category": "Industria",
       "grade": 5,
       "components": [
-        { "materialId": 173, "quantity": 1 },
-        { "materialId": 161, "quantity": 1 },
-        { "materialId": 176, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 173,
+          "quantity": 1
+        },
+        {
+          "materialId": 161,
+          "quantity": 1
+        },
+        {
+          "materialId": 176,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 16800
     },
@@ -1273,10 +2801,22 @@
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 182, "quantity": 1 },
-        { "materialId": 160, "quantity": 1 },
-        { "materialId": 171, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 182,
+          "quantity": 1
+        },
+        {
+          "materialId": 160,
+          "quantity": 1
+        },
+        {
+          "materialId": 171,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 22000
     },
@@ -1286,10 +2826,22 @@
       "category": "Tecnologia",
       "grade": 5,
       "components": [
-        { "materialId": 178, "quantity": 1 },
-        { "materialId": 175, "quantity": 1 },
-        { "materialId": 168, "quantity": 1 },
-        { "materialId": 63, "quantity": 3 }
+        {
+          "materialId": 178,
+          "quantity": 1
+        },
+        {
+          "materialId": 175,
+          "quantity": 1
+        },
+        {
+          "materialId": 168,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 3
+        }
       ],
       "basePrice": 25000
     },
@@ -1299,10 +2851,22 @@
       "category": "Industria",
       "grade": 5,
       "components": [
-        { "materialId": 179, "quantity": 1 },
-        { "materialId": 180, "quantity": 1 },
-        { "materialId": 176, "quantity": 1 },
-        { "materialId": 63, "quantity": 4 }
+        {
+          "materialId": 179,
+          "quantity": 1
+        },
+        {
+          "materialId": 180,
+          "quantity": 1
+        },
+        {
+          "materialId": 176,
+          "quantity": 1
+        },
+        {
+          "materialId": 63,
+          "quantity": 4
+        }
       ],
       "basePrice": 30000
     }
