@@ -7,11 +7,13 @@ import 'package:industrial_app/widgets/industrial_button.dart';
 class ProductDetailScreen extends StatelessWidget {
   final MaterialModel material;
   final Map<String, dynamic> marketData; // To store price, stock, etc.
+  final Map<String, String> materialNames;
 
   const ProductDetailScreen({
     Key? key,
     required this.material,
     required this.marketData,
+    this.materialNames = const {},
   }) : super(key: key);
 
   @override
@@ -39,14 +41,20 @@ class ProductDetailScreen extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Center(
-                    child: Text(
-                      material.name.toUpperCase(),
-                      style: GoogleFonts.orbitron(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 2,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Center(
+                      child: Text(
+                        material.name.toUpperCase(),
+                        style: GoogleFonts.orbitron(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
@@ -121,7 +129,7 @@ class ProductDetailScreen extends StatelessWidget {
                       child: Text(
                         material.category.toUpperCase(),
                         style: GoogleFonts.orbitron(
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           shadows: [
@@ -142,7 +150,7 @@ class ProductDetailScreen extends StatelessWidget {
                       child: Text(
                         material.description,
                         style: GoogleFonts.inter(
-                          fontSize: 16,
+                          fontSize: 13,
                           color: Colors.white70,
                           height: 1.5,
                         ),
@@ -182,15 +190,13 @@ class ProductDetailScreen extends StatelessWidget {
                         children: [
                           _buildStatRow(
                             Icons.inventory_2_outlined,
-                            "Disponible",
-                            "${NumberFormat('#,###').format(marketData['stock'] ?? 0)} Unidades",
+                            "${NumberFormat('#,###').format(marketData['stockCurrent'] ?? 0)} Unidades",
                             Colors.blue[200]!,
                           ),
                           const Divider(color: Colors.white10, height: 24),
                           _buildStatRow(
                             Icons.monetization_on_outlined,
-                            "Precio Actual",
-                            "\$ ${NumberFormat('#,###').format(marketData['price'] ?? material.basePrice)}",
+                            "\$ ${NumberFormat('#,###').format(((marketData['priceMultiplier'] as num?)?.toDouble() ?? 1.0) * material.basePrice)}",
                             const Color(0xFFFFD700),
                           ),
                         ],
@@ -220,7 +226,7 @@ class ProductDetailScreen extends StatelessWidget {
                               child: Text(
                                 "Composición",
                                 style: GoogleFonts.orbitron(
-                                  fontSize: 18,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -246,34 +252,32 @@ class ProductDetailScreen extends StatelessWidget {
                         child: Column(
                           children: material.components.map((component) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
                                 children: [
                                   // Component Icon/Image
                                   Container(
-                                    width: 40,
-                                    height: 40,
+                                    width: 32,
+                                    height: 32,
                                     decoration: BoxDecoration(
                                       color: Colors.black26,
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(color: Colors.white24),
                                     ),
-                                    // Need to fetch material name/image from ID.
-                                    // For now using generic placeholder as we don't have the full list passed down to look it up easily
-                                    // unless we pass the full material list or a lookup function.
-                                    // Assuming simple placeholder for now.
                                     child: const Icon(
                                       Icons.extension,
                                       color: Colors.white70,
-                                      size: 24,
+                                      size: 18,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
-                                      "Material ID: ${component.materialId}", // Placeholder name
+                                      materialNames[component.materialId
+                                              .toString()] ??
+                                          "Material ID: ${component.materialId}",
                                       style: GoogleFonts.orbitron(
-                                        fontSize: 16,
+                                        fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -282,7 +286,7 @@ class ProductDetailScreen extends StatelessWidget {
                                   Text(
                                     "${component.quantity}",
                                     style: GoogleFonts.orbitron(
-                                      fontSize: 18,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFFFFD700),
                                     ),
@@ -339,33 +343,22 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(
-    IconData icon,
-    String label,
-    String value,
-    Color valueColor,
-  ) {
+  Widget _buildStatRow(IconData icon, String value, Color valueColor) {
     return Row(
       children: [
         Icon(icon, color: Colors.white70, size: 28),
-        const SizedBox(width: 16),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.orbitron(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: valueColor,
+            ),
           ),
         ),
-        const Spacer(),
-        Text(
-          value,
-          style: GoogleFonts.orbitron(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: valueColor,
-          ),
-        ),
+        const SizedBox(width: 28), // Balance icon width for perfect centering
       ],
     );
   }

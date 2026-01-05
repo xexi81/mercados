@@ -5,6 +5,7 @@ class LocationModel {
   final double longitude;
   final String countryIso;
   final bool hasMarket;
+  final int? marketIndex;
 
   LocationModel({
     required this.id,
@@ -13,6 +14,7 @@ class LocationModel {
     required this.longitude,
     required this.countryIso,
     required this.hasMarket,
+    this.marketIndex,
   });
 
   String get imagePath =>
@@ -26,6 +28,7 @@ class LocationModel {
       longitude: (json['longitude'] as num).toDouble(),
       countryIso: json['countryIso'],
       hasMarket: json['hasMarket'],
+      marketIndex: json['marketIndex'],
     );
   }
 
@@ -36,5 +39,6 @@ class LocationModel {
     'longitude': longitude,
     'countryIso': countryIso,
     'hasMarket': hasMarket,
+    'marketIndex': marketIndex,
   };
 }

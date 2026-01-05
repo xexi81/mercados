@@ -36,7 +36,24 @@ class _MarketsScreenState extends State<MarketsScreen> {
           .get();
       final firestoreData = <String, dynamic>{};
       for (var doc in materialsSnapshot.docs) {
-        firestoreData[doc.id] = doc.data();
+        if (doc.id == 'global') {
+          // Parse global document containing array of materials
+          final data = doc.data();
+          // Find the list field (could be 'materiales', 'items', etc.)
+          for (var value in data.values) {
+            if (value is List) {
+              for (var item in value) {
+                if (item is Map && item.containsKey('materialId')) {
+                  // Map each material by its ID
+                  firestoreData[item['materialId'].toString()] = item;
+                }
+              }
+            }
+          }
+        } else {
+          // Standard document structure fallback
+          firestoreData[doc.id] = doc.data();
+        }
       }
 
       setState(() {

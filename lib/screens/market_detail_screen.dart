@@ -187,14 +187,37 @@ class _MarketDetailScreenState extends State<MarketDetailScreen> {
                                 ),
                             itemCount: materials.length,
                             itemBuilder: (context, materialIndex) {
+                              final material = materials[materialIndex];
+                              final rawData = widget
+                                  .firestoreMaterials[material.id.toString()];
+                              Map<String, dynamic> specificMarketData = {};
+
+                              if (rawData != null &&
+                                  widget.location.marketIndex != null) {
+                                final index = widget.location.marketIndex!;
+
+                                // Check if 'markets' is a list and has enough elements
+                                if (rawData['markets'] is List &&
+                                    (rawData['markets'] as List).length >
+                                        index) {
+                                  final marketEntry = rawData['markets'][index];
+                                  if (marketEntry is Map) {
+                                    specificMarketData['stockCurrent'] =
+                                        marketEntry['stockCurrent'];
+                                    specificMarketData['priceMultiplier'] =
+                                        marketEntry['priceMultiplier'];
+                                  }
+                                }
+                              }
+
                               return MaterialCard(
-                                material: materials[materialIndex],
-                                marketData:
-                                    widget
-                                        .firestoreMaterials[materials[materialIndex]
-                                        .id
-                                        .toString()] ??
-                                    {},
+                                material: material,
+                                marketData: specificMarketData,
+                                materialNames: Map.fromEntries(
+                                  _materials.map(
+                                    (m) => MapEntry(m.id.toString(), m.name),
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -240,11 +263,13 @@ class _MarketDetailScreenState extends State<MarketDetailScreen> {
 class MaterialCard extends StatelessWidget {
   final MaterialModel material;
   final Map<String, dynamic> marketData;
+  final Map<String, String> materialNames;
 
   const MaterialCard({
     Key? key,
     required this.material,
     required this.marketData,
+    required this.materialNames,
   }) : super(key: key);
 
   @override
@@ -254,8 +279,11 @@ class MaterialCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                ProductDetailScreen(material: material, marketData: marketData),
+            builder: (context) => ProductDetailScreen(
+              material: material,
+              marketData: marketData,
+              materialNames: materialNames,
+            ),
           ),
         );
       },

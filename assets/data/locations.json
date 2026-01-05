@@ -6,7 +6,8 @@
             "latitude": 40.4168,
             "longitude": -3.7038,
             "countryIso": "ES",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 0
         },
         {
             "id": 2,
@@ -22,7 +23,8 @@
             "latitude": 48.8566,
             "longitude": 2.3522,
             "countryIso": "FR",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 1
         },
         {
             "id": 4,
@@ -30,7 +32,8 @@
             "latitude": 52.5200,
             "longitude": 13.4050,
             "countryIso": "DE",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 2
         },
         {
             "id": 5,
@@ -542,7 +545,8 @@
             "latitude": 59.3293,
             "longitude": 18.0686,
             "countryIso": "SE",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 3
         },
         {
             "id": 69,
@@ -614,7 +618,8 @@
             "latitude": 37.9838,
             "longitude": 23.7275,
             "countryIso": "GR",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 4
         },
         {
             "id": 78,
@@ -646,7 +651,8 @@
             "latitude": 44.4268,
             "longitude": 26.1025,
             "countryIso": "RO",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 5
         },
         {
             "id": 82,
@@ -750,7 +756,8 @@
             "latitude": 64.1466,
             "longitude": -21.9426,
             "countryIso": "IS",
-            "hasMarket": true
+            "hasMarket": true,
+            "marketIndex": 6
         },
         {
             "id": 95,
