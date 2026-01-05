@@ -14,4 +14,9 @@ class LocationsRepository {
 
     return locationsJson.map((json) => LocationModel.fromJson(json)).toList();
   }
+
+  static Future<List<LocationModel>> loadLocationsWithMarkets() async {
+    final locations = await loadLocations();
+    return locations.where((location) => location.hasMarket).toList();
+  }
 }

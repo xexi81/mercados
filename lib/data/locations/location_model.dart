@@ -15,6 +15,9 @@ class LocationModel {
     required this.hasMarket,
   });
 
+  String get imagePath =>
+      'assets/images/cities/${city.toLowerCase().replaceAll(RegExp(r'\s+'), '_')}.png';
+
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
       id: json['id'],
