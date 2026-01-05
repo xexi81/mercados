@@ -264,10 +264,20 @@ class ProductDetailScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(color: Colors.white24),
                                     ),
-                                    child: const Icon(
-                                      Icons.extension,
-                                      color: Colors.white70,
-                                      size: 18,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child: Image.asset(
+                                        'assets/images/materials/${component.materialId}.png',
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons.extension,
+                                                color: Colors.white70,
+                                                size: 18,
+                                              );
+                                            },
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 12),
