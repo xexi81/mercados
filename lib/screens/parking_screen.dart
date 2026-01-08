@@ -8,6 +8,8 @@ import 'package:industrial_app/data/fleet/fleet_repository.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:industrial_app/theme/app_colors.dart';
+import 'package:industrial_app/data/locations/location_model.dart';
+import 'package:industrial_app/data/locations/location_repository.dart';
 import 'dart:async';
 
 class ParkingScreen extends StatefulWidget {
@@ -100,65 +102,92 @@ class _ParkingScreenState extends State<ParkingScreen> {
             .doc(user.uid)
             .snapshots(),
         builder: (context, userSnapshot) {
-          if (!userSnapshot.hasData)
+          if (!userSnapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
 
-          final userData = userSnapshot.data!.data() as Map<String, dynamic>?;
+          final userData = userSnapshot.data?.data() as Map<String, dynamic>?;
           final int experience = userData?['experience'] ?? 0;
           final int level = ExperienceService.getLevelFromExperience(
             experience,
           );
+          final String? hqId = userData?['headquarter_id']?.toString();
 
-          return StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('fleet')
-                .doc(user.uid)
-                .snapshots(),
-            builder: (context, fleetSnapshot) {
-              Map<String, dynamic> fleetMap = {};
-              if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
-                fleetMap =
-                    fleetSnapshot.data!.data() as Map<String, dynamic>? ?? {};
+          return FutureBuilder<List<LocationModel>>(
+            future: LocationsRepository.loadLocations(),
+            builder: (context, locationsSnapshot) {
+              double? hqLat;
+              double? hqLng;
+
+              if (locationsSnapshot.hasData && hqId != null) {
+                try {
+                  final hq = locationsSnapshot.data!.firstWhere(
+                    (l) => l.id.toString() == hqId,
+                  );
+                  hqLat = hq.latitude;
+                  hqLng = hq.longitude;
+                } catch (_) {}
               }
 
-              // The user said: "partiremos de la colección fleet de firestore para el documento con id igual al id del usuario"
-              // "esta pantalla siempre tendrá 20 cards"
-              return GridView.builder(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 12,
-                  bottom: 80, // Added significant bottom padding
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 2.0,
-                ),
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  final fleetId = index + 1;
-                  final config = _fleetConfigs.firstWhere(
-                    (f) => f.fleetId == fleetId,
-                    orElse: () => FleetModel(
-                      fleetId: fleetId,
-                      name: 'Unknown',
-                      requiredLevel: 999,
-                      unlockCost: _fleetConfigs.first.unlockCost, // Fallback
-                      unlockedByDefault: false,
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('fleet_users')
+                    .doc(user.uid)
+                    .snapshots(),
+                builder: (context, fleetSnapshot) {
+                  Map<String, dynamic> fleetMap = {};
+                  if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
+                    fleetMap =
+                        fleetSnapshot.data?.data() as Map<String, dynamic>? ??
+                        {};
+                  }
+
+                  final List<dynamic> slots = fleetMap['slots'] ?? [];
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: 80,
                     ),
-                  );
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          crossAxisSpacing: 0,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 2.0,
+                        ),
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      final fleetId = index + 1;
+                      final config = _fleetConfigs.firstWhere(
+                        (f) => f.fleetId == fleetId,
+                        orElse: () => FleetModel(
+                          fleetId: fleetId,
+                          name: 'Unknown',
+                          requiredLevel: 999,
+                          unlockCost: _fleetConfigs.first.unlockCost,
+                          unlockedByDefault: false,
+                        ),
+                      );
 
-                  // Firestore data might use string keys
-                  final Map<String, dynamic>? cardData =
-                      fleetMap['$fleetId'] ?? fleetMap[fleetId.toString()];
+                      final Map<String, dynamic>? cardData =
+                          slots.firstWhere(
+                                (s) => s['fleetId'] == fleetId,
+                                orElse: () => null,
+                              )
+                              as Map<String, dynamic>?;
 
-                  return ParkingFleetCard(
-                    fleetId: fleetId,
-                    fleetConfig: config,
-                    firestoreData: cardData,
-                    userLevel: level,
+                      return ParkingFleetCard(
+                        fleetId: fleetId,
+                        fleetConfig: config,
+                        firestoreData: cardData,
+                        userLevel: level,
+                        hqLatitude: hqLat,
+                        hqLongitude: hqLng,
+                      );
+                    },
                   );
                 },
               );

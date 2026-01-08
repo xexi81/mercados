@@ -3,12 +3,15 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
+import 'package:industrial_app/widgets/fleet_purchase_dialog.dart';
 
 class ParkingFleetCard extends StatelessWidget {
   final int fleetId;
   final FleetModel? fleetConfig;
   final Map<String, dynamic>? firestoreData;
   final int userLevel;
+  final double? hqLatitude;
+  final double? hqLongitude;
 
   const ParkingFleetCard({
     super.key,
@@ -16,12 +19,29 @@ class ParkingFleetCard extends StatelessWidget {
     this.fleetConfig,
     this.firestoreData,
     required this.userLevel,
+    this.hqLatitude,
+    this.hqLongitude,
   });
 
   @override
   Widget build(BuildContext context) {
     // If we have data in Firestore, it's occupied (to be refined later)
     final bool isOccupied = firestoreData != null && firestoreData!.isNotEmpty;
+
+    // Check if it's at headquarters
+    bool isAtHQ = false;
+    if (isOccupied && hqLatitude != null && hqLongitude != null) {
+      final location = firestoreData!['location'];
+      if (location != null) {
+        final double fleetLat = (location['latitude'] as num).toDouble();
+        final double fleetLng = (location['longitude'] as num).toDouble();
+        // Use a small epsilon for double comparison if needed,
+        // but since they come from the same source, direct match should work.
+        if (fleetLat == hqLatitude && fleetLng == hqLongitude) {
+          isAtHQ = true;
+        }
+      }
+    }
 
     // Check if it's unlocked by level
     final int requiredLevel = fleetConfig?.requiredLevel ?? 0;
@@ -41,7 +61,21 @@ class ParkingFleetCard extends StatelessWidget {
         ), // Adjust for border width
         child: Stack(
           children: [
-            if (!isOccupied)
+            // Background Image logic
+            if (isOccupied)
+              if (isAtHQ)
+                Positioned.fill(
+                  child: Transform.scale(
+                    scale: 1.4,
+                    child: Image.asset(
+                      'assets/images/parking/parking_sede.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else
+                const SizedBox.shrink() // Empty background for other locations
+            else
               Positioned.fill(
                 child: Transform.scale(
                   scale: 1.4,
@@ -54,6 +88,7 @@ class ParkingFleetCard extends StatelessWidget {
                   ),
                 ),
               ),
+
             if (isLocked) _buildLockedContent(context, requiredLevel),
             if (isOccupied) _buildOccupiedContent(context),
             if (!isLocked && !isOccupied) _buildAvailableContent(context),
@@ -106,27 +141,7 @@ class ParkingFleetCard extends StatelessWidget {
   }
 
   Widget _buildOccupiedContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.local_shipping,
-            color: AppColors.secondary,
-            size: 32,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            firestoreData?['truck_name'] ?? 'CAMIÓN',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SizedBox.shrink();
   }
 
   Widget _buildAvailableContent(BuildContext context) {
@@ -139,51 +154,60 @@ class ParkingFleetCard extends StatelessWidget {
         : 'assets/images/gemas.png';
     final String amount = isFree ? '0' : '${cost?.amount ?? 0}';
 
-    return Stack(
-      children: [
-        // Large centered pay icon
-        Center(
-          child: Image.asset(
-            'assets/images/parking/pagar.png',
-            width: 160,
-            height: 160,
-            fit: BoxFit.contain,
+    return InkWell(
+      onTap: () {
+        if (fleetConfig != null) {
+          showDialog(
+            context: context,
+            builder: (context) => FleetPurchaseDialog(fleet: fleetConfig!),
+          );
+        }
+      },
+      child: Stack(
+        children: [
+          // Large centered pay icon
+          Center(
+            child: Image.asset(
+              'assets/images/parking/pagar.png',
+              width: 160,
+              height: 160,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
 
-        // Top-right cost indicator
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5), // Darkened background
-              // Removed borderRadius for square look as requested
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  amount,
-                  style: const TextStyle(
-                    color: Colors.white, // White text as requested
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16,
+          // Top-right cost indicator
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // Darkened background
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    amount,
+                    style: const TextStyle(
+                      color: Colors.white, // White text as requested
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                Image.asset(
-                  currencyIcon,
-                  width: 24, // Slightly larger
-                  height: 24,
-                  fit: BoxFit.contain,
-                ),
-              ],
+                  const SizedBox(width: 4),
+                  Image.asset(
+                    currencyIcon,
+                    width: 24, // Slightly larger
+                    height: 24,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
