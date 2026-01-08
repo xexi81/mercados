@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/materials/material_model.dart';
 import 'package:industrial_app/data/materials/materials_repository.dart';
-import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/screens/product_detail_screen.dart';
+
+import 'package:industrial_app/widgets/custom_game_appbar.dart';
 
 class MarketDetailScreen extends StatefulWidget {
   final LocationModel location;
@@ -65,91 +63,12 @@ class _MarketDetailScreenState extends State<MarketDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User? currentUser = FirebaseAuth.instance.currentUser;
     final groupedMaterials = _groupMaterialsByCategory();
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        actions: currentUser != null
-            ? [
-                StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('usuarios')
-                      .doc(currentUser.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    var dinero = 0;
-                    var gemas = 0;
-
-                    if (snapshot.hasData && snapshot.data!.exists) {
-                      final data =
-                          snapshot.data!.data() as Map<String, dynamic>?;
-                      if (data != null) {
-                        dinero = data['dinero'] ?? 0;
-                        gemas = data['gemas'] ?? 0;
-                      }
-                    }
-
-                    return Row(
-                      children: [
-                        _buildResourceBadge(
-                          Icons.attach_money,
-                          const Color(0xFFFFD700),
-                          dinero,
-                        ),
-                        _buildResourceBadge(
-                          Icons.diamond,
-                          const Color(0xFF00D9FF),
-                          gemas,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ]
-            : null,
-      ),
+      appBar: const CustomGameAppBar(),
       body: Column(
         children: [
-          // Market Name Header
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor.withOpacity(0.8),
-                  Colors.transparent,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: Text(
-              'MERCADO ${widget.location.city.toUpperCase()}',
-              style: GoogleFonts.orbitron(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                letterSpacing: 2,
-                shadows: [
-                  Shadow(
-                    blurRadius: 10.0,
-                    color: Theme.of(context).primaryColor,
-                    offset: const Offset(0, 0),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -226,33 +145,6 @@ class _MarketDetailScreenState extends State<MarketDetailScreen> {
                       );
                     },
                   ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildResourceBadge(IconData icon, Color color, int amount) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primary.withOpacity(0.5)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 16),
-          const SizedBox(width: 4),
-          Text(
-            NumberFormat('#,###').format(amount),
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
           ),
         ],
       ),

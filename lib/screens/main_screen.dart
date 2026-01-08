@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomGameAppBar(),
+      appBar: const CustomGameAppBar(isMainScreen: true),
       body: InteractiveViewer(
         transformationController: _transformationController,
         boundaryMargin: const EdgeInsets.all(0),

@@ -13,7 +13,7 @@
         {
             "fleetId": 2,
             "name": "Flota Regional I",
-            "requiredLevel": 3,
+            "requiredLevel": 35,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 5000
@@ -23,7 +23,7 @@
         {
             "fleetId": 3,
             "name": "Flota Regional II",
-            "requiredLevel": 5,
+            "requiredLevel": 70,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 15000
@@ -33,7 +33,7 @@
         {
             "fleetId": 4,
             "name": "Flota Nacional I",
-            "requiredLevel": 8,
+            "requiredLevel": 105,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 40000
@@ -43,7 +43,7 @@
         {
             "fleetId": 5,
             "name": "Flota Nacional II",
-            "requiredLevel": 12,
+            "requiredLevel": 140,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 100000
@@ -53,7 +53,7 @@
         {
             "fleetId": 6,
             "name": "Flota Continental I",
-            "requiredLevel": 16,
+            "requiredLevel": 175,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 250000
@@ -63,7 +63,7 @@
         {
             "fleetId": 7,
             "name": "Flota Continental II",
-            "requiredLevel": 20,
+            "requiredLevel": 210,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 600000
@@ -73,7 +73,7 @@
         {
             "fleetId": 8,
             "name": "Flota Internacional I",
-            "requiredLevel": 25,
+            "requiredLevel": 245,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 1200000
@@ -83,7 +83,7 @@
         {
             "fleetId": 9,
             "name": "Flota Internacional II",
-            "requiredLevel": 30,
+            "requiredLevel": 280,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 2500000
@@ -93,7 +93,7 @@
         {
             "fleetId": 10,
             "name": "Flota Global I",
-            "requiredLevel": 35,
+            "requiredLevel": 315,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 5000000
@@ -103,7 +103,7 @@
         {
             "fleetId": 11,
             "name": "Flota Global II",
-            "requiredLevel": 40,
+            "requiredLevel": 350,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 9000000
@@ -113,7 +113,7 @@
         {
             "fleetId": 12,
             "name": "Flota Corporativa I",
-            "requiredLevel": 45,
+            "requiredLevel": 385,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 15000000
@@ -123,7 +123,7 @@
         {
             "fleetId": 13,
             "name": "Flota Corporativa II",
-            "requiredLevel": 50,
+            "requiredLevel": 420,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 25000000
@@ -133,7 +133,7 @@
         {
             "fleetId": 14,
             "name": "Flota Megacorporación I",
-            "requiredLevel": 55,
+            "requiredLevel": 455,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 40000000
@@ -143,7 +143,7 @@
         {
             "fleetId": 15,
             "name": "Flota Megacorporación II",
-            "requiredLevel": 60,
+            "requiredLevel": 490,
             "unlockCost": {
                 "type": "MONEY",
                 "amount": 65000000
@@ -153,7 +153,7 @@
         {
             "fleetId": 16,
             "name": "Flota Élite I",
-            "requiredLevel": 65,
+            "requiredLevel": 1,
             "unlockCost": {
                 "type": "GEMS",
                 "amount": 50
@@ -163,7 +163,7 @@
         {
             "fleetId": 17,
             "name": "Flota Élite II",
-            "requiredLevel": 70,
+            "requiredLevel": 100,
             "unlockCost": {
                 "type": "GEMS",
                 "amount": 100
@@ -173,7 +173,7 @@
         {
             "fleetId": 18,
             "name": "Flota Legendaria I",
-            "requiredLevel": 75,
+            "requiredLevel": 200,
             "unlockCost": {
                 "type": "GEMS",
                 "amount": 200
@@ -183,7 +183,7 @@
         {
             "fleetId": 19,
             "name": "Flota Legendaria II",
-            "requiredLevel": 80,
+            "requiredLevel": 300,
             "unlockCost": {
                 "type": "GEMS",
                 "amount": 350
@@ -193,7 +193,7 @@
         {
             "fleetId": 20,
             "name": "Flota Suprema",
-            "requiredLevel": 85,
+            "requiredLevel": 400,
             "unlockCost": {
                 "type": "GEMS",
                 "amount": 500

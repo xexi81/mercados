@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 
+import 'package:industrial_app/widgets/custom_game_appbar.dart';
+
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tienda')),
+      appBar: const CustomGameAppBar(),
       body: Center(
         child: IndustrialButton(
           width: MediaQuery.of(context).size.width * 0.5,

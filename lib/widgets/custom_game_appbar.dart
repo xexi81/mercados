@@ -5,11 +5,27 @@ import 'package:intl/intl.dart';
 import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/screens/user_config_screen.dart';
 
-class CustomGameAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomGameAppBar({Key? key}) : super(key: key);
+import 'package:industrial_app/data/experience/experience_service.dart';
+
+class CustomGameAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final bool isMainScreen;
+
+  const CustomGameAppBar({Key? key, this.isMainScreen = false})
+    : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(100);
+
+  @override
+  State<CustomGameAppBar> createState() => _CustomGameAppBarState();
+}
+
+class _CustomGameAppBarState extends State<CustomGameAppBar> {
+  @override
+  void initState() {
+    super.initState();
+    ExperienceService.loadExperienceData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +47,7 @@ class CustomGameAppBar extends StatelessWidget implements PreferredSizeWidget {
         // Default values
         int dinero = 0;
         int gemas = 0;
+        int experience = 0;
         String? photoUrl = currentUser.photoURL;
 
         if (snapshot.hasData && snapshot.data!.exists) {
@@ -38,95 +55,103 @@ class CustomGameAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (data != null) {
             dinero = data['dinero'] ?? 0;
             gemas = data['gemas'] ?? 0;
+            experience = data['experience'] ?? 0;
             photoUrl = data['foto_url'] ?? currentUser.photoURL;
           }
         }
 
+        int level = 1;
+        try {
+          level = ExperienceService.getLevelFromExperience(experience);
+        } catch (e) {
+          debugPrint('Error calculating level: $e');
+        }
+
         return AppBar(
+          toolbarHeight: 100,
           backgroundColor: AppColors.surface,
           elevation: 0,
+          leadingWidth: widget.isMainScreen ? 100 : 120,
           leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UserConfigScreen(),
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!widget.isMainScreen)
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                );
-              },
-              child: CircleAvatar(
-                backgroundImage: photoUrl != null
-                    ? NetworkImage(photoUrl)
-                    : null,
-                backgroundColor: AppColors.primary,
-                child: photoUrl == null
-                    ? const Icon(Icons.person, color: Colors.white)
-                    : null,
-              ),
+                GestureDetector(
+                  onTap: () {
+                    if (widget.isMainScreen) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserConfigScreen(),
+                        ),
+                      );
+                    }
+                  },
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 22,
+                        backgroundImage: photoUrl != null
+                            ? NetworkImage(photoUrl)
+                            : null,
+                        backgroundColor: AppColors.primary,
+                        child: photoUrl == null
+                            ? const Icon(Icons.person, color: Colors.white)
+                            : null,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white24, width: 1),
+                        ),
+                        constraints: const BoxConstraints(minWidth: 20),
+                        child: Text(
+                          '$level',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           actions: [
-            // Money display
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.primary.withOpacity(0.5),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Icon(
-                    Icons.attach_money,
-                    color: Color(0xFFFFD700), // Gold color
-                    size: 22,
+                  // Money display
+                  _CurrencyDisplay(
+                    imagePath: 'assets/images/billete.png',
+                    amount: dinero,
+                    color: const Color(0xFFFFD700),
                   ),
-                  const SizedBox(width: 6),
-                  Text(
-                    NumberFormat('#,###').format(dinero),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Gems display
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.accent.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.accent.withOpacity(0.5),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.diamond,
-                    color: Color(0xFF00D9FF), // Cyan/diamond color
-                    size: 22,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    NumberFormat('#,###').format(gemas),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                  Transform.translate(
+                    offset: const Offset(0, -15),
+                    child: _CurrencyDisplay(
+                      imagePath: 'assets/images/gemas.png',
+                      amount: gemas,
+                      color: const Color(0xFF00D9FF),
                     ),
                   ),
                 ],
@@ -135,6 +160,37 @@ class CustomGameAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _CurrencyDisplay extends StatelessWidget {
+  final String imagePath;
+  final int amount;
+  final Color color;
+
+  const _CurrencyDisplay({
+    required this.imagePath,
+    required this.amount,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset(imagePath, width: 50, height: 50, fit: BoxFit.contain),
+        const SizedBox(width: 12),
+        Text(
+          NumberFormat('#,###').format(amount),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+      ],
     );
   }
 }
