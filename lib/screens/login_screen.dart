@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'foto_url': firebaseUser.photoURL,
           'dinero': 100000, // Dinero inicial
           'gemas': 10, // Gemas iniciales
+          'experience': 0, // Experiencia inicial
           'fecha_alta': now,
           'fecha_modificacion': now,
         });

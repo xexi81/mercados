@@ -1,0 +1,2004 @@
+{
+    "experienceLevels": [
+        {
+            "level": 1,
+            "requiredExperience": 0
+        },
+        {
+            "level": 2,
+            "requiredExperience": 443
+        },
+        {
+            "level": 3,
+            "requiredExperience": 1061
+        },
+        {
+            "level": 4,
+            "requiredExperience": 1969
+        },
+        {
+            "level": 5,
+            "requiredExperience": 3182
+        },
+        {
+            "level": 6,
+            "requiredExperience": 4710
+        },
+        {
+            "level": 7,
+            "requiredExperience": 6560
+        },
+        {
+            "level": 8,
+            "requiredExperience": 8742
+        },
+        {
+            "level": 9,
+            "requiredExperience": 11262
+        },
+        {
+            "level": 10,
+            "requiredExperience": 14125
+        },
+        {
+            "level": 11,
+            "requiredExperience": 17337
+        },
+        {
+            "level": 12,
+            "requiredExperience": 20904
+        },
+        {
+            "level": 13,
+            "requiredExperience": 24830
+        },
+        {
+            "level": 14,
+            "requiredExperience": 29118
+        },
+        {
+            "level": 15,
+            "requiredExperience": 33775
+        },
+        {
+            "level": 16,
+            "requiredExperience": 38802
+        },
+        {
+            "level": 17,
+            "requiredExperience": 44204
+        },
+        {
+            "level": 18,
+            "requiredExperience": 49984
+        },
+        {
+            "level": 19,
+            "requiredExperience": 56146
+        },
+        {
+            "level": 20,
+            "requiredExperience": 62692
+        },
+        {
+            "level": 21,
+            "requiredExperience": 69626
+        },
+        {
+            "level": 22,
+            "requiredExperience": 76950
+        },
+        {
+            "level": 23,
+            "requiredExperience": 84667
+        },
+        {
+            "level": 24,
+            "requiredExperience": 92779
+        },
+        {
+            "level": 25,
+            "requiredExperience": 101291
+        },
+        {
+            "level": 26,
+            "requiredExperience": 110202
+        },
+        {
+            "level": 27,
+            "requiredExperience": 119517
+        },
+        {
+            "level": 28,
+            "requiredExperience": 129237
+        },
+        {
+            "level": 29,
+            "requiredExperience": 139365
+        },
+        {
+            "level": 30,
+            "requiredExperience": 149903
+        },
+        {
+            "level": 31,
+            "requiredExperience": 160852
+        },
+        {
+            "level": 32,
+            "requiredExperience": 172215
+        },
+        {
+            "level": 33,
+            "requiredExperience": 183994
+        },
+        {
+            "level": 34,
+            "requiredExperience": 196191
+        },
+        {
+            "level": 35,
+            "requiredExperience": 208807
+        },
+        {
+            "level": 36,
+            "requiredExperience": 221845
+        },
+        {
+            "level": 37,
+            "requiredExperience": 235306
+        },
+        {
+            "level": 38,
+            "requiredExperience": 249192
+        },
+        {
+            "level": 39,
+            "requiredExperience": 263505
+        },
+        {
+            "level": 40,
+            "requiredExperience": 278246
+        },
+        {
+            "level": 41,
+            "requiredExperience": 293417
+        },
+        {
+            "level": 42,
+            "requiredExperience": 309019
+        },
+        {
+            "level": 43,
+            "requiredExperience": 325055
+        },
+        {
+            "level": 44,
+            "requiredExperience": 341525
+        },
+        {
+            "level": 45,
+            "requiredExperience": 358432
+        },
+        {
+            "level": 46,
+            "requiredExperience": 375776
+        },
+        {
+            "level": 47,
+            "requiredExperience": 393559
+        },
+        {
+            "level": 48,
+            "requiredExperience": 411783
+        },
+        {
+            "level": 49,
+            "requiredExperience": 430448
+        },
+        {
+            "level": 50,
+            "requiredExperience": 449557
+        },
+        {
+            "level": 51,
+            "requiredExperience": 469111
+        },
+        {
+            "level": 52,
+            "requiredExperience": 489110
+        },
+        {
+            "level": 53,
+            "requiredExperience": 509557
+        },
+        {
+            "level": 54,
+            "requiredExperience": 530452
+        },
+        {
+            "level": 55,
+            "requiredExperience": 551797
+        },
+        {
+            "level": 56,
+            "requiredExperience": 573593
+        },
+        {
+            "level": 57,
+            "requiredExperience": 595841
+        },
+        {
+            "level": 58,
+            "requiredExperience": 618543
+        },
+        {
+            "level": 59,
+            "requiredExperience": 641699
+        },
+        {
+            "level": 60,
+            "requiredExperience": 665311
+        },
+        {
+            "level": 61,
+            "requiredExperience": 689380
+        },
+        {
+            "level": 62,
+            "requiredExperience": 713907
+        },
+        {
+            "level": 63,
+            "requiredExperience": 738894
+        },
+        {
+            "level": 64,
+            "requiredExperience": 764340
+        },
+        {
+            "level": 65,
+            "requiredExperience": 790248
+        },
+        {
+            "level": 66,
+            "requiredExperience": 816618
+        },
+        {
+            "level": 67,
+            "requiredExperience": 843452
+        },
+        {
+            "level": 68,
+            "requiredExperience": 870751
+        },
+        {
+            "level": 69,
+            "requiredExperience": 898515
+        },
+        {
+            "level": 70,
+            "requiredExperience": 926746
+        },
+        {
+            "level": 71,
+            "requiredExperience": 955444
+        },
+        {
+            "level": 72,
+            "requiredExperience": 984611
+        },
+        {
+            "level": 73,
+            "requiredExperience": 1014247
+        },
+        {
+            "level": 74,
+            "requiredExperience": 1044355
+        },
+        {
+            "level": 75,
+            "requiredExperience": 1074933
+        },
+        {
+            "level": 76,
+            "requiredExperience": 1105984
+        },
+        {
+            "level": 77,
+            "requiredExperience": 1137509
+        },
+        {
+            "level": 78,
+            "requiredExperience": 1169508
+        },
+        {
+            "level": 79,
+            "requiredExperience": 1201982
+        },
+        {
+            "level": 80,
+            "requiredExperience": 1234933
+        },
+        {
+            "level": 81,
+            "requiredExperience": 1268360
+        },
+        {
+            "level": 82,
+            "requiredExperience": 1302266
+        },
+        {
+            "level": 83,
+            "requiredExperience": 1336650
+        },
+        {
+            "level": 84,
+            "requiredExperience": 1371514
+        },
+        {
+            "level": 85,
+            "requiredExperience": 1406859
+        },
+        {
+            "level": 86,
+            "requiredExperience": 1442685
+        },
+        {
+            "level": 87,
+            "requiredExperience": 1478993
+        },
+        {
+            "level": 88,
+            "requiredExperience": 1515785
+        },
+        {
+            "level": 89,
+            "requiredExperience": 1553061
+        },
+        {
+            "level": 90,
+            "requiredExperience": 1590821
+        },
+        {
+            "level": 91,
+            "requiredExperience": 1629067
+        },
+        {
+            "level": 92,
+            "requiredExperience": 1667799
+        },
+        {
+            "level": 93,
+            "requiredExperience": 1707018
+        },
+        {
+            "level": 94,
+            "requiredExperience": 1746726
+        },
+        {
+            "level": 95,
+            "requiredExperience": 1786922
+        },
+        {
+            "level": 96,
+            "requiredExperience": 1827608
+        },
+        {
+            "level": 97,
+            "requiredExperience": 1868784
+        },
+        {
+            "level": 98,
+            "requiredExperience": 1910451
+        },
+        {
+            "level": 99,
+            "requiredExperience": 1952610
+        },
+        {
+            "level": 100,
+            "requiredExperience": 1995262
+        },
+        {
+            "level": 101,
+            "requiredExperience": 2038407
+        },
+        {
+            "level": 102,
+            "requiredExperience": 2082046
+        },
+        {
+            "level": 103,
+            "requiredExperience": 2126180
+        },
+        {
+            "level": 104,
+            "requiredExperience": 2170809
+        },
+        {
+            "level": 105,
+            "requiredExperience": 2215934
+        },
+        {
+            "level": 106,
+            "requiredExperience": 2261557
+        },
+        {
+            "level": 107,
+            "requiredExperience": 2307677
+        },
+        {
+            "level": 108,
+            "requiredExperience": 2354296
+        },
+        {
+            "level": 109,
+            "requiredExperience": 2401413
+        },
+        {
+            "level": 110,
+            "requiredExperience": 2449030
+        },
+        {
+            "level": 111,
+            "requiredExperience": 2497148
+        },
+        {
+            "level": 112,
+            "requiredExperience": 2545767
+        },
+        {
+            "level": 113,
+            "requiredExperience": 2594888
+        },
+        {
+            "level": 114,
+            "requiredExperience": 2644511
+        },
+        {
+            "level": 115,
+            "requiredExperience": 2694637
+        },
+        {
+            "level": 116,
+            "requiredExperience": 2745267
+        },
+        {
+            "level": 117,
+            "requiredExperience": 2796401
+        },
+        {
+            "level": 118,
+            "requiredExperience": 2848041
+        },
+        {
+            "level": 119,
+            "requiredExperience": 2900186
+        },
+        {
+            "level": 120,
+            "requiredExperience": 2952838
+        },
+        {
+            "level": 121,
+            "requiredExperience": 3005997
+        },
+        {
+            "level": 122,
+            "requiredExperience": 3059663
+        },
+        {
+            "level": 123,
+            "requiredExperience": 3113837
+        },
+        {
+            "level": 124,
+            "requiredExperience": 3168521
+        },
+        {
+            "level": 125,
+            "requiredExperience": 3223714
+        },
+        {
+            "level": 126,
+            "requiredExperience": 3279417
+        },
+        {
+            "level": 127,
+            "requiredExperience": 3335630
+        },
+        {
+            "level": 128,
+            "requiredExperience": 3392356
+        },
+        {
+            "level": 129,
+            "requiredExperience": 3449593
+        },
+        {
+            "level": 130,
+            "requiredExperience": 3507342
+        },
+        {
+            "level": 131,
+            "requiredExperience": 3565605
+        },
+        {
+            "level": 132,
+            "requiredExperience": 3624381
+        },
+        {
+            "level": 133,
+            "requiredExperience": 3683672
+        },
+        {
+            "level": 134,
+            "requiredExperience": 3743478
+        },
+        {
+            "level": 135,
+            "requiredExperience": 3803799
+        },
+        {
+            "level": 136,
+            "requiredExperience": 3864636
+        },
+        {
+            "level": 137,
+            "requiredExperience": 3925990
+        },
+        {
+            "level": 138,
+            "requiredExperience": 3987861
+        },
+        {
+            "level": 139,
+            "requiredExperience": 4050249
+        },
+        {
+            "level": 140,
+            "requiredExperience": 4113156
+        },
+        {
+            "level": 141,
+            "requiredExperience": 4176582
+        },
+        {
+            "level": 142,
+            "requiredExperience": 4240528
+        },
+        {
+            "level": 143,
+            "requiredExperience": 4304993
+        },
+        {
+            "level": 144,
+            "requiredExperience": 4369979
+        },
+        {
+            "level": 145,
+            "requiredExperience": 4435485
+        },
+        {
+            "level": 146,
+            "requiredExperience": 4501514
+        },
+        {
+            "level": 147,
+            "requiredExperience": 4568064
+        },
+        {
+            "level": 148,
+            "requiredExperience": 4635138
+        },
+        {
+            "level": 149,
+            "requiredExperience": 4702734
+        },
+        {
+            "level": 150,
+            "requiredExperience": 4770854
+        },
+        {
+            "level": 151,
+            "requiredExperience": 4839499
+        },
+        {
+            "level": 152,
+            "requiredExperience": 4908668
+        },
+        {
+            "level": 153,
+            "requiredExperience": 4978363
+        },
+        {
+            "level": 154,
+            "requiredExperience": 5048583
+        },
+        {
+            "level": 155,
+            "requiredExperience": 5119330
+        },
+        {
+            "level": 156,
+            "requiredExperience": 5190603
+        },
+        {
+            "level": 157,
+            "requiredExperience": 5262404
+        },
+        {
+            "level": 158,
+            "requiredExperience": 5334733
+        },
+        {
+            "level": 159,
+            "requiredExperience": 5407590
+        },
+        {
+            "level": 160,
+            "requiredExperience": 5480976
+        },
+        {
+            "level": 161,
+            "requiredExperience": 5554892
+        },
+        {
+            "level": 162,
+            "requiredExperience": 5629337
+        },
+        {
+            "level": 163,
+            "requiredExperience": 5704313
+        },
+        {
+            "level": 164,
+            "requiredExperience": 5779819
+        },
+        {
+            "level": 165,
+            "requiredExperience": 5855857
+        },
+        {
+            "level": 166,
+            "requiredExperience": 5932426
+        },
+        {
+            "level": 167,
+            "requiredExperience": 6009528
+        },
+        {
+            "level": 168,
+            "requiredExperience": 6087163
+        },
+        {
+            "level": 169,
+            "requiredExperience": 6165331
+        },
+        {
+            "level": 170,
+            "requiredExperience": 6244032
+        },
+        {
+            "level": 171,
+            "requiredExperience": 6323268
+        },
+        {
+            "level": 172,
+            "requiredExperience": 6403039
+        },
+        {
+            "level": 173,
+            "requiredExperience": 6483344
+        },
+        {
+            "level": 174,
+            "requiredExperience": 6564186
+        },
+        {
+            "level": 175,
+            "requiredExperience": 6645563
+        },
+        {
+            "level": 176,
+            "requiredExperience": 6727477
+        },
+        {
+            "level": 177,
+            "requiredExperience": 6809928
+        },
+        {
+            "level": 178,
+            "requiredExperience": 6892916
+        },
+        {
+            "level": 179,
+            "requiredExperience": 6976442
+        },
+        {
+            "level": 180,
+            "requiredExperience": 7060506
+        },
+        {
+            "level": 181,
+            "requiredExperience": 7145110
+        },
+        {
+            "level": 182,
+            "requiredExperience": 7230252
+        },
+        {
+            "level": 183,
+            "requiredExperience": 7315935
+        },
+        {
+            "level": 184,
+            "requiredExperience": 7402157
+        },
+        {
+            "level": 185,
+            "requiredExperience": 7488920
+        },
+        {
+            "level": 186,
+            "requiredExperience": 7576224
+        },
+        {
+            "level": 187,
+            "requiredExperience": 7664069
+        },
+        {
+            "level": 188,
+            "requiredExperience": 7752457
+        },
+        {
+            "level": 189,
+            "requiredExperience": 7841386
+        },
+        {
+            "level": 190,
+            "requiredExperience": 7930859
+        },
+        {
+            "level": 191,
+            "requiredExperience": 8020874
+        },
+        {
+            "level": 192,
+            "requiredExperience": 8111434
+        },
+        {
+            "level": 193,
+            "requiredExperience": 8202537
+        },
+        {
+            "level": 194,
+            "requiredExperience": 8294185
+        },
+        {
+            "level": 195,
+            "requiredExperience": 8386377
+        },
+        {
+            "level": 196,
+            "requiredExperience": 8479115
+        },
+        {
+            "level": 197,
+            "requiredExperience": 8572399
+        },
+        {
+            "level": 198,
+            "requiredExperience": 8666228
+        },
+        {
+            "level": 199,
+            "requiredExperience": 8760605
+        },
+        {
+            "level": 200,
+            "requiredExperience": 8855528
+        },
+        {
+            "level": 201,
+            "requiredExperience": 8950999
+        },
+        {
+            "level": 202,
+            "requiredExperience": 9047017
+        },
+        {
+            "level": 203,
+            "requiredExperience": 9143584
+        },
+        {
+            "level": 204,
+            "requiredExperience": 9240699
+        },
+        {
+            "level": 205,
+            "requiredExperience": 9338364
+        },
+        {
+            "level": 206,
+            "requiredExperience": 9436577
+        },
+        {
+            "level": 207,
+            "requiredExperience": 9535341
+        },
+        {
+            "level": 208,
+            "requiredExperience": 9634655
+        },
+        {
+            "level": 209,
+            "requiredExperience": 9734519
+        },
+        {
+            "level": 210,
+            "requiredExperience": 9834934
+        },
+        {
+            "level": 211,
+            "requiredExperience": 9935901
+        },
+        {
+            "level": 212,
+            "requiredExperience": 10037420
+        },
+        {
+            "level": 213,
+            "requiredExperience": 10139490
+        },
+        {
+            "level": 214,
+            "requiredExperience": 10242114
+        },
+        {
+            "level": 215,
+            "requiredExperience": 10345290
+        },
+        {
+            "level": 216,
+            "requiredExperience": 10449020
+        },
+        {
+            "level": 217,
+            "requiredExperience": 10553303
+        },
+        {
+            "level": 218,
+            "requiredExperience": 10658140
+        },
+        {
+            "level": 219,
+            "requiredExperience": 10763533
+        },
+        {
+            "level": 220,
+            "requiredExperience": 10869479
+        },
+        {
+            "level": 221,
+            "requiredExperience": 10975982
+        },
+        {
+            "level": 222,
+            "requiredExperience": 11083039
+        },
+        {
+            "level": 223,
+            "requiredExperience": 11190653
+        },
+        {
+            "level": 224,
+            "requiredExperience": 11298823
+        },
+        {
+            "level": 225,
+            "requiredExperience": 11407550
+        },
+        {
+            "level": 226,
+            "requiredExperience": 11516834
+        },
+        {
+            "level": 227,
+            "requiredExperience": 11626676
+        },
+        {
+            "level": 228,
+            "requiredExperience": 11737076
+        },
+        {
+            "level": 229,
+            "requiredExperience": 11848033
+        },
+        {
+            "level": 230,
+            "requiredExperience": 11959550
+        },
+        {
+            "level": 231,
+            "requiredExperience": 12071625
+        },
+        {
+            "level": 232,
+            "requiredExperience": 12184260
+        },
+        {
+            "level": 233,
+            "requiredExperience": 12297454
+        },
+        {
+            "level": 234,
+            "requiredExperience": 12411209
+        },
+        {
+            "level": 235,
+            "requiredExperience": 12525524
+        },
+        {
+            "level": 236,
+            "requiredExperience": 12640399
+        },
+        {
+            "level": 237,
+            "requiredExperience": 12755836
+        },
+        {
+            "level": 238,
+            "requiredExperience": 12871834
+        },
+        {
+            "level": 239,
+            "requiredExperience": 12988394
+        },
+        {
+            "level": 240,
+            "requiredExperience": 13105517
+        },
+        {
+            "level": 241,
+            "requiredExperience": 13223202
+        },
+        {
+            "level": 242,
+            "requiredExperience": 13341450
+        },
+        {
+            "level": 243,
+            "requiredExperience": 13460261
+        },
+        {
+            "level": 244,
+            "requiredExperience": 13579635
+        },
+        {
+            "level": 245,
+            "requiredExperience": 13699574
+        },
+        {
+            "level": 246,
+            "requiredExperience": 13820077
+        },
+        {
+            "level": 247,
+            "requiredExperience": 13941145
+        },
+        {
+            "level": 248,
+            "requiredExperience": 14062777
+        },
+        {
+            "level": 249,
+            "requiredExperience": 14184975
+        },
+        {
+            "level": 250,
+            "requiredExperience": 14307739
+        },
+        {
+            "level": 251,
+            "requiredExperience": 14431068
+        },
+        {
+            "level": 252,
+            "requiredExperience": 14554964
+        },
+        {
+            "level": 253,
+            "requiredExperience": 14679427
+        },
+        {
+            "level": 254,
+            "requiredExperience": 14804457
+        },
+        {
+            "level": 255,
+            "requiredExperience": 14930054
+        },
+        {
+            "level": 256,
+            "requiredExperience": 15056219
+        },
+        {
+            "level": 257,
+            "requiredExperience": 15182951
+        },
+        {
+            "level": 258,
+            "requiredExperience": 15310253
+        },
+        {
+            "level": 259,
+            "requiredExperience": 15438122
+        },
+        {
+            "level": 260,
+            "requiredExperience": 15566561
+        },
+        {
+            "level": 261,
+            "requiredExperience": 15695569
+        },
+        {
+            "level": 262,
+            "requiredExperience": 15825147
+        },
+        {
+            "level": 263,
+            "requiredExperience": 15955295
+        },
+        {
+            "level": 264,
+            "requiredExperience": 16086014
+        },
+        {
+            "level": 265,
+            "requiredExperience": 16217302
+        },
+        {
+            "level": 266,
+            "requiredExperience": 16349162
+        },
+        {
+            "level": 267,
+            "requiredExperience": 16481594
+        },
+        {
+            "level": 268,
+            "requiredExperience": 16614596
+        },
+        {
+            "level": 269,
+            "requiredExperience": 16748171
+        },
+        {
+            "level": 270,
+            "requiredExperience": 16882318
+        },
+        {
+            "level": 271,
+            "requiredExperience": 17017038
+        },
+        {
+            "level": 272,
+            "requiredExperience": 17152330
+        },
+        {
+            "level": 273,
+            "requiredExperience": 17288196
+        },
+        {
+            "level": 274,
+            "requiredExperience": 17424635
+        },
+        {
+            "level": 275,
+            "requiredExperience": 17561648
+        },
+        {
+            "level": 276,
+            "requiredExperience": 17699236
+        },
+        {
+            "level": 277,
+            "requiredExperience": 17837398
+        },
+        {
+            "level": 278,
+            "requiredExperience": 17976134
+        },
+        {
+            "level": 279,
+            "requiredExperience": 18115446
+        },
+        {
+            "level": 280,
+            "requiredExperience": 18255333
+        },
+        {
+            "level": 281,
+            "requiredExperience": 18395796
+        },
+        {
+            "level": 282,
+            "requiredExperience": 18536834
+        },
+        {
+            "level": 283,
+            "requiredExperience": 18678450
+        },
+        {
+            "level": 284,
+            "requiredExperience": 18820641
+        },
+        {
+            "level": 285,
+            "requiredExperience": 18963410
+        },
+        {
+            "level": 286,
+            "requiredExperience": 19106756
+        },
+        {
+            "level": 287,
+            "requiredExperience": 19250680
+        },
+        {
+            "level": 288,
+            "requiredExperience": 19395181
+        },
+        {
+            "level": 289,
+            "requiredExperience": 19540261
+        },
+        {
+            "level": 290,
+            "requiredExperience": 19685919
+        },
+        {
+            "level": 291,
+            "requiredExperience": 19832155
+        },
+        {
+            "level": 292,
+            "requiredExperience": 19978971
+        },
+        {
+            "level": 293,
+            "requiredExperience": 20126366
+        },
+        {
+            "level": 294,
+            "requiredExperience": 20274341
+        },
+        {
+            "level": 295,
+            "requiredExperience": 20422896
+        },
+        {
+            "level": 296,
+            "requiredExperience": 20572031
+        },
+        {
+            "level": 297,
+            "requiredExperience": 20721746
+        },
+        {
+            "level": 298,
+            "requiredExperience": 20872043
+        },
+        {
+            "level": 299,
+            "requiredExperience": 21022920
+        },
+        {
+            "level": 300,
+            "requiredExperience": 21174379
+        },
+        {
+            "level": 301,
+            "requiredExperience": 21326420
+        },
+        {
+            "level": 302,
+            "requiredExperience": 21479042
+        },
+        {
+            "level": 303,
+            "requiredExperience": 21632247
+        },
+        {
+            "level": 304,
+            "requiredExperience": 21786035
+        },
+        {
+            "level": 305,
+            "requiredExperience": 21940405
+        },
+        {
+            "level": 306,
+            "requiredExperience": 22095359
+        },
+        {
+            "level": 307,
+            "requiredExperience": 22250896
+        },
+        {
+            "level": 308,
+            "requiredExperience": 22407016
+        },
+        {
+            "level": 309,
+            "requiredExperience": 22563721
+        },
+        {
+            "level": 310,
+            "requiredExperience": 22721010
+        },
+        {
+            "level": 311,
+            "requiredExperience": 22878884
+        },
+        {
+            "level": 312,
+            "requiredExperience": 23037342
+        },
+        {
+            "level": 313,
+            "requiredExperience": 23196385
+        },
+        {
+            "level": 314,
+            "requiredExperience": 23356014
+        },
+        {
+            "level": 315,
+            "requiredExperience": 23516229
+        },
+        {
+            "level": 316,
+            "requiredExperience": 23677030
+        },
+        {
+            "level": 317,
+            "requiredExperience": 23838417
+        },
+        {
+            "level": 318,
+            "requiredExperience": 24000390
+        },
+        {
+            "level": 319,
+            "requiredExperience": 24162950
+        },
+        {
+            "level": 320,
+            "requiredExperience": 24326098
+        },
+        {
+            "level": 321,
+            "requiredExperience": 24489832
+        },
+        {
+            "level": 322,
+            "requiredExperience": 24654155
+        },
+        {
+            "level": 323,
+            "requiredExperience": 24819065
+        },
+        {
+            "level": 324,
+            "requiredExperience": 24984563
+        },
+        {
+            "level": 325,
+            "requiredExperience": 25150650
+        },
+        {
+            "level": 326,
+            "requiredExperience": 25317326
+        },
+        {
+            "level": 327,
+            "requiredExperience": 25484591
+        },
+        {
+            "level": 328,
+            "requiredExperience": 25652444
+        },
+        {
+            "level": 329,
+            "requiredExperience": 25820888
+        },
+        {
+            "level": 330,
+            "requiredExperience": 25989921
+        },
+        {
+            "level": 331,
+            "requiredExperience": 26159545
+        },
+        {
+            "level": 332,
+            "requiredExperience": 26329758
+        },
+        {
+            "level": 333,
+            "requiredExperience": 26500563
+        },
+        {
+            "level": 334,
+            "requiredExperience": 26671958
+        },
+        {
+            "level": 335,
+            "requiredExperience": 26843944
+        },
+        {
+            "level": 336,
+            "requiredExperience": 27016522
+        },
+        {
+            "level": 337,
+            "requiredExperience": 27189691
+        },
+        {
+            "level": 338,
+            "requiredExperience": 27363453
+        },
+        {
+            "level": 339,
+            "requiredExperience": 27537806
+        },
+        {
+            "level": 340,
+            "requiredExperience": 27712753
+        },
+        {
+            "level": 341,
+            "requiredExperience": 27888291
+        },
+        {
+            "level": 342,
+            "requiredExperience": 28064423
+        },
+        {
+            "level": 343,
+            "requiredExperience": 28241148
+        },
+        {
+            "level": 344,
+            "requiredExperience": 28418467
+        },
+        {
+            "level": 345,
+            "requiredExperience": 28596379
+        },
+        {
+            "level": 346,
+            "requiredExperience": 28774886
+        },
+        {
+            "level": 347,
+            "requiredExperience": 28953986
+        },
+        {
+            "level": 348,
+            "requiredExperience": 29133681
+        },
+        {
+            "level": 349,
+            "requiredExperience": 29313971
+        },
+        {
+            "level": 350,
+            "requiredExperience": 29494857
+        },
+        {
+            "level": 351,
+            "requiredExperience": 29676337
+        },
+        {
+            "level": 352,
+            "requiredExperience": 29858413
+        },
+        {
+            "level": 353,
+            "requiredExperience": 30041085
+        },
+        {
+            "level": 354,
+            "requiredExperience": 30224353
+        },
+        {
+            "level": 355,
+            "requiredExperience": 30408217
+        },
+        {
+            "level": 356,
+            "requiredExperience": 30592678
+        },
+        {
+            "level": 357,
+            "requiredExperience": 30777735
+        },
+        {
+            "level": 358,
+            "requiredExperience": 30963390
+        },
+        {
+            "level": 359,
+            "requiredExperience": 31149642
+        },
+        {
+            "level": 360,
+            "requiredExperience": 31336491
+        },
+        {
+            "level": 361,
+            "requiredExperience": 31523939
+        },
+        {
+            "level": 362,
+            "requiredExperience": 31711984
+        },
+        {
+            "level": 363,
+            "requiredExperience": 31900628
+        },
+        {
+            "level": 364,
+            "requiredExperience": 32089871
+        },
+        {
+            "level": 365,
+            "requiredExperience": 32279712
+        },
+        {
+            "level": 366,
+            "requiredExperience": 32470152
+        },
+        {
+            "level": 367,
+            "requiredExperience": 32661192
+        },
+        {
+            "level": 368,
+            "requiredExperience": 32852831
+        },
+        {
+            "level": 369,
+            "requiredExperience": 33045070
+        },
+        {
+            "level": 370,
+            "requiredExperience": 33237909
+        },
+        {
+            "level": 371,
+            "requiredExperience": 33431349
+        },
+        {
+            "level": 372,
+            "requiredExperience": 33625389
+        },
+        {
+            "level": 373,
+            "requiredExperience": 33820029
+        },
+        {
+            "level": 374,
+            "requiredExperience": 34015271
+        },
+        {
+            "level": 375,
+            "requiredExperience": 34211114
+        },
+        {
+            "level": 376,
+            "requiredExperience": 34407559
+        },
+        {
+            "level": 377,
+            "requiredExperience": 34604605
+        },
+        {
+            "level": 378,
+            "requiredExperience": 34802253
+        },
+        {
+            "level": 379,
+            "requiredExperience": 35000504
+        },
+        {
+            "level": 380,
+            "requiredExperience": 35199357
+        },
+        {
+            "level": 381,
+            "requiredExperience": 35398812
+        },
+        {
+            "level": 382,
+            "requiredExperience": 35598871
+        },
+        {
+            "level": 383,
+            "requiredExperience": 35799533
+        },
+        {
+            "level": 384,
+            "requiredExperience": 36000798
+        },
+        {
+            "level": 385,
+            "requiredExperience": 36202667
+        },
+        {
+            "level": 386,
+            "requiredExperience": 36405139
+        },
+        {
+            "level": 387,
+            "requiredExperience": 36608216
+        },
+        {
+            "level": 388,
+            "requiredExperience": 36811898
+        },
+        {
+            "level": 389,
+            "requiredExperience": 37016183
+        },
+        {
+            "level": 390,
+            "requiredExperience": 37221074
+        },
+        {
+            "level": 391,
+            "requiredExperience": 37426570
+        },
+        {
+            "level": 392,
+            "requiredExperience": 37632671
+        },
+        {
+            "level": 393,
+            "requiredExperience": 37839377
+        },
+        {
+            "level": 394,
+            "requiredExperience": 38046689
+        },
+        {
+            "level": 395,
+            "requiredExperience": 38254607
+        },
+        {
+            "level": 396,
+            "requiredExperience": 38463132
+        },
+        {
+            "level": 397,
+            "requiredExperience": 38672263
+        },
+        {
+            "level": 398,
+            "requiredExperience": 38882000
+        },
+        {
+            "level": 399,
+            "requiredExperience": 39092345
+        },
+        {
+            "level": 400,
+            "requiredExperience": 39303296
+        },
+        {
+            "level": 401,
+            "requiredExperience": 39514855
+        },
+        {
+            "level": 402,
+            "requiredExperience": 39727022
+        },
+        {
+            "level": 403,
+            "requiredExperience": 39939796
+        },
+        {
+            "level": 404,
+            "requiredExperience": 40153179
+        },
+        {
+            "level": 405,
+            "requiredExperience": 40367169
+        },
+        {
+            "level": 406,
+            "requiredExperience": 40581768
+        },
+        {
+            "level": 407,
+            "requiredExperience": 40796976
+        },
+        {
+            "level": 408,
+            "requiredExperience": 41012793
+        },
+        {
+            "level": 409,
+            "requiredExperience": 41229219
+        },
+        {
+            "level": 410,
+            "requiredExperience": 41446254
+        },
+        {
+            "level": 411,
+            "requiredExperience": 41663899
+        },
+        {
+            "level": 412,
+            "requiredExperience": 41882154
+        },
+        {
+            "level": 413,
+            "requiredExperience": 42101019
+        },
+        {
+            "level": 414,
+            "requiredExperience": 42320494
+        },
+        {
+            "level": 415,
+            "requiredExperience": 42540580
+        },
+        {
+            "level": 416,
+            "requiredExperience": 42761276
+        },
+        {
+            "level": 417,
+            "requiredExperience": 42982583
+        },
+        {
+            "level": 418,
+            "requiredExperience": 43204502
+        },
+        {
+            "level": 419,
+            "requiredExperience": 43427032
+        },
+        {
+            "level": 420,
+            "requiredExperience": 43650173
+        },
+        {
+            "level": 421,
+            "requiredExperience": 43873926
+        },
+        {
+            "level": 422,
+            "requiredExperience": 44098292
+        },
+        {
+            "level": 423,
+            "requiredExperience": 44323269
+        },
+        {
+            "level": 424,
+            "requiredExperience": 44548859
+        },
+        {
+            "level": 425,
+            "requiredExperience": 44775062
+        },
+        {
+            "level": 426,
+            "requiredExperience": 45001878
+        },
+        {
+            "level": 427,
+            "requiredExperience": 45229306
+        },
+        {
+            "level": 428,
+            "requiredExperience": 45457348
+        },
+        {
+            "level": 429,
+            "requiredExperience": 45686004
+        },
+        {
+            "level": 430,
+            "requiredExperience": 45915273
+        },
+        {
+            "level": 431,
+            "requiredExperience": 46145157
+        },
+        {
+            "level": 432,
+            "requiredExperience": 46375654
+        },
+        {
+            "level": 433,
+            "requiredExperience": 46606766
+        },
+        {
+            "level": 434,
+            "requiredExperience": 46838493
+        },
+        {
+            "level": 435,
+            "requiredExperience": 47070835
+        },
+        {
+            "level": 436,
+            "requiredExperience": 47303791
+        },
+        {
+            "level": 437,
+            "requiredExperience": 47537363
+        },
+        {
+            "level": 438,
+            "requiredExperience": 47771550
+        },
+        {
+            "level": 439,
+            "requiredExperience": 48006353
+        },
+        {
+            "level": 440,
+            "requiredExperience": 48241772
+        },
+        {
+            "level": 441,
+            "requiredExperience": 48477807
+        },
+        {
+            "level": 442,
+            "requiredExperience": 48714458
+        },
+        {
+            "level": 443,
+            "requiredExperience": 48951726
+        },
+        {
+            "level": 444,
+            "requiredExperience": 49189610
+        },
+        {
+            "level": 445,
+            "requiredExperience": 49428112
+        },
+        {
+            "level": 446,
+            "requiredExperience": 49667230
+        },
+        {
+            "level": 447,
+            "requiredExperience": 49906966
+        },
+        {
+            "level": 448,
+            "requiredExperience": 50147320
+        },
+        {
+            "level": 449,
+            "requiredExperience": 50388291
+        },
+        {
+            "level": 450,
+            "requiredExperience": 50629880
+        },
+        {
+            "level": 451,
+            "requiredExperience": 50872088
+        },
+        {
+            "level": 452,
+            "requiredExperience": 51114914
+        },
+        {
+            "level": 453,
+            "requiredExperience": 51358358
+        },
+        {
+            "level": 454,
+            "requiredExperience": 51602421
+        },
+        {
+            "level": 455,
+            "requiredExperience": 51847103
+        },
+        {
+            "level": 456,
+            "requiredExperience": 52092405
+        },
+        {
+            "level": 457,
+            "requiredExperience": 52338326
+        },
+        {
+            "level": 458,
+            "requiredExperience": 52584866
+        },
+        {
+            "level": 459,
+            "requiredExperience": 52832027
+        },
+        {
+            "level": 460,
+            "requiredExperience": 53079807
+        },
+        {
+            "level": 461,
+            "requiredExperience": 53328207
+        },
+        {
+            "level": 462,
+            "requiredExperience": 53577228
+        },
+        {
+            "level": 463,
+            "requiredExperience": 53826870
+        },
+        {
+            "level": 464,
+            "requiredExperience": 54077132
+        },
+        {
+            "level": 465,
+            "requiredExperience": 54328016
+        },
+        {
+            "level": 466,
+            "requiredExperience": 54579521
+        },
+        {
+            "level": 467,
+            "requiredExperience": 54831647
+        },
+        {
+            "level": 468,
+            "requiredExperience": 55084395
+        },
+        {
+            "level": 469,
+            "requiredExperience": 55337764
+        },
+        {
+            "level": 470,
+            "requiredExperience": 55591756
+        },
+        {
+            "level": 471,
+            "requiredExperience": 55846370
+        },
+        {
+            "level": 472,
+            "requiredExperience": 56101606
+        },
+        {
+            "level": 473,
+            "requiredExperience": 56357465
+        },
+        {
+            "level": 474,
+            "requiredExperience": 56613947
+        },
+        {
+            "level": 475,
+            "requiredExperience": 56871051
+        },
+        {
+            "level": 476,
+            "requiredExperience": 57128779
+        },
+        {
+            "level": 477,
+            "requiredExperience": 57387131
+        },
+        {
+            "level": 478,
+            "requiredExperience": 57646106
+        },
+        {
+            "level": 479,
+            "requiredExperience": 57905705
+        },
+        {
+            "level": 480,
+            "requiredExperience": 58165927
+        },
+        {
+            "level": 481,
+            "requiredExperience": 58426774
+        },
+        {
+            "level": 482,
+            "requiredExperience": 58688246
+        },
+        {
+            "level": 483,
+            "requiredExperience": 58950342
+        },
+        {
+            "level": 484,
+            "requiredExperience": 59213063
+        },
+        {
+            "level": 485,
+            "requiredExperience": 59476408
+        },
+        {
+            "level": 486,
+            "requiredExperience": 59740379
+        },
+        {
+            "level": 487,
+            "requiredExperience": 60004976
+        },
+        {
+            "level": 488,
+            "requiredExperience": 60270197
+        },
+        {
+            "level": 489,
+            "requiredExperience": 60536045
+        },
+        {
+            "level": 490,
+            "requiredExperience": 60802518
+        },
+        {
+            "level": 491,
+            "requiredExperience": 61069618
+        },
+        {
+            "level": 492,
+            "requiredExperience": 61337344
+        },
+        {
+            "level": 493,
+            "requiredExperience": 61605697
+        },
+        {
+            "level": 494,
+            "requiredExperience": 61874676
+        },
+        {
+            "level": 495,
+            "requiredExperience": 62144282
+        },
+        {
+            "level": 496,
+            "requiredExperience": 62414515
+        },
+        {
+            "level": 497,
+            "requiredExperience": 62685376
+        },
+        {
+            "level": 498,
+            "requiredExperience": 62956864
+        },
+        {
+            "level": 499,
+            "requiredExperience": 63228979
+        },
+        {
+            "level": 500,
+            "requiredExperience": 63501723
+        }
+    ]
+}
