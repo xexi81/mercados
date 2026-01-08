@@ -6,7 +6,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 2,
@@ -14,7 +18,12 @@
       "category": "Energia",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 3,
@@ -22,7 +31,12 @@
       "category": "Energia",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 4,
@@ -30,7 +44,11 @@
       "category": "Energia",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_GAS"
+      ]
     },
     {
       "id": 5,
@@ -38,7 +56,12 @@
       "category": "Energia",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 6,
@@ -46,7 +69,12 @@
       "category": "Construccion",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 7,
@@ -54,7 +82,12 @@
       "category": "Construccion",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 8,
@@ -62,7 +95,12 @@
       "category": "Construccion",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 9,
@@ -70,7 +108,12 @@
       "category": "Construccion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 10,
@@ -78,7 +121,12 @@
       "category": "Industria",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 11,
@@ -86,7 +134,12 @@
       "category": "Industria",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 12,
@@ -94,7 +147,12 @@
       "category": "Industria",
       "grade": 1,
       "components": [],
-      "basePrice": 30
+      "basePrice": 30,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 13,
@@ -102,7 +160,11 @@
       "category": "Electronica",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 14,
@@ -110,7 +172,11 @@
       "category": "Electronica",
       "grade": 1,
       "components": [],
-      "basePrice": 30
+      "basePrice": 30,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 15,
@@ -118,7 +184,12 @@
       "category": "Industria",
       "grade": 1,
       "components": [],
-      "basePrice": 40
+      "basePrice": 40,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 16,
@@ -126,7 +197,12 @@
       "category": "Industria",
       "grade": 1,
       "components": [],
-      "basePrice": 35
+      "basePrice": 35,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 17,
@@ -134,7 +210,12 @@
       "category": "Energia",
       "grade": 1,
       "components": [],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 18,
@@ -142,7 +223,12 @@
       "category": "Quimica",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 19,
@@ -150,7 +236,12 @@
       "category": "Construccion",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 20,
@@ -158,7 +249,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 21,
@@ -166,7 +261,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 22,
@@ -174,7 +274,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 23,
@@ -182,7 +287,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 24,
@@ -190,7 +300,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 25,
@@ -198,7 +313,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 30
+      "basePrice": 30,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 26,
@@ -206,7 +326,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 27,
@@ -214,7 +339,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 15
+      "basePrice": 15,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 28,
@@ -222,7 +352,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 29,
@@ -230,7 +365,11 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 30,
@@ -238,7 +377,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 31,
@@ -246,7 +390,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 32,
@@ -254,7 +403,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 33,
@@ -262,7 +416,12 @@
       "category": "Alimentacion",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 34,
@@ -270,7 +429,11 @@
       "category": "Automocion",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 35,
@@ -278,7 +441,11 @@
       "category": "Consumo",
       "grade": 1,
       "components": [],
-      "basePrice": 20
+      "basePrice": 20,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 36,
@@ -286,7 +453,11 @@
       "category": "Consumo",
       "grade": 1,
       "components": [],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 37,
@@ -294,7 +465,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 38,
@@ -302,7 +477,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 39,
@@ -310,7 +489,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 40,
@@ -318,7 +501,11 @@
       "category": "Basicos",
       "grade": 1,
       "components": [],
-      "basePrice": 10
+      "basePrice": 10,
+      "unitVolumeM3": 0.5,
+      "allowedContainers": [
+        "BULK_GAS"
+      ]
     },
     {
       "id": 41,
@@ -331,7 +518,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 25
+      "basePrice": 25,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 42,
@@ -344,7 +535,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 43,
@@ -357,7 +553,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 60
+      "basePrice": 60,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 44,
@@ -370,7 +570,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 45,
@@ -383,7 +588,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 40
+      "basePrice": 40,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 46,
@@ -396,7 +606,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 55
+      "basePrice": 55,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 47,
@@ -409,7 +624,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 48,
@@ -422,7 +642,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 49,
@@ -435,7 +660,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 70
+      "basePrice": 70,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 50,
@@ -448,7 +677,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 75
+      "basePrice": 75,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 51,
@@ -461,7 +695,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 40
+      "basePrice": 40,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 52,
@@ -474,7 +713,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 53,
@@ -487,7 +731,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 54,
@@ -500,7 +749,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 55,
@@ -517,7 +771,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 90
+      "basePrice": 90,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 56,
@@ -530,7 +789,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 75
+      "basePrice": 75,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 57,
@@ -543,7 +807,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 95
+      "basePrice": 95,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 58,
@@ -556,7 +825,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 80
+      "basePrice": 80,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 59,
@@ -573,7 +846,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 120
+      "basePrice": 120,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 60,
@@ -586,7 +863,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 60
+      "basePrice": 60,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 61,
@@ -599,7 +881,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 95
+      "basePrice": 95,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 62,
@@ -612,7 +898,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 85
+      "basePrice": 85,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_GAS"
+      ]
     },
     {
       "id": 63,
@@ -625,7 +915,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 40
+      "basePrice": 40,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 64,
@@ -638,7 +933,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 60
+      "basePrice": 60,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 65,
@@ -651,7 +950,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 66,
@@ -664,7 +967,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 70
+      "basePrice": 70,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 67,
@@ -677,7 +984,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 35
+      "basePrice": 35,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 68,
@@ -690,7 +1001,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 55
+      "basePrice": 55,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 69,
@@ -707,7 +1022,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 85
+      "basePrice": 85,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 70,
@@ -720,7 +1040,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 30
+      "basePrice": 30,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 71,
@@ -733,7 +1057,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 55
+      "basePrice": 55,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 72,
@@ -746,7 +1075,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 73,
@@ -759,7 +1093,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 45
+      "basePrice": 45,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 74,
@@ -772,7 +1111,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 65
+      "basePrice": 65,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 75,
@@ -785,7 +1128,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 50
+      "basePrice": 50,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 76,
@@ -798,7 +1146,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 95
+      "basePrice": 95,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 77,
@@ -811,7 +1164,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 80
+      "basePrice": 80,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 78,
@@ -824,7 +1181,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 70
+      "basePrice": 70,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 79,
@@ -837,7 +1199,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 85
+      "basePrice": 85,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 80,
@@ -850,7 +1217,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 100
+      "basePrice": 100,
+      "unitVolumeM3": 0.8,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 81,
@@ -871,7 +1243,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 170
+      "basePrice": 170,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 82,
@@ -892,7 +1269,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 180
+      "basePrice": 180,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 83,
@@ -913,7 +1295,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 240
+      "basePrice": 240,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 84,
@@ -934,7 +1321,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 250
+      "basePrice": 250,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 85,
@@ -955,7 +1347,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 230
+      "basePrice": 230,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 86,
@@ -976,7 +1373,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 280
+      "basePrice": 280,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 87,
@@ -997,7 +1399,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 220
+      "basePrice": 220,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_LIQUID"
+      ]
     },
     {
       "id": 88,
@@ -1018,7 +1424,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 210
+      "basePrice": 210,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 89,
@@ -1043,7 +1454,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 320
+      "basePrice": 320,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "REFRIGERATED"
+      ]
     },
     {
       "id": 90,
@@ -1064,7 +1480,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 280
+      "basePrice": 280,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 91,
@@ -1085,7 +1506,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 260
+      "basePrice": 260,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 92,
@@ -1106,7 +1532,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 250
+      "basePrice": 250,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 93,
@@ -1127,7 +1558,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 380
+      "basePrice": 380,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 94,
@@ -1148,7 +1583,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 340
+      "basePrice": 340,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 95,
@@ -1165,7 +1604,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 280
+      "basePrice": 280,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 96,
@@ -1186,7 +1629,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 420
+      "basePrice": 420,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 97,
@@ -1211,7 +1659,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 420
+      "basePrice": 420,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 98,
@@ -1232,7 +1684,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 300
+      "basePrice": 300,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 99,
@@ -1253,7 +1709,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 380
+      "basePrice": 380,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 100,
@@ -1270,7 +1730,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 450
+      "basePrice": 450,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 101,
@@ -1291,7 +1755,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 380
+      "basePrice": 380,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 102,
@@ -1308,7 +1776,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 300
+      "basePrice": 300,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 103,
@@ -1325,7 +1797,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 260
+      "basePrice": 260,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 104,
@@ -1346,7 +1822,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 300
+      "basePrice": 300,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 105,
@@ -1363,7 +1844,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 480
+      "basePrice": 480,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 106,
@@ -1380,7 +1866,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 360
+      "basePrice": 360,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 107,
@@ -1397,7 +1888,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 330
+      "basePrice": 330,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 108,
@@ -1414,7 +1910,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 310
+      "basePrice": 310,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 109,
@@ -1431,7 +1932,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 340
+      "basePrice": 340,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 110,
@@ -1448,7 +1954,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 360
+      "basePrice": 360,
+      "unitVolumeM3": 1.2,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 141,
@@ -1477,7 +1988,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1200
+      "basePrice": 1200,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 142,
@@ -1502,7 +2017,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1050
+      "basePrice": 1050,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 143,
@@ -1527,7 +2046,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 980
+      "basePrice": 980,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 144,
@@ -1552,7 +2075,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1100
+      "basePrice": 1100,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 145,
@@ -1577,7 +2104,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1400
+      "basePrice": 1400,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 146,
@@ -1602,7 +2133,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1350
+      "basePrice": 1350,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 147,
@@ -1627,7 +2162,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1250
+      "basePrice": 1250,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 148,
@@ -1648,7 +2187,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1500
+      "basePrice": 1500,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 149,
@@ -1669,7 +2213,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 1200
+      "basePrice": 1200,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 150,
@@ -1694,7 +2243,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1150
+      "basePrice": 1150,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 151,
@@ -1715,7 +2269,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1600
+      "basePrice": 1600,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 152,
@@ -1736,7 +2295,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1750
+      "basePrice": 1750,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 153,
@@ -1757,7 +2321,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1400
+      "basePrice": 1400,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 154,
@@ -1778,7 +2346,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1800
+      "basePrice": 1800,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 155,
@@ -1799,7 +2371,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1500
+      "basePrice": 1500,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 156,
@@ -1820,7 +2396,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1000
+      "basePrice": 1000,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 157,
@@ -1841,7 +2422,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1100
+      "basePrice": 1100,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 158,
@@ -1862,7 +2448,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1250
+      "basePrice": 1250,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 159,
@@ -1883,7 +2474,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1150
+      "basePrice": 1150,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 160,
@@ -1904,7 +2500,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1300
+      "basePrice": 1300,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 161,
@@ -1925,7 +2525,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1500
+      "basePrice": 1500,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 162,
@@ -1946,7 +2551,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1650
+      "basePrice": 1650,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 163,
@@ -1967,7 +2577,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1450
+      "basePrice": 1450,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 164,
@@ -1988,7 +2603,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1550
+      "basePrice": 1550,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 165,
@@ -2005,7 +2624,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1600
+      "basePrice": 1600,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 166,
@@ -2026,7 +2650,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1800
+      "basePrice": 1800,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 167,
@@ -2047,7 +2676,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1700
+      "basePrice": 1700,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 168,
@@ -2068,7 +2702,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1850
+      "basePrice": 1850,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 169,
@@ -2085,7 +2723,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1900
+      "basePrice": 1900,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 170,
@@ -2106,7 +2749,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2000
+      "basePrice": 2000,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 171,
@@ -2123,7 +2771,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1750
+      "basePrice": 1750,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 172,
@@ -2144,7 +2796,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2100
+      "basePrice": 2100,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 173,
@@ -2165,7 +2822,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1950
+      "basePrice": 1950,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 174,
@@ -2186,7 +2848,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 1800
+      "basePrice": 1800,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 175,
@@ -2207,7 +2874,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2200
+      "basePrice": 2200,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 176,
@@ -2228,7 +2899,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2300
+      "basePrice": 2300,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 177,
@@ -2249,7 +2925,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2250
+      "basePrice": 2250,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 178,
@@ -2270,7 +2951,11 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2500
+      "basePrice": 2500,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 179,
@@ -2287,7 +2972,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 2700
+      "basePrice": 2700,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 180,
@@ -2308,7 +2998,12 @@
           "quantity": 1
         }
       ],
-      "basePrice": 3000
+      "basePrice": 3000,
+      "unitVolumeM3": 2.5,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 181,
@@ -2341,7 +3036,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 6200
+      "basePrice": 6200,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 182,
@@ -2374,7 +3073,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 8800
+      "basePrice": 8800,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 183,
@@ -2403,7 +3106,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 5400
+      "basePrice": 5400,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 184,
@@ -2436,7 +3143,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 10500
+      "basePrice": 10500,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 185,
@@ -2465,7 +3176,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 7200
+      "basePrice": 7200,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 186,
@@ -2494,7 +3209,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 9800
+      "basePrice": 9800,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 187,
@@ -2523,7 +3242,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 14500
+      "basePrice": 14500,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 188,
@@ -2552,7 +3275,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 11200
+      "basePrice": 11200,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 189,
@@ -2581,7 +3309,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 13200
+      "basePrice": 13200,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 190,
@@ -2606,7 +3339,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 15800
+      "basePrice": 15800,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 191,
@@ -2635,7 +3373,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 16500
+      "basePrice": 16500,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 192,
@@ -2664,7 +3407,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 18500
+      "basePrice": 18500,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD",
+        "HAZARDOUS"
+      ]
     },
     {
       "id": 193,
@@ -2693,7 +3441,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 21000
+      "basePrice": 21000,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 194,
@@ -2718,7 +3470,11 @@
           "quantity": 2
         }
       ],
-      "basePrice": 8900
+      "basePrice": 8900,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 195,
@@ -2743,7 +3499,12 @@
           "quantity": 2
         }
       ],
-      "basePrice": 12000
+      "basePrice": 12000,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 196,
@@ -2768,7 +3529,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 17500
+      "basePrice": 17500,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 197,
@@ -2793,7 +3559,12 @@
           "quantity": 3
         }
       ],
-      "basePrice": 16800
+      "basePrice": 16800,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     },
     {
       "id": 198,
@@ -2818,7 +3589,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 22000
+      "basePrice": 22000,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 199,
@@ -2843,7 +3618,11 @@
           "quantity": 3
         }
       ],
-      "basePrice": 25000
+      "basePrice": 25000,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "STANDARD"
+      ]
     },
     {
       "id": 200,
@@ -2868,7 +3647,12 @@
           "quantity": 4
         }
       ],
-      "basePrice": 30000
+      "basePrice": 30000,
+      "unitVolumeM3": 8.0,
+      "allowedContainers": [
+        "BULK_SOLID",
+        "HEAVY"
+      ]
     }
   ]
 }

@@ -7,6 +7,8 @@ class IndustrialButton extends StatelessWidget {
   final Color gradientTop;
   final Color gradientBottom;
   final Color borderColor;
+  final double? width;
+  final double? height;
 
   const IndustrialButton({
     Key? key,
@@ -15,42 +17,57 @@ class IndustrialButton extends StatelessWidget {
     required this.gradientTop,
     required this.gradientBottom,
     required this.borderColor,
+    this.width,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 50, // Updated height as per spec (48-52)
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.zero, // Square shape
-          border: Border.all(
-            color: borderColor,
-            width:
-                2, // Slightly wider to make the lighter color visible? User said "unos pixels".
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4), // Updated shadow
-              offset: const Offset(0, 3),
-              blurRadius: 8,
-            ),
-          ],
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [gradientTop, gradientBottom],
-          ),
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [gradientTop, gradientBottom],
         ),
-        child: Center(
-          child: Text(
-            label.toUpperCase(),
-            style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.bold, // Bold
-              color: Colors.white,
-              letterSpacing: 0.5,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onPressed,
+          child: Center(
+            child: Text(
+              label.toUpperCase(),
+              style: GoogleFonts.montserrat(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: 0.5,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.8),
+                    offset: const Offset(0, 1),
+                    blurRadius: 1,
+                  ),
+                  Shadow(
+                    color: Colors.black.withOpacity(0.5),
+                    offset: const Offset(1, 1),
+                    blurRadius: 2,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

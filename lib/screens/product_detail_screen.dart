@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:industrial_app/data/materials/material_model.dart';
-import 'package:industrial_app/widgets/industrial_button.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final MaterialModel material;
@@ -315,39 +314,6 @@ class ProductDetailScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            color: Color(0xFF1E1E1E),
-            border: Border(top: BorderSide(color: Colors.white12)),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: IndustrialButton(
-                  label: "COMPRAR",
-                  gradientTop: const Color(0xFF4CAF50),
-                  gradientBottom: const Color(0xFF2E7D32),
-                  borderColor: const Color(0xFF81C784), // Lighter Green
-                  onPressed: () {},
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: IndustrialButton(
-                  label: "VENDER",
-                  gradientTop: const Color(0xFFE53935),
-                  gradientBottom: const Color(0xFFB71C1C),
-                  borderColor: const Color(0xFFEF5350), // Lighter Red
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
