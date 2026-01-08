@@ -1,0 +1,199 @@
+{
+    "containers": [
+        {
+            "containerId": 1,
+            "name": "Contenedor estándar pequeño",
+            "type": "STANDARD",
+            "capacityM3": 10,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 8000
+            },
+            "sellValue": 5000,
+            "bonuses": {
+                "loadingSpeedPercent": 0,
+                "damageRiskReductionPercent": 0
+            }
+        },
+        {
+            "containerId": 2,
+            "name": "Contenedor estándar grande",
+            "type": "STANDARD",
+            "capacityM3": 25,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 20000
+            },
+            "sellValue": 13000,
+            "bonuses": {
+                "loadingSpeedPercent": 5,
+                "damageRiskReductionPercent": 5
+            }
+        },
+        {
+            "containerId": 3,
+            "name": "Contenedor refrigerado básico",
+            "type": "REFRIGERATED",
+            "capacityM3": 18,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 35000
+            },
+            "sellValue": 22000,
+            "bonuses": {
+                "loadingSpeedPercent": -5,
+                "damageRiskReductionPercent": 15
+            }
+        },
+        {
+            "containerId": 4,
+            "name": "Contenedor refrigerado avanzado",
+            "type": "REFRIGERATED",
+            "capacityM3": 30,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 70000
+            },
+            "sellValue": 48000,
+            "bonuses": {
+                "loadingSpeedPercent": 0,
+                "damageRiskReductionPercent": 30
+            }
+        },
+        {
+            "containerId": 5,
+            "name": "Tolva de granel sólido",
+            "type": "BULK_SOLID",
+            "capacityM3": 35,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 50000
+            },
+            "sellValue": 34000,
+            "bonuses": {
+                "loadingSpeedPercent": 10,
+                "damageRiskReductionPercent": 5
+            }
+        },
+        {
+            "containerId": 6,
+            "name": "Tolva industrial reforzada",
+            "type": "BULK_SOLID",
+            "capacityM3": 55,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 110000
+            },
+            "sellValue": 78000,
+            "bonuses": {
+                "loadingSpeedPercent": 15,
+                "damageRiskReductionPercent": 10
+            }
+        },
+        {
+            "containerId": 7,
+            "name": "Cisterna líquida estándar",
+            "type": "BULK_LIQUID",
+            "capacityM3": 40,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 65000
+            },
+            "sellValue": 45000,
+            "bonuses": {
+                "loadingSpeedPercent": 5,
+                "damageRiskReductionPercent": 10
+            }
+        },
+        {
+            "containerId": 8,
+            "name": "Cisterna presurizada",
+            "type": "BULK_LIQUID",
+            "capacityM3": 60,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 140000
+            },
+            "sellValue": 100000,
+            "bonuses": {
+                "loadingSpeedPercent": 0,
+                "damageRiskReductionPercent": 25
+            }
+        },
+        {
+            "containerId": 9,
+            "name": "Depósito de gas comprimido",
+            "type": "BULK_GAS",
+            "capacityM3": 30,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 120000
+            },
+            "sellValue": 85000,
+            "bonuses": {
+                "loadingSpeedPercent": -10,
+                "damageRiskReductionPercent": 35
+            }
+        },
+        {
+            "containerId": 10,
+            "name": "Plataforma de carga pesada",
+            "type": "HEAVY",
+            "capacityM3": 45,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 90000
+            },
+            "sellValue": 62000,
+            "bonuses": {
+                "loadingSpeedPercent": -5,
+                "damageRiskReductionPercent": 20
+            }
+        },
+        {
+            "containerId": 11,
+            "name": "Plataforma industrial extrema",
+            "type": "HEAVY",
+            "capacityM3": 70,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 180000
+            },
+            "sellValue": 130000,
+            "bonuses": {
+                "loadingSpeedPercent": -10,
+                "damageRiskReductionPercent": 35
+            }
+        },
+        {
+            "containerId": 12,
+            "name": "Contenedor de materiales peligrosos",
+            "type": "HAZARDOUS",
+            "capacityM3": 25,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 160000
+            },
+            "sellValue": 110000,
+            "bonuses": {
+                "loadingSpeedPercent": -15,
+                "damageRiskReductionPercent": 50
+            }
+        },
+        {
+            "containerId": 13,
+            "name": "Contenedor peligroso certificado élite",
+            "type": "HAZARDOUS",
+            "capacityM3": 40,
+            "purchaseCost": {
+                "type": "GEMS",
+                "amount": 60
+            },
+            "sellValue": 0,
+            "bonuses": {
+                "loadingSpeedPercent": 0,
+                "damageRiskReductionPercent": 70
+            }
+        }
+    ]
+}

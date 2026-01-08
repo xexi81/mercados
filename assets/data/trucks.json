@@ -1,0 +1,240 @@
+{
+    "trucks": [
+        {
+            "truckId": 1,
+            "name": "Furgoneta ligera",
+            "unlockFleet": 1,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 12000
+            },
+            "sellValue": 8000,
+            "allowedContainers": [
+                "STANDARD",
+                "REFRIGERATED"
+            ],
+            "maxSpeedKmh": 90,
+            "fuelCapacityM3": 0.12,
+            "fuelConsumptionPer100KmM3": 0.015,
+            "accidentRiskPercent": 6,
+            "breakdownRiskPercent": 8
+        },
+        {
+            "truckId": 2,
+            "name": "Camión pequeño",
+            "unlockFleet": 2,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 35000
+            },
+            "sellValue": 22000,
+            "allowedContainers": [
+                "STANDARD",
+                "REFRIGERATED"
+            ],
+            "maxSpeedKmh": 85,
+            "fuelCapacityM3": 0.25,
+            "fuelConsumptionPer100KmM3": 0.03,
+            "accidentRiskPercent": 5,
+            "breakdownRiskPercent": 7
+        },
+        {
+            "truckId": 3,
+            "name": "Camión mediano",
+            "unlockFleet": 3,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 75000
+            },
+            "sellValue": 50000,
+            "allowedContainers": [
+                "STANDARD",
+                "HEAVY"
+            ],
+            "maxSpeedKmh": 80,
+            "fuelCapacityM3": 0.45,
+            "fuelConsumptionPer100KmM3": 0.05,
+            "accidentRiskPercent": 4.5,
+            "breakdownRiskPercent": 6
+        },
+        {
+            "truckId": 4,
+            "name": "Camión pesado",
+            "unlockFleet": 4,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 150000
+            },
+            "sellValue": 100000,
+            "allowedContainers": [
+                "STANDARD",
+                "HEAVY",
+                "HAZARDOUS"
+            ],
+            "maxSpeedKmh": 75,
+            "fuelCapacityM3": 0.7,
+            "fuelConsumptionPer100KmM3": 0.08,
+            "accidentRiskPercent": 4,
+            "breakdownRiskPercent": 5.5
+        },
+        {
+            "truckId": 5,
+            "name": "Camión cisterna",
+            "unlockFleet": 5,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 220000
+            },
+            "sellValue": 150000,
+            "allowedContainers": [
+                "BULK_LIQUID",
+                "HAZARDOUS"
+            ],
+            "maxSpeedKmh": 70,
+            "fuelCapacityM3": 0.8,
+            "fuelConsumptionPer100KmM3": 0.1,
+            "accidentRiskPercent": 5.5,
+            "breakdownRiskPercent": 6
+        },
+        {
+            "truckId": 6,
+            "name": "Camión frigorífico",
+            "unlockFleet": 6,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 280000
+            },
+            "sellValue": 190000,
+            "allowedContainers": [
+                "REFRIGERATED"
+            ],
+            "maxSpeedKmh": 75,
+            "fuelCapacityM3": 0.75,
+            "fuelConsumptionPer100KmM3": 0.11,
+            "accidentRiskPercent": 4.5,
+            "breakdownRiskPercent": 6.5
+        },
+        {
+            "truckId": 7,
+            "name": "Tráiler estándar",
+            "unlockFleet": 7,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 450000
+            },
+            "sellValue": 300000,
+            "allowedContainers": [
+                "STANDARD",
+                "HEAVY"
+            ],
+            "maxSpeedKmh": 70,
+            "fuelCapacityM3": 1.2,
+            "fuelConsumptionPer100KmM3": 0.15,
+            "accidentRiskPercent": 3.8,
+            "breakdownRiskPercent": 5
+        },
+        {
+            "truckId": 8,
+            "name": "Tráiler de gran tonelaje",
+            "unlockFleet": 8,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 750000
+            },
+            "sellValue": 520000,
+            "allowedContainers": [
+                "HEAVY",
+                "BULK_SOLID"
+            ],
+            "maxSpeedKmh": 65,
+            "fuelCapacityM3": 1.6,
+            "fuelConsumptionPer100KmM3": 0.2,
+            "accidentRiskPercent": 3.5,
+            "breakdownRiskPercent": 4.5
+        },
+        {
+            "truckId": 9,
+            "name": "Megatráiler industrial",
+            "unlockFleet": 10,
+            "purchaseCost": {
+                "type": "MONEY",
+                "amount": 1200000
+            },
+            "sellValue": 850000,
+            "allowedContainers": [
+                "HEAVY",
+                "BULK_SOLID",
+                "HAZARDOUS"
+            ],
+            "maxSpeedKmh": 60,
+            "fuelCapacityM3": 2.2,
+            "fuelConsumptionPer100KmM3": 0.28,
+            "accidentRiskPercent": 3,
+            "breakdownRiskPercent": 4
+        },
+        {
+            "truckId": 10,
+            "name": "Tráiler autónomo avanzado",
+            "unlockFleet": 15,
+            "purchaseCost": {
+                "type": "GEMS",
+                "amount": 120
+            },
+            "sellValue": 0,
+            "allowedContainers": [
+                "STANDARD",
+                "HEAVY",
+                "BULK_SOLID",
+                "BULK_LIQUID",
+                "REFRIGERATED",
+                "HAZARDOUS"
+            ],
+            "maxSpeedKmh": 80,
+            "fuelCapacityM3": 1.8,
+            "fuelConsumptionPer100KmM3": 0.18,
+            "accidentRiskPercent": 1.2,
+            "breakdownRiskPercent": 2
+        },
+        {
+            "truckId": 11,
+            "name": "Tráiler eléctrico de alta eficiencia",
+            "unlockFleet": 18,
+            "purchaseCost": {
+                "type": "GEMS",
+                "amount": 220
+            },
+            "sellValue": 0,
+            "allowedContainers": [
+                "STANDARD",
+                "HEAVY",
+                "REFRIGERATED"
+            ],
+            "maxSpeedKmh": 85,
+            "fuelCapacityM3": 1.4,
+            "fuelConsumptionPer100KmM3": 0.12,
+            "accidentRiskPercent": 1,
+            "breakdownRiskPercent": 1.8
+        },
+        {
+            "truckId": 12,
+            "name": "Tráiler legendario ultrapesado",
+            "unlockFleet": 20,
+            "purchaseCost": {
+                "type": "GEMS",
+                "amount": 350
+            },
+            "sellValue": 0,
+            "allowedContainers": [
+                "HEAVY",
+                "BULK_SOLID",
+                "BULK_LIQUID",
+                "HAZARDOUS"
+            ],
+            "maxSpeedKmh": 75,
+            "fuelCapacityM3": 3.5,
+            "fuelConsumptionPer100KmM3": 0.32,
+            "accidentRiskPercent": 0.8,
+            "breakdownRiskPercent": 1.2
+        }
+    ]
+}

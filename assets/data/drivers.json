@@ -1,0 +1,144 @@
+{
+    "drivers": [
+        {
+            "driverId": 1,
+            "name": "Conductor novato",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 2000
+            },
+            "bonuses": {
+                "speedBonusPercent": 0,
+                "fuelConsumptionReductionPercent": 0,
+                "accidentRiskReductionPercent": 0,
+                "breakdownRiskReductionPercent": 0
+            }
+        },
+        {
+            "driverId": 2,
+            "name": "Conductor aprendiz",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 6000
+            },
+            "bonuses": {
+                "speedBonusPercent": 2,
+                "fuelConsumptionReductionPercent": 3,
+                "accidentRiskReductionPercent": 5,
+                "breakdownRiskReductionPercent": 4
+            }
+        },
+        {
+            "driverId": 3,
+            "name": "Conductor urbano",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 12000
+            },
+            "bonuses": {
+                "speedBonusPercent": 4,
+                "fuelConsumptionReductionPercent": 6,
+                "accidentRiskReductionPercent": 8,
+                "breakdownRiskReductionPercent": 6
+            }
+        },
+        {
+            "driverId": 4,
+            "name": "Conductor de larga distancia",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 22000
+            },
+            "bonuses": {
+                "speedBonusPercent": 6,
+                "fuelConsumptionReductionPercent": 10,
+                "accidentRiskReductionPercent": 12,
+                "breakdownRiskReductionPercent": 10
+            }
+        },
+        {
+            "driverId": 5,
+            "name": "Conductor profesional",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 40000
+            },
+            "bonuses": {
+                "speedBonusPercent": 8,
+                "fuelConsumptionReductionPercent": 14,
+                "accidentRiskReductionPercent": 18,
+                "breakdownRiskReductionPercent": 14
+            }
+        },
+        {
+            "driverId": 6,
+            "name": "Veterano de flota",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 70000
+            },
+            "bonuses": {
+                "speedBonusPercent": 10,
+                "fuelConsumptionReductionPercent": 18,
+                "accidentRiskReductionPercent": 22,
+                "breakdownRiskReductionPercent": 18
+            }
+        },
+        {
+            "driverId": 7,
+            "name": "Especialista en cargas peligrosas",
+            "hireCost": {
+                "type": "MONEY",
+                "amount": 110000
+            },
+            "bonuses": {
+                "speedBonusPercent": 6,
+                "fuelConsumptionReductionPercent": 12,
+                "accidentRiskReductionPercent": 30,
+                "breakdownRiskReductionPercent": 25
+            }
+        },
+        {
+            "driverId": 8,
+            "name": "Piloto élite",
+            "hireCost": {
+                "type": "GEMS",
+                "amount": 40
+            },
+            "bonuses": {
+                "speedBonusPercent": 14,
+                "fuelConsumptionReductionPercent": 22,
+                "accidentRiskReductionPercent": 35,
+                "breakdownRiskReductionPercent": 30
+            }
+        },
+        {
+            "driverId": 9,
+            "name": "Leyenda del asfalto",
+            "hireCost": {
+                "type": "GEMS",
+                "amount": 90
+            },
+            "bonuses": {
+                "speedBonusPercent": 18,
+                "fuelConsumptionReductionPercent": 28,
+                "accidentRiskReductionPercent": 45,
+                "breakdownRiskReductionPercent": 40
+            }
+        },
+        {
+            "driverId": 10,
+            "name": "Sistema de conducción asistida IA",
+            "hireCost": {
+                "type": "GEMS",
+                "amount": 150
+            },
+            "bonuses": {
+                "speedBonusPercent": 12,
+                "fuelConsumptionReductionPercent": 35,
+                "accidentRiskReductionPercent": 60,
+                "breakdownRiskReductionPercent": 55
+            }
+        }
+    ]
+}
