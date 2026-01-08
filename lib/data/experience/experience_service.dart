@@ -1,26 +1,92 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'experience_level_model.dart';
+import 'experience_account_model.dart';
 
 class ExperienceService {
   static List<ExperienceLevelModel>? _levels;
+  static ExperienceAccountModel? _accountRules;
 
-  /// Carga los niveles de experiencia desde el archivo JSON si no están ya cargados.
+  /// Carga los datos de niveles y reglas de experiencia desde los archivos JSON.
   static Future<void> loadExperienceData() async {
-    if (_levels != null) return;
+    if (_levels != null && _accountRules != null) return;
 
-    final String response = await rootBundle.loadString(
-      'assets/data/experience.json',
-    );
-    final data = json.decode(response);
-    final List<dynamic> levelsJson = data['experienceLevels'];
+    // Cargar niveles
+    if (_levels == null) {
+      final String levelsResponse = await rootBundle.loadString(
+        'assets/data/experience.json',
+      );
+      final levelsData = json.decode(levelsResponse);
+      final List<dynamic> levelsJson = levelsData['experienceLevels'];
+      _levels = levelsJson
+          .map((json) => ExperienceLevelModel.fromJson(json))
+          .toList();
+      _levels!.sort((a, b) => a.level.compareTo(b.level));
+    }
 
-    _levels = levelsJson
-        .map((json) => ExperienceLevelModel.fromJson(json))
-        .toList();
+    // Cargar reglas de cuenta
+    if (_accountRules == null) {
+      final String rulesResponse = await rootBundle.loadString(
+        'assets/data/experience_account.json',
+      );
+      final rulesData = json.decode(rulesResponse);
+      _accountRules = ExperienceAccountModel.fromJson(rulesData);
+    }
+  }
 
-    // Asegurarnos de que estén ordenados por nivel (aunque ya deberían estarlo)
-    _levels!.sort((a, b) => a.level.compareTo(b.level));
+  /// Calcula la experiencia a sumar por una compra.
+  static int calculatePurchaseXp(double volumeM3, int grade) {
+    if (_accountRules == null) return 0;
+    final baseXp = _accountRules!.purchaseXpPerM3[grade.toString()] ?? 0.0;
+    return (volumeM3 * baseXp).round();
+  }
+
+  /// Calcula la experiencia a sumar por una venta (normal o retail).
+  static int calculateSaleXp(
+    double volumeM3,
+    int grade, {
+    bool isRetail = false,
+  }) {
+    if (_accountRules == null) return 0;
+    final map = isRetail
+        ? _accountRules!.retailSaleXpPerM3
+        : _accountRules!.saleXpPerM3;
+    final baseXp = map[grade.toString()] ?? 0.0;
+    return (volumeM3 * baseXp).round();
+  }
+
+  /// Calcula la experiencia a sumar por completar un contrato.
+  static int calculateContractFulfilledXp(
+    double volumeM3,
+    int grade, {
+    bool onTime = false,
+    bool perfectCondition = false,
+  }) {
+    if (_accountRules == null) return 0;
+
+    final baseXpPerM3 =
+        _accountRules!.contractFulfilledXpPerM3[grade.toString()] ?? 0.0;
+    double totalXp = volumeM3 * baseXpPerM3;
+
+    if (onTime) {
+      totalXp += (totalXp * _accountRules!.onTimeBonusPercent / 100);
+    }
+    if (perfectCondition) {
+      totalXp += (totalXp * _accountRules!.perfectConditionBonusPercent / 100);
+    }
+
+    return totalXp.round();
+  }
+
+  /// Calcula la penalización de experiencia por fallar un contrato.
+  static int calculateContractFailedPenalty(int potentialGainXp) {
+    if (_accountRules == null) return 0;
+
+    int penalty = _accountRules!.flatXpLoss;
+    penalty += (potentialGainXp * _accountRules!.xpPenaltyPercent / 100)
+        .round();
+
+    return penalty;
   }
 
   /// Calcula el nivel actual basado en la experiencia total.
