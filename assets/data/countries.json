@@ -1,0 +1,164 @@
+{
+    "countries": [
+        {
+            "code": "ES",
+            "name": "España"
+        },
+        {
+            "code": "FR",
+            "name": "Francia"
+        },
+        {
+            "code": "DE",
+            "name": "Alemania"
+        },
+        {
+            "code": "IT",
+            "name": "Italia"
+        },
+        {
+            "code": "GB",
+            "name": "Reino Unido"
+        },
+        {
+            "code": "NL",
+            "name": "Países Bajos"
+        },
+        {
+            "code": "PT",
+            "name": "Portugal"
+        },
+        {
+            "code": "BE",
+            "name": "Bélgica"
+        },
+        {
+            "code": "CH",
+            "name": "Suiza"
+        },
+        {
+            "code": "AT",
+            "name": "Austria"
+        },
+        {
+            "code": "PL",
+            "name": "Polonia"
+        },
+        {
+            "code": "CZ",
+            "name": "República Checa"
+        },
+        {
+            "code": "HU",
+            "name": "Hungría"
+        },
+        {
+            "code": "DK",
+            "name": "Dinamarca"
+        },
+        {
+            "code": "SE",
+            "name": "Suecia"
+        },
+        {
+            "code": "NO",
+            "name": "Noruega"
+        },
+        {
+            "code": "FI",
+            "name": "Finlandia"
+        },
+        {
+            "code": "IE",
+            "name": "Irlanda"
+        },
+        {
+            "code": "GR",
+            "name": "Grecia"
+        },
+        {
+            "code": "BG",
+            "name": "Bulgaria"
+        },
+        {
+            "code": "RO",
+            "name": "Rumanía"
+        },
+        {
+            "code": "HR",
+            "name": "Croacia"
+        },
+        {
+            "code": "SI",
+            "name": "Eslovenia"
+        },
+        {
+            "code": "SK",
+            "name": "Eslovaquia"
+        },
+        {
+            "code": "EE",
+            "name": "Estonia"
+        },
+        {
+            "code": "LV",
+            "name": "Letonia"
+        },
+        {
+            "code": "LT",
+            "name": "Lituania"
+        },
+        {
+            "code": "LU",
+            "name": "Luxemburgo"
+        },
+        {
+            "code": "MC",
+            "name": "Mónaco"
+        },
+        {
+            "code": "SM",
+            "name": "San Marino"
+        },
+        {
+            "code": "AD",
+            "name": "Andorra"
+        },
+        {
+            "code": "IS",
+            "name": "Islandia"
+        },
+        {
+            "code": "MT",
+            "name": "Malta"
+        },
+        {
+            "code": "CY",
+            "name": "Chipre"
+        },
+        {
+            "code": "BA",
+            "name": "Bosnia y Herzegovina"
+        },
+        {
+            "code": "RS",
+            "name": "Serbia"
+        },
+        {
+            "code": "MK",
+            "name": "Macedonia del Norte"
+        },
+        {
+            "code": "AL",
+            "name": "Albania"
+        },
+        {
+            "code": "ME",
+            "name": "Montenegro"
+        },
+        {
+            "code": "XK",
+            "name": "Kosovo"
+        }
+    ]
+}

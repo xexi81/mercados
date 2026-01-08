@@ -19,4 +19,13 @@ class LocationsRepository {
     final locations = await loadLocations();
     return locations.where((location) => location.hasMarket).toList();
   }
+
+  static Future<List<LocationModel>> loadLocationsByCountry(
+    String countryIso,
+  ) async {
+    final locations = await loadLocations();
+    return locations
+        .where((location) => location.countryIso == countryIso)
+        .toList();
+  }
 }

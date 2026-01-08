@@ -71,7 +71,7 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
           toolbarHeight: 100,
           backgroundColor: AppColors.surface,
           elevation: 0,
-          leadingWidth: widget.isMainScreen ? 100 : 120,
+          leadingWidth: widget.isMainScreen ? 120 : 150,
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
@@ -97,7 +97,7 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
                     alignment: Alignment.bottomRight,
                     children: [
                       CircleAvatar(
-                        radius: 22,
+                        radius: 34,
                         backgroundImage: photoUrl != null
                             ? NetworkImage(photoUrl)
                             : null,
@@ -108,22 +108,30 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                          vertical: 2,
+                          horizontal: 8,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.white24, width: 1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        constraints: const BoxConstraints(minWidth: 20),
+                        constraints: const BoxConstraints(minWidth: 28),
+
                         child: Text(
                           '$level',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ),
