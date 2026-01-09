@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:industrial_app/data/trucks/truck_model.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
+import 'package:industrial_app/data/materials/container_type.dart';
 
 class BuyTruckScreen extends StatefulWidget {
   const BuyTruckScreen({super.key});
@@ -69,6 +70,15 @@ class _TruckCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const containerTypes = [
+      ContainerType.bulkSolid,
+      ContainerType.bulkLiquid,
+      ContainerType.refrigerated,
+      ContainerType.standard,
+      ContainerType.heavy,
+      ContainerType.hazardous,
+    ];
+
     const double borderRadiusValue = 24;
     return AspectRatio(
       aspectRatio: 2.2,
@@ -136,7 +146,13 @@ class _TruckCard extends StatelessWidget {
                     6,
                     (i) => Padding(
                       padding: EdgeInsets.only(right: i < 5 ? 5 : 0),
-                      child: _TruckMiniCard(),
+                      child: _TruckMiniCard(
+                        imagePath:
+                            'assets/images/containers/${containerTypes[i].name}.png',
+                        showCross: !truck.allowedContainers.contains(
+                          containerTypes[i],
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -150,7 +166,9 @@ class _TruckCard extends StatelessWidget {
 }
 
 class _TruckMiniCard extends StatelessWidget {
-  const _TruckMiniCard();
+  final String imagePath;
+  final bool showCross;
+  const _TruckMiniCard({required this.imagePath, this.showCross = false});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +182,21 @@ class _TruckMiniCard extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(3),
-        child: Container(), // Vacío por ahora
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(),
+            ),
+            if (showCross)
+              Image.asset(
+                'assets/images/containers/cruz_roja.png',
+                fit: BoxFit.contain,
+              ),
+          ],
+        ),
       ),
     );
   }
