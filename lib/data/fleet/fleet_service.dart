@@ -82,11 +82,17 @@ class FleetService {
       final newSlot = {
         'fleetId': fleet.fleetId,
         'truckId': null,
-        'driverid': null,
-        'containerid': null,
+        'driverId': null,
+        'containerId': null,
+        'fleetLevel': 0,
         'quantity': 0,
-        'improves': [],
-        'location': locationData ?? {'latitude': 0.0, 'longitude': 0.0},
+        'truckSkills': {},
+        'driverSkills': {},
+        'containerSkills': {},
+        'truckLoad': {},
+        'currentLocation': locationData ?? {'latitude': 0.0, 'longitude': 0.0},
+        'destinyLocation': {'latitude': 0.0, 'longitude': 0.0},
+        'status': 'en destino',
       };
 
       if (!fleetSnapshot.exists) {

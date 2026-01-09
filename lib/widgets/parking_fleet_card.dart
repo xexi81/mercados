@@ -5,6 +5,13 @@ import 'package:industrial_app/data/fleet/fleet_model.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/widgets/fleet_purchase_dialog.dart';
 
+import 'package:industrial_app/screens/buy_truck.dart';
+import 'package:industrial_app/screens/buy_driver.dart';
+import 'package:industrial_app/screens/buy_container.dart';
+import 'package:industrial_app/screens/fleet_level.dart';
+import 'package:industrial_app/screens/route.dart';
+import 'package:industrial_app/screens/load_manager.dart';
+
 class ParkingFleetCard extends StatelessWidget {
   final int fleetId;
   final FleetModel? fleetConfig;
@@ -31,12 +38,12 @@ class ParkingFleetCard extends StatelessWidget {
     // Check if it's at headquarters
     bool isAtHQ = false;
     if (isOccupied && hqLatitude != null && hqLongitude != null) {
-      final location = firestoreData!['location'];
-      if (location != null) {
-        final double fleetLat = (location['latitude'] as num).toDouble();
-        final double fleetLng = (location['longitude'] as num).toDouble();
-        // Use a small epsilon for double comparison if needed,
-        // but since they come from the same source, direct match should work.
+      final currentLocation = firestoreData!['currentLocation'];
+      final status = firestoreData!['status'];
+      if (currentLocation != null && status == 'en destino') {
+        final double fleetLat = (currentLocation['latitude'] as num).toDouble();
+        final double fleetLng = (currentLocation['longitude'] as num)
+            .toDouble();
         if (fleetLat == hqLatitude && fleetLng == hqLongitude) {
           isAtHQ = true;
         }
@@ -90,29 +97,10 @@ class ParkingFleetCard extends StatelessWidget {
               ),
 
             if (isLocked) _buildLockedContent(context, requiredLevel),
-            if (isOccupied) _buildOccupiedContent(context),
+            if (isOccupied) _buildOccupiedContent(context, isAtHQ),
             if (!isLocked && !isOccupied) _buildAvailableContent(context),
 
-            // Fleet ID indicator (optional, but helpful for debugging/clarity)
-            Positioned(
-              top: 4,
-              left: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  '#$fleetId',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            // Fleet ID and Level indicators
           ],
         ),
       ),
@@ -140,8 +128,245 @@ class ParkingFleetCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOccupiedContent(BuildContext context) {
+  Widget _buildOccupiedContent(BuildContext context, bool isAtHQ) {
+    if (isAtHQ) {
+      return Positioned.fill(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final h = constraints.maxHeight;
+            final w = constraints.maxWidth;
+
+            // Medidas relativas: cada fila ocupa ~26% del alto
+            final double itemH = h * 0.26;
+            final double itemW = itemH * (85 / 48);
+            final double gap = h * 0.04; // Espacio entre filas (4%)
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.03, // 3% de padding lateral
+                vertical: h * 0.02, // 2% de padding vertical
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLevelButton(context, itemW, itemH),
+                  SizedBox(height: gap),
+                  _buildMiniCards(context, itemW, itemH),
+                  SizedBox(height: gap),
+                  Row(
+                    children: [
+                      _buildBottomButton(
+                        context: context,
+                        assetPath: 'assets/images/parking/route.png',
+                        width: itemW,
+                        height: itemH,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RouteScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(width: w * 0.02),
+                      _buildBottomButton(
+                        context: context,
+                        assetPath: 'assets/images/parking/load.png',
+                        width: itemW,
+                        height: itemH,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoadManagerScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return const SizedBox.shrink();
+  }
+
+  Widget _buildLevelButton(BuildContext context, double width, double height) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const FleetLevelScreen()),
+        );
+      },
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: AppColors.surface.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(height * 0.15),
+          border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            'LVL ${firestoreData?['fleetLevel'] ?? 0}',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: height * 0.3,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomButton({
+    required BuildContext context,
+    required String assetPath,
+    required double width,
+    required double height,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.black26,
+          borderRadius: BorderRadius.circular(height * 0.15),
+          border: Border.all(color: Colors.white, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(height * 0.12),
+          child: Image.asset(assetPath, fit: BoxFit.cover),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMiniCards(BuildContext context, double width, double height) {
+    final truckId = firestoreData?['truckId'];
+    final driverId = firestoreData?['driverId'];
+    final containerId = firestoreData?['containerId'];
+
+    final bool noTruck = truckId == null || truckId.toString().isEmpty;
+    final bool noDriver = driverId == null || driverId.toString().isEmpty;
+    final bool noContainer =
+        containerId == null || containerId.toString().isEmpty;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        _buildMiniCard(
+          width: width,
+          height: height,
+          assetPath: noTruck
+              ? 'assets/images/parking/no_truck.png'
+              : 'assets/images/trucks/$truckId.png',
+          showOverlay: noTruck,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BuyTruckScreen()),
+            );
+          },
+        ),
+        SizedBox(width: width * 0.1),
+        _buildMiniCard(
+          width: width,
+          height: height,
+          assetPath: noDriver
+              ? 'assets/images/parking/no_driver.png'
+              : 'assets/images/drivers/$driverId.png',
+          showOverlay: noDriver,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BuyDriverScreen()),
+            );
+          },
+        ),
+        SizedBox(width: width * 0.1),
+        _buildMiniCard(
+          width: width,
+          height: height,
+          assetPath: noContainer
+              ? 'assets/images/parking/no_container.png'
+              : 'assets/images/containers/$containerId.png',
+          showOverlay: noContainer,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BuyContainerScreen(),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMiniCard({
+    required double width,
+    required double height,
+    required String assetPath,
+    required bool showOverlay,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.black26,
+          borderRadius: BorderRadius.circular(height * 0.12),
+          border: Border.all(color: Colors.white, width: 1.2),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(height * 0.1),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(assetPath, fit: BoxFit.cover),
+              if (showOverlay)
+                Center(
+                  child: Image.asset(
+                    'assets/images/parking/mas.png',
+                    width: width * 1.4,
+                    height: width * 1.4,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildAvailableContent(BuildContext context) {
