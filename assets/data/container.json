@@ -123,7 +123,7 @@
         {
             "containerId": 9,
             "name": "Depósito de gas comprimido",
-            "type": "BULK_GAS",
+            "type": "BULK_LIQUID",
             "capacityM3": 30,
             "purchaseCost": {
                 "type": "MONEY",

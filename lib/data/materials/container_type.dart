@@ -1,7 +1,6 @@
 enum ContainerType {
   bulkSolid,
   bulkLiquid,
-  bulkGas,
   refrigerated,
   standard,
   heavy,
@@ -14,8 +13,6 @@ enum ContainerType {
         return 'Granel sólido';
       case ContainerType.bulkLiquid:
         return 'Granel líquido';
-      case ContainerType.bulkGas:
-        return 'Granel gaseoso';
       case ContainerType.refrigerated:
         return 'Refrigerado';
       case ContainerType.standard:
@@ -34,8 +31,6 @@ enum ContainerType {
         return 'BULK_SOLID';
       case ContainerType.bulkLiquid:
         return 'BULK_LIQUID';
-      case ContainerType.bulkGas:
-        return 'BULK_GAS';
       case ContainerType.refrigerated:
         return 'REFRIGERATED';
       case ContainerType.standard:
@@ -54,8 +49,6 @@ enum ContainerType {
         return ContainerType.bulkSolid;
       case 'BULK_LIQUID':
         return ContainerType.bulkLiquid;
-      case 'BULK_GAS':
-        return ContainerType.bulkGas;
       case 'REFRIGERATED':
         return ContainerType.refrigerated;
       case 'STANDARD':

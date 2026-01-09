@@ -47,7 +47,7 @@
       "basePrice": 20,
       "unitVolumeM3": 0.5,
       "allowedContainers": [
-        "BULK_GAS"
+        "BULK_LIQUID"
       ]
     },
     {
@@ -504,7 +504,7 @@
       "basePrice": 10,
       "unitVolumeM3": 0.5,
       "allowedContainers": [
-        "BULK_GAS"
+        "BULK_LIQUID"
       ]
     },
     {
@@ -901,7 +901,7 @@
       "basePrice": 85,
       "unitVolumeM3": 0.8,
       "allowedContainers": [
-        "BULK_GAS"
+        "BULK_LIQUID"
       ]
     },
     {
