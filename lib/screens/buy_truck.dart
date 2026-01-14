@@ -35,6 +35,16 @@ class _BuyTruckScreenState extends State<BuyTruckScreen> {
     return trucksJson.map((e) => TruckModel.fromJson(e)).toList();
   }
 
+  Map<String, dynamic> _createTruckSkills(TruckModel truck) {
+    return {
+      'maxSpeedKmh': truck.maxSpeedKmh,
+      'fuelCapacityM3': truck.fuelCapacityM3,
+      'fuelConsumptionPer100KmM3': truck.fuelConsumptionPer100KmM3,
+      'accidentRiskPercent': truck.accidentRiskPercent,
+      'breakdownRiskPercent': truck.breakdownRiskPercent,
+    };
+  }
+
   Future<void> _handlePurchase(TruckModel truck) async {
     final bool? purchased = await showDialog<bool>(
       context: context,
@@ -52,6 +62,8 @@ class _BuyTruckScreenState extends State<BuyTruckScreen> {
               .collection('usuarios')
               .doc(user.uid);
           final fleetDocRef = FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user.uid)
               .collection('fleet_users')
               .doc(user.uid);
 
@@ -98,11 +110,12 @@ class _BuyTruckScreenState extends State<BuyTruckScreen> {
               );
             }
 
-            // Clone the map and update truckId
+            // Clone the map and update truckId and truckSkills
             Map<String, dynamic> updatedSlot = Map<String, dynamic>.from(
               slots[slotIndex],
             );
             updatedSlot['truckId'] = truck.truckId;
+            updatedSlot['truckSkills'] = _createTruckSkills(truck);
 
             slots[slotIndex] = updatedSlot;
 

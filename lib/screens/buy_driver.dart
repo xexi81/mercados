@@ -34,6 +34,18 @@ class _BuyDriverScreenState extends State<BuyDriverScreen> {
     return driversJson.map((e) => DriverModel.fromJson(e)).toList();
   }
 
+  Map<String, dynamic> _createDriverSkills(DriverModel driver) {
+    return {
+      'speedBonusPercent': driver.bonuses.speedBonusPercent,
+      'fuelConsumptionReductionPercent':
+          driver.bonuses.fuelConsumptionReductionPercent,
+      'accidentRiskReductionPercent':
+          driver.bonuses.accidentRiskReductionPercent,
+      'breakdownRiskReductionPercent':
+          driver.bonuses.breakdownRiskReductionPercent,
+    };
+  }
+
   Future<void> _handlePurchase(DriverModel driver) async {
     final bool? purchased = await showDialog<bool>(
       context: context,
@@ -50,6 +62,8 @@ class _BuyDriverScreenState extends State<BuyDriverScreen> {
               .collection('usuarios')
               .doc(user.uid);
           final fleetDocRef = FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user.uid)
               .collection('fleet_users')
               .doc(user.uid);
 
@@ -96,11 +110,12 @@ class _BuyDriverScreenState extends State<BuyDriverScreen> {
               );
             }
 
-            // Clone the map and update driverId
+            // Clone the map and update driverId and driverSkills
             Map<String, dynamic> updatedSlot = Map<String, dynamic>.from(
               slots[slotIndex],
             );
             updatedSlot['driverId'] = driver.driverId;
+            updatedSlot['driverSkills'] = _createDriverSkills(driver);
 
             slots[slotIndex] = updatedSlot;
 

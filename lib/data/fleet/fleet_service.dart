@@ -15,7 +15,11 @@ class FleetService {
     if (user == null) throw Exception('Usuario no autenticado');
 
     final userDocRef = _firestore.collection('usuarios').doc(user.uid);
-    final fleetDocRef = _firestore.collection('fleet_users').doc(user.uid);
+    final fleetDocRef = _firestore
+        .collection('usuarios')
+        .doc(user.uid)
+        .collection('fleet_users')
+        .doc(user.uid);
 
     return _firestore.runTransaction((transaction) async {
       // 1. Perform all reads first (Firestore transactions requirement)

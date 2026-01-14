@@ -9,6 +9,7 @@ import 'package:industrial_app/data/fleet/fleet_service.dart';
 import 'package:industrial_app/screens/buy_truck.dart';
 import 'package:industrial_app/screens/buy_driver.dart';
 import 'package:industrial_app/screens/buy_container.dart';
+import 'package:industrial_app/screens/container_information.dart';
 import 'package:industrial_app/screens/fleet_level.dart';
 import 'package:industrial_app/screens/route.dart';
 import 'package:industrial_app/screens/load_manager.dart';
@@ -138,7 +139,24 @@ class ParkingFleetCard extends StatelessWidget {
     // Show content if occupied, regardless of location (isAtHQ logic logic handled separately for bg)
     // But we need to check status for specific buttons
     final status = firestoreData?['status'];
-    final bool showActionButtons = status != 'en destino';
+    final truckId = firestoreData?['truckId'];
+    final driverId = firestoreData?['driverId'];
+    final containerId = firestoreData?['containerId'];
+
+    // Action buttons show when NOT 'en destino' OR when 'en destino' but all components are assigned
+    final bool showActionButtons =
+        status != 'en destino' ||
+        (status == 'en destino' &&
+            truckId != null &&
+            truckId.toString().trim().isNotEmpty &&
+            driverId != null &&
+            driverId.toString().trim().isNotEmpty &&
+            containerId != null &&
+            containerId.toString().trim().isNotEmpty);
+
+    debugPrint(
+      'FleetCard - status: $status, showActionButtons: $showActionButtons, locationName: $locationName',
+    );
 
     return Stack(
       children: [
@@ -211,7 +229,7 @@ class ParkingFleetCard extends StatelessWidget {
           ),
         ),
         // Display location name if provided and status is 'en destino'
-        if (locationName != null && !showActionButtons)
+        if (locationName != null && status == 'en destino')
           Positioned(
             top: 6,
             right: 10,
@@ -383,12 +401,23 @@ class ParkingFleetCard extends StatelessWidget {
               : 'assets/images/containers/$containerId.png',
           showOverlay: noContainer,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BuyContainerScreen(),
-              ),
-            );
+            if (noContainer) {
+              // Si no hay contenedor, ir a buy_container
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BuyContainerScreen(fleetId: fleetId),
+                ),
+              );
+            } else {
+              // Si hay contenedor, ir a container_information
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContainerInformationScreen(),
+                ),
+              );
+            }
           },
         ),
       ],
