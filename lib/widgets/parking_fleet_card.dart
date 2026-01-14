@@ -3,7 +3,8 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
-import 'package:industrial_app/widgets/fleet_purchase_dialog.dart';
+import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
+import 'package:industrial_app/data/fleet/fleet_service.dart';
 
 import 'package:industrial_app/screens/buy_truck.dart';
 import 'package:industrial_app/screens/buy_driver.dart';
@@ -11,6 +12,8 @@ import 'package:industrial_app/screens/buy_container.dart';
 import 'package:industrial_app/screens/fleet_level.dart';
 import 'package:industrial_app/screens/route.dart';
 import 'package:industrial_app/screens/load_manager.dart';
+import 'package:industrial_app/screens/truck_information.dart';
+import 'package:industrial_app/screens/driver_information.dart';
 
 class ParkingFleetCard extends StatelessWidget {
   final int fleetId;
@@ -20,6 +23,8 @@ class ParkingFleetCard extends StatelessWidget {
   final double? hqLatitude;
   final double? hqLongitude;
 
+  final String? locationName;
+
   const ParkingFleetCard({
     super.key,
     required this.fleetId,
@@ -28,6 +33,7 @@ class ParkingFleetCard extends StatelessWidget {
     required this.userLevel,
     this.hqLatitude,
     this.hqLongitude,
+    this.locationName,
   });
 
   @override
@@ -129,73 +135,104 @@ class ParkingFleetCard extends StatelessWidget {
   }
 
   Widget _buildOccupiedContent(BuildContext context, bool isAtHQ) {
-    if (isAtHQ) {
-      return Positioned.fill(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final h = constraints.maxHeight;
-            final w = constraints.maxWidth;
+    // Show content if occupied, regardless of location (isAtHQ logic logic handled separately for bg)
+    // But we need to check status for specific buttons
+    final status = firestoreData?['status'];
+    final bool showActionButtons = status != 'en destino';
 
-            // Medidas relativas: cada fila ocupa ~26% del alto
-            final double itemH = h * 0.26;
-            final double itemW = itemH * (85 / 48);
-            final double gap = h * 0.04; // Espacio entre filas (4%)
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final h = constraints.maxHeight;
+              final w = constraints.maxWidth;
 
-            return Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: w * 0.03, // 3% de padding lateral
-                vertical: h * 0.02, // 2% de padding vertical
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildLevelButton(context, itemW, itemH),
-                  SizedBox(height: gap),
-                  _buildMiniCards(context, itemW, itemH),
-                  SizedBox(height: gap),
-                  Row(
-                    children: [
-                      _buildBottomButton(
-                        context: context,
-                        assetPath: 'assets/images/parking/route.png',
-                        width: itemW,
-                        height: itemH,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RouteScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(width: w * 0.02),
-                      _buildBottomButton(
-                        context: context,
-                        assetPath: 'assets/images/parking/load.png',
-                        width: itemW,
-                        height: itemH,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoadManagerScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+              // Medidas relativas: cada fila ocupa ~26% del alto
+              final double itemH = h * 0.26;
+              final double itemW = itemH * (85 / 48);
+              final double gap = h * 0.04; // Espacio entre filas (4%)
+
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: w * 0.03, // 3% de padding lateral
+                  vertical: h * 0.02, // 2% de padding vertical
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildLevelButton(context, itemW, itemH),
+                    SizedBox(height: gap),
+                    _buildMiniCards(context, itemW, itemH),
+                    SizedBox(height: gap),
+                    // Only show Route/Load buttons if NOT 'en destino'
+                    if (showActionButtons)
+                      Row(
+                        children: [
+                          _buildBottomButton(
+                            context: context,
+                            assetPath: 'assets/images/parking/route.png',
+                            width: itemW,
+                            height: itemH,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RouteScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(width: w * 0.02),
+                          _buildBottomButton(
+                            context: context,
+                            assetPath: 'assets/images/parking/load.png',
+                            width: itemW,
+                            height: itemH,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoadManagerScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    else
+                      const SizedBox.shrink(),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        // Display location name if provided and status is 'en destino'
+        if (locationName != null && !showActionButtons)
+          Positioned(
+            top: 6,
+            right: 10,
+            child: Text(
+              locationName!,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    offset: const Offset(1, 1),
+                    blurRadius: 2,
+                    color: Colors.black.withOpacity(0.8),
                   ),
                 ],
               ),
-            );
-          },
-        ),
-      );
-    }
-
-    return const SizedBox.shrink();
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _buildLevelButton(BuildContext context, double width, double height) {
@@ -288,10 +325,24 @@ class ParkingFleetCard extends StatelessWidget {
               : 'assets/images/trucks/$truckId.png',
           showOverlay: noTruck,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BuyTruckScreen()),
-            );
+            if (truckId != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TruckInformationScreen(
+                    truckId: truckId!,
+                    fleetId: fleetId,
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BuyTruckScreen(fleetId: fleetId),
+                ),
+              );
+            }
           },
         ),
         SizedBox(width: width * 0.1),
@@ -303,10 +354,24 @@ class ParkingFleetCard extends StatelessWidget {
               : 'assets/images/drivers/$driverId.png',
           showOverlay: noDriver,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BuyDriverScreen()),
-            );
+            if (driverId != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DriverInformationScreen(
+                    driverId: driverId!,
+                    fleetId: fleetId,
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BuyDriverScreen(fleetId: fleetId),
+                ),
+              );
+            }
           },
         ),
         SizedBox(width: width * 0.1),
@@ -380,12 +445,28 @@ class ParkingFleetCard extends StatelessWidget {
     final String amount = isFree ? '0' : '${cost?.amount ?? 0}';
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (fleetConfig != null) {
-          showDialog(
+          final bool? success = await showDialog<bool>(
             context: context,
-            builder: (context) => FleetPurchaseDialog(fleet: fleetConfig!),
+            builder: (context) => GenericPurchaseDialog(
+              title: 'COMPRA DE FLOTA',
+              description:
+                  '¿Estás seguro de que deseas desbloquear este slot para tu flota?',
+              price: fleetConfig!.unlockCost.amount,
+              priceType: fleetConfig!.unlockCost.type,
+              onConfirm: () => FleetService.purchaseFleet(fleetConfig!),
+            ),
           );
+
+          if (success == true && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('¡Flota desbloqueada con éxito!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
         }
       },
       child: Stack(

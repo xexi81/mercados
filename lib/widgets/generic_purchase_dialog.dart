@@ -1,36 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:industrial_app/theme/app_colors.dart';
-import 'package:industrial_app/data/fleet/fleet_model.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
-import 'package:industrial_app/data/fleet/fleet_service.dart';
 import 'industrial_button.dart';
 
-class FleetPurchaseDialog extends StatefulWidget {
-  final FleetModel fleet;
+class GenericPurchaseDialog extends StatefulWidget {
+  final String title;
+  final String description;
+  final int price;
+  final UnlockCostType priceType;
+  final Future<void> Function() onConfirm;
 
-  const FleetPurchaseDialog({super.key, required this.fleet});
+  const GenericPurchaseDialog({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.priceType,
+    required this.onConfirm,
+  });
 
   @override
-  State<FleetPurchaseDialog> createState() => _FleetPurchaseDialogState();
+  State<GenericPurchaseDialog> createState() => _GenericPurchaseDialogState();
 }
 
-class _FleetPurchaseDialogState extends State<FleetPurchaseDialog> {
+class _GenericPurchaseDialogState extends State<GenericPurchaseDialog> {
   bool _isLoading = false;
 
-  Future<void> _onAccept() async {
+  Future<void> _handleConfirm() async {
     setState(() => _isLoading = true);
     try {
-      await FleetService.purchaseFleet(widget.fleet);
+      await widget.onConfirm();
       if (mounted) {
         Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('¡Flota desbloqueada con éxito!'),
-            backgroundColor: Colors.green,
-          ),
-        );
       }
     } catch (e) {
+      // Error handling is expected to be done by the caller or we can show it here?
+      // The implementation plan said: "If the callback throws, show error."
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -48,13 +53,13 @@ class _FleetPurchaseDialogState extends State<FleetPurchaseDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final cost = widget.fleet.unlockCost;
-    final bool isFree = cost.type == UnlockCostType.free;
+    final bool isFree = widget.priceType == UnlockCostType.free;
 
-    final String currencyIcon = (isFree || cost.type == UnlockCostType.money)
+    final String currencyIcon =
+        (isFree || widget.priceType == UnlockCostType.money)
         ? 'assets/images/billete.png'
         : 'assets/images/gemas.png';
-    final String amount = isFree ? '0' : '${cost.amount}';
+    final String amount = isFree ? '0' : '${widget.price}';
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -93,9 +98,10 @@ class _FleetPurchaseDialogState extends State<FleetPurchaseDialog> {
                     size: 40,
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'COMPRA DE FLOTA',
-                    style: TextStyle(
+                  Text(
+                    widget.title.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
@@ -110,10 +116,10 @@ class _FleetPurchaseDialogState extends State<FleetPurchaseDialog> {
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  const Text(
-                    '¿Estás seguro de que deseas desbloquear este slot para tu flota?',
+                  Text(
+                    widget.description,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
                       height: 1.5,
@@ -180,7 +186,7 @@ class _FleetPurchaseDialogState extends State<FleetPurchaseDialog> {
                             gradientTop: Colors.green[400]!,
                             gradientBottom: Colors.green[700]!,
                             borderColor: Colors.green[200]!,
-                            onPressed: _onAccept,
+                            onPressed: _handleConfirm,
                           ),
                         ),
                       ],

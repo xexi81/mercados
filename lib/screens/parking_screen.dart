@@ -179,6 +179,31 @@ class _ParkingScreenState extends State<ParkingScreen> {
                               )
                               as Map<String, dynamic>?;
 
+                      String? fleetLocationName;
+                      final String? status = cardData?['status'];
+                      final dynamic currentLocation =
+                          cardData?['currentLocation'];
+
+                      // If occupied and 'en destino', try to find location name
+                      if (status == 'en destino' &&
+                          currentLocation != null &&
+                          locationsSnapshot.hasData) {
+                        try {
+                          final double lat =
+                              (currentLocation['latitude'] as num).toDouble();
+                          final double lng =
+                              (currentLocation['longitude'] as num).toDouble();
+
+                          // Find location with matching coordinates
+                          final location = locationsSnapshot.data!.firstWhere(
+                            (l) => l.latitude == lat && l.longitude == lng,
+                          );
+                          fleetLocationName = location.city;
+                        } catch (_) {
+                          // Location not found or invalid data
+                        }
+                      }
+
                       return ParkingFleetCard(
                         fleetId: fleetId,
                         fleetConfig: config,
@@ -186,6 +211,7 @@ class _ParkingScreenState extends State<ParkingScreen> {
                         userLevel: level,
                         hqLatitude: hqLat,
                         hqLongitude: hqLng,
+                        locationName: fleetLocationName,
                       );
                     },
                   );
