@@ -142,11 +142,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
                     fleetMap =
                         fleetSnapshot.data?.data() as Map<String, dynamic>? ??
                         {};
-                    debugPrint('Fleet data loaded: ${fleetMap.keys}');
-                  } else {
-                    debugPrint(
-                      'Fleet data not exists or no data - hasData: ${fleetSnapshot.hasData}, exists: ${fleetSnapshot.data?.exists}',
-                    );
                   }
 
                   final List<dynamic> slots = fleetMap['slots'] ?? [];
@@ -195,38 +190,20 @@ class _ParkingScreenState extends State<ParkingScreen> {
                       if (status == 'en destino' &&
                           currentLocation != null &&
                           locationsSnapshot.hasData) {
-                        debugPrint(
-                          'Processing location for fleet $fleetId - status: $status',
-                        );
-                        debugPrint('Current location: $currentLocation');
                         try {
                           final double lat =
                               (currentLocation['latitude'] as num).toDouble();
                           final double lng =
                               (currentLocation['longitude'] as num).toDouble();
-                          debugPrint(
-                            'Looking for coordinates: lat=$lat, lng=$lng',
-                          );
 
                           // Find location with matching coordinates
                           final location = locationsSnapshot.data!.firstWhere(
                             (l) => l.latitude == lat && l.longitude == lng,
                           );
                           fleetLocationName = location.city;
-                          debugPrint('Found location: ${location.city}');
                         } catch (e) {
-                          debugPrint('Location not found or invalid data: $e');
-                          // Try to find closest location
-                          if (locationsSnapshot.data!.isNotEmpty) {
-                            debugPrint(
-                              'Available locations: ${locationsSnapshot.data!.map((l) => '${l.city}: ${l.latitude},${l.longitude}').join(', ')}',
-                            );
-                          }
+                          // Location not found or invalid data
                         }
-                      } else {
-                        debugPrint(
-                          'Not processing location - status: $status, currentLocation: $currentLocation, hasLocationData: ${locationsSnapshot.hasData}',
-                        );
                       }
 
                       return ParkingFleetCard(

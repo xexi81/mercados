@@ -1,0 +1,2502 @@
+[
+  {
+    "nivel": 1,
+    "coste": 10000,
+    "capacidad_bonus": 1
+  },
+  {
+    "nivel": 2,
+    "coste": 20000,
+    "capacidad_bonus": 2
+  },
+  {
+    "nivel": 3,
+    "coste": 30000,
+    "capacidad_bonus": 3
+  },
+  {
+    "nivel": 4,
+    "coste": 40000,
+    "capacidad_bonus": 4
+  },
+  {
+    "nivel": 5,
+    "coste": 50000,
+    "capacidad_bonus": 5
+  },
+  {
+    "nivel": 6,
+    "coste": 60000,
+    "capacidad_bonus": 6
+  },
+  {
+    "nivel": 7,
+    "coste": 70000,
+    "capacidad_bonus": 7
+  },
+  {
+    "nivel": 8,
+    "coste": 80000,
+    "capacidad_bonus": 8
+  },
+  {
+    "nivel": 9,
+    "coste": 90000,
+    "capacidad_bonus": 9
+  },
+  {
+    "nivel": 10,
+    "coste": 100000,
+    "capacidad_bonus": 10
+  },
+  {
+    "nivel": 11,
+    "coste": 110000,
+    "capacidad_bonus": 11
+  },
+  {
+    "nivel": 12,
+    "coste": 120000,
+    "capacidad_bonus": 12
+  },
+  {
+    "nivel": 13,
+    "coste": 130000,
+    "capacidad_bonus": 13
+  },
+  {
+    "nivel": 14,
+    "coste": 140000,
+    "capacidad_bonus": 14
+  },
+  {
+    "nivel": 15,
+    "coste": 150000,
+    "capacidad_bonus": 15
+  },
+  {
+    "nivel": 16,
+    "coste": 160000,
+    "capacidad_bonus": 16
+  },
+  {
+    "nivel": 17,
+    "coste": 170000,
+    "capacidad_bonus": 17
+  },
+  {
+    "nivel": 18,
+    "coste": 180000,
+    "capacidad_bonus": 18
+  },
+  {
+    "nivel": 19,
+    "coste": 190000,
+    "capacidad_bonus": 19
+  },
+  {
+    "nivel": 20,
+    "coste": 200000,
+    "capacidad_bonus": 20
+  },
+  {
+    "nivel": 21,
+    "coste": 210000,
+    "capacidad_bonus": 21
+  },
+  {
+    "nivel": 22,
+    "coste": 220000,
+    "capacidad_bonus": 22
+  },
+  {
+    "nivel": 23,
+    "coste": 230000,
+    "capacidad_bonus": 23
+  },
+  {
+    "nivel": 24,
+    "coste": 240000,
+    "capacidad_bonus": 24
+  },
+  {
+    "nivel": 25,
+    "coste": 250000,
+    "capacidad_bonus": 25
+  },
+  {
+    "nivel": 26,
+    "coste": 260000,
+    "capacidad_bonus": 26
+  },
+  {
+    "nivel": 27,
+    "coste": 270000,
+    "capacidad_bonus": 27
+  },
+  {
+    "nivel": 28,
+    "coste": 280000,
+    "capacidad_bonus": 28
+  },
+  {
+    "nivel": 29,
+    "coste": 290000,
+    "capacidad_bonus": 29
+  },
+  {
+    "nivel": 30,
+    "coste": 300000,
+    "capacidad_bonus": 30
+  },
+  {
+    "nivel": 31,
+    "coste": 310000,
+    "capacidad_bonus": 31
+  },
+  {
+    "nivel": 32,
+    "coste": 320000,
+    "capacidad_bonus": 32
+  },
+  {
+    "nivel": 33,
+    "coste": 330000,
+    "capacidad_bonus": 33
+  },
+  {
+    "nivel": 34,
+    "coste": 340000,
+    "capacidad_bonus": 34
+  },
+  {
+    "nivel": 35,
+    "coste": 350000,
+    "capacidad_bonus": 35
+  },
+  {
+    "nivel": 36,
+    "coste": 360000,
+    "capacidad_bonus": 36
+  },
+  {
+    "nivel": 37,
+    "coste": 370000,
+    "capacidad_bonus": 37
+  },
+  {
+    "nivel": 38,
+    "coste": 380000,
+    "capacidad_bonus": 38
+  },
+  {
+    "nivel": 39,
+    "coste": 390000,
+    "capacidad_bonus": 39
+  },
+  {
+    "nivel": 40,
+    "coste": 400000,
+    "capacidad_bonus": 40
+  },
+  {
+    "nivel": 41,
+    "coste": 410000,
+    "capacidad_bonus": 41
+  },
+  {
+    "nivel": 42,
+    "coste": 420000,
+    "capacidad_bonus": 42
+  },
+  {
+    "nivel": 43,
+    "coste": 430000,
+    "capacidad_bonus": 43
+  },
+  {
+    "nivel": 44,
+    "coste": 440000,
+    "capacidad_bonus": 44
+  },
+  {
+    "nivel": 45,
+    "coste": 450000,
+    "capacidad_bonus": 45
+  },
+  {
+    "nivel": 46,
+    "coste": 460000,
+    "capacidad_bonus": 46
+  },
+  {
+    "nivel": 47,
+    "coste": 470000,
+    "capacidad_bonus": 47
+  },
+  {
+    "nivel": 48,
+    "coste": 480000,
+    "capacidad_bonus": 48
+  },
+  {
+    "nivel": 49,
+    "coste": 490000,
+    "capacidad_bonus": 49
+  },
+  {
+    "nivel": 50,
+    "coste": 500000,
+    "capacidad_bonus": 50
+  },
+  {
+    "nivel": 51,
+    "coste": 510000,
+    "capacidad_bonus": 51
+  },
+  {
+    "nivel": 52,
+    "coste": 520000,
+    "capacidad_bonus": 52
+  },
+  {
+    "nivel": 53,
+    "coste": 530000,
+    "capacidad_bonus": 53
+  },
+  {
+    "nivel": 54,
+    "coste": 540000,
+    "capacidad_bonus": 54
+  },
+  {
+    "nivel": 55,
+    "coste": 550000,
+    "capacidad_bonus": 55
+  },
+  {
+    "nivel": 56,
+    "coste": 560000,
+    "capacidad_bonus": 56
+  },
+  {
+    "nivel": 57,
+    "coste": 570000,
+    "capacidad_bonus": 57
+  },
+  {
+    "nivel": 58,
+    "coste": 580000,
+    "capacidad_bonus": 58
+  },
+  {
+    "nivel": 59,
+    "coste": 590000,
+    "capacidad_bonus": 59
+  },
+  {
+    "nivel": 60,
+    "coste": 600000,
+    "capacidad_bonus": 60
+  },
+  {
+    "nivel": 61,
+    "coste": 610000,
+    "capacidad_bonus": 61
+  },
+  {
+    "nivel": 62,
+    "coste": 620000,
+    "capacidad_bonus": 62
+  },
+  {
+    "nivel": 63,
+    "coste": 630000,
+    "capacidad_bonus": 63
+  },
+  {
+    "nivel": 64,
+    "coste": 640000,
+    "capacidad_bonus": 64
+  },
+  {
+    "nivel": 65,
+    "coste": 650000,
+    "capacidad_bonus": 65
+  },
+  {
+    "nivel": 66,
+    "coste": 660000,
+    "capacidad_bonus": 66
+  },
+  {
+    "nivel": 67,
+    "coste": 670000,
+    "capacidad_bonus": 67
+  },
+  {
+    "nivel": 68,
+    "coste": 680000,
+    "capacidad_bonus": 68
+  },
+  {
+    "nivel": 69,
+    "coste": 690000,
+    "capacidad_bonus": 69
+  },
+  {
+    "nivel": 70,
+    "coste": 700000,
+    "capacidad_bonus": 70
+  },
+  {
+    "nivel": 71,
+    "coste": 710000,
+    "capacidad_bonus": 71
+  },
+  {
+    "nivel": 72,
+    "coste": 720000,
+    "capacidad_bonus": 72
+  },
+  {
+    "nivel": 73,
+    "coste": 730000,
+    "capacidad_bonus": 73
+  },
+  {
+    "nivel": 74,
+    "coste": 740000,
+    "capacidad_bonus": 74
+  },
+  {
+    "nivel": 75,
+    "coste": 750000,
+    "capacidad_bonus": 75
+  },
+  {
+    "nivel": 76,
+    "coste": 760000,
+    "capacidad_bonus": 76
+  },
+  {
+    "nivel": 77,
+    "coste": 770000,
+    "capacidad_bonus": 77
+  },
+  {
+    "nivel": 78,
+    "coste": 780000,
+    "capacidad_bonus": 78
+  },
+  {
+    "nivel": 79,
+    "coste": 790000,
+    "capacidad_bonus": 79
+  },
+  {
+    "nivel": 80,
+    "coste": 800000,
+    "capacidad_bonus": 80
+  },
+  {
+    "nivel": 81,
+    "coste": 810000,
+    "capacidad_bonus": 81
+  },
+  {
+    "nivel": 82,
+    "coste": 820000,
+    "capacidad_bonus": 82
+  },
+  {
+    "nivel": 83,
+    "coste": 830000,
+    "capacidad_bonus": 83
+  },
+  {
+    "nivel": 84,
+    "coste": 840000,
+    "capacidad_bonus": 84
+  },
+  {
+    "nivel": 85,
+    "coste": 850000,
+    "capacidad_bonus": 85
+  },
+  {
+    "nivel": 86,
+    "coste": 860000,
+    "capacidad_bonus": 86
+  },
+  {
+    "nivel": 87,
+    "coste": 870000,
+    "capacidad_bonus": 87
+  },
+  {
+    "nivel": 88,
+    "coste": 880000,
+    "capacidad_bonus": 88
+  },
+  {
+    "nivel": 89,
+    "coste": 890000,
+    "capacidad_bonus": 89
+  },
+  {
+    "nivel": 90,
+    "coste": 900000,
+    "capacidad_bonus": 90
+  },
+  {
+    "nivel": 91,
+    "coste": 910000,
+    "capacidad_bonus": 91
+  },
+  {
+    "nivel": 92,
+    "coste": 920000,
+    "capacidad_bonus": 92
+  },
+  {
+    "nivel": 93,
+    "coste": 930000,
+    "capacidad_bonus": 93
+  },
+  {
+    "nivel": 94,
+    "coste": 940000,
+    "capacidad_bonus": 94
+  },
+  {
+    "nivel": 95,
+    "coste": 950000,
+    "capacidad_bonus": 95
+  },
+  {
+    "nivel": 96,
+    "coste": 960000,
+    "capacidad_bonus": 96
+  },
+  {
+    "nivel": 97,
+    "coste": 970000,
+    "capacidad_bonus": 97
+  },
+  {
+    "nivel": 98,
+    "coste": 980000,
+    "capacidad_bonus": 98
+  },
+  {
+    "nivel": 99,
+    "coste": 990000,
+    "capacidad_bonus": 99
+  },
+  {
+    "nivel": 100,
+    "coste": 1000000,
+    "capacidad_bonus": 100
+  },
+  {
+    "nivel": 101,
+    "coste": 1010000,
+    "capacidad_bonus": 101
+  },
+  {
+    "nivel": 102,
+    "coste": 1020000,
+    "capacidad_bonus": 102
+  },
+  {
+    "nivel": 103,
+    "coste": 1030000,
+    "capacidad_bonus": 103
+  },
+  {
+    "nivel": 104,
+    "coste": 1040000,
+    "capacidad_bonus": 104
+  },
+  {
+    "nivel": 105,
+    "coste": 1050000,
+    "capacidad_bonus": 105
+  },
+  {
+    "nivel": 106,
+    "coste": 1060000,
+    "capacidad_bonus": 106
+  },
+  {
+    "nivel": 107,
+    "coste": 1070000,
+    "capacidad_bonus": 107
+  },
+  {
+    "nivel": 108,
+    "coste": 1080000,
+    "capacidad_bonus": 108
+  },
+  {
+    "nivel": 109,
+    "coste": 1090000,
+    "capacidad_bonus": 109
+  },
+  {
+    "nivel": 110,
+    "coste": 1100000,
+    "capacidad_bonus": 110
+  },
+  {
+    "nivel": 111,
+    "coste": 1110000,
+    "capacidad_bonus": 111
+  },
+  {
+    "nivel": 112,
+    "coste": 1120000,
+    "capacidad_bonus": 112
+  },
+  {
+    "nivel": 113,
+    "coste": 1130000,
+    "capacidad_bonus": 113
+  },
+  {
+    "nivel": 114,
+    "coste": 1140000,
+    "capacidad_bonus": 114
+  },
+  {
+    "nivel": 115,
+    "coste": 1150000,
+    "capacidad_bonus": 115
+  },
+  {
+    "nivel": 116,
+    "coste": 1160000,
+    "capacidad_bonus": 116
+  },
+  {
+    "nivel": 117,
+    "coste": 1170000,
+    "capacidad_bonus": 117
+  },
+  {
+    "nivel": 118,
+    "coste": 1180000,
+    "capacidad_bonus": 118
+  },
+  {
+    "nivel": 119,
+    "coste": 1190000,
+    "capacidad_bonus": 119
+  },
+  {
+    "nivel": 120,
+    "coste": 1200000,
+    "capacidad_bonus": 120
+  },
+  {
+    "nivel": 121,
+    "coste": 1210000,
+    "capacidad_bonus": 121
+  },
+  {
+    "nivel": 122,
+    "coste": 1220000,
+    "capacidad_bonus": 122
+  },
+  {
+    "nivel": 123,
+    "coste": 1230000,
+    "capacidad_bonus": 123
+  },
+  {
+    "nivel": 124,
+    "coste": 1240000,
+    "capacidad_bonus": 124
+  },
+  {
+    "nivel": 125,
+    "coste": 1250000,
+    "capacidad_bonus": 125
+  },
+  {
+    "nivel": 126,
+    "coste": 1260000,
+    "capacidad_bonus": 126
+  },
+  {
+    "nivel": 127,
+    "coste": 1270000,
+    "capacidad_bonus": 127
+  },
+  {
+    "nivel": 128,
+    "coste": 1280000,
+    "capacidad_bonus": 128
+  },
+  {
+    "nivel": 129,
+    "coste": 1290000,
+    "capacidad_bonus": 129
+  },
+  {
+    "nivel": 130,
+    "coste": 1300000,
+    "capacidad_bonus": 130
+  },
+  {
+    "nivel": 131,
+    "coste": 1310000,
+    "capacidad_bonus": 131
+  },
+  {
+    "nivel": 132,
+    "coste": 1320000,
+    "capacidad_bonus": 132
+  },
+  {
+    "nivel": 133,
+    "coste": 1330000,
+    "capacidad_bonus": 133
+  },
+  {
+    "nivel": 134,
+    "coste": 1340000,
+    "capacidad_bonus": 134
+  },
+  {
+    "nivel": 135,
+    "coste": 1350000,
+    "capacidad_bonus": 135
+  },
+  {
+    "nivel": 136,
+    "coste": 1360000,
+    "capacidad_bonus": 136
+  },
+  {
+    "nivel": 137,
+    "coste": 1370000,
+    "capacidad_bonus": 137
+  },
+  {
+    "nivel": 138,
+    "coste": 1380000,
+    "capacidad_bonus": 138
+  },
+  {
+    "nivel": 139,
+    "coste": 1390000,
+    "capacidad_bonus": 139
+  },
+  {
+    "nivel": 140,
+    "coste": 1400000,
+    "capacidad_bonus": 140
+  },
+  {
+    "nivel": 141,
+    "coste": 1410000,
+    "capacidad_bonus": 141
+  },
+  {
+    "nivel": 142,
+    "coste": 1420000,
+    "capacidad_bonus": 142
+  },
+  {
+    "nivel": 143,
+    "coste": 1430000,
+    "capacidad_bonus": 143
+  },
+  {
+    "nivel": 144,
+    "coste": 1440000,
+    "capacidad_bonus": 144
+  },
+  {
+    "nivel": 145,
+    "coste": 1450000,
+    "capacidad_bonus": 145
+  },
+  {
+    "nivel": 146,
+    "coste": 1460000,
+    "capacidad_bonus": 146
+  },
+  {
+    "nivel": 147,
+    "coste": 1470000,
+    "capacidad_bonus": 147
+  },
+  {
+    "nivel": 148,
+    "coste": 1480000,
+    "capacidad_bonus": 148
+  },
+  {
+    "nivel": 149,
+    "coste": 1490000,
+    "capacidad_bonus": 149
+  },
+  {
+    "nivel": 150,
+    "coste": 1500000,
+    "capacidad_bonus": 150
+  },
+  {
+    "nivel": 151,
+    "coste": 1510000,
+    "capacidad_bonus": 151
+  },
+  {
+    "nivel": 152,
+    "coste": 1520000,
+    "capacidad_bonus": 152
+  },
+  {
+    "nivel": 153,
+    "coste": 1530000,
+    "capacidad_bonus": 153
+  },
+  {
+    "nivel": 154,
+    "coste": 1540000,
+    "capacidad_bonus": 154
+  },
+  {
+    "nivel": 155,
+    "coste": 1550000,
+    "capacidad_bonus": 155
+  },
+  {
+    "nivel": 156,
+    "coste": 1560000,
+    "capacidad_bonus": 156
+  },
+  {
+    "nivel": 157,
+    "coste": 1570000,
+    "capacidad_bonus": 157
+  },
+  {
+    "nivel": 158,
+    "coste": 1580000,
+    "capacidad_bonus": 158
+  },
+  {
+    "nivel": 159,
+    "coste": 1590000,
+    "capacidad_bonus": 159
+  },
+  {
+    "nivel": 160,
+    "coste": 1600000,
+    "capacidad_bonus": 160
+  },
+  {
+    "nivel": 161,
+    "coste": 1610000,
+    "capacidad_bonus": 161
+  },
+  {
+    "nivel": 162,
+    "coste": 1620000,
+    "capacidad_bonus": 162
+  },
+  {
+    "nivel": 163,
+    "coste": 1630000,
+    "capacidad_bonus": 163
+  },
+  {
+    "nivel": 164,
+    "coste": 1640000,
+    "capacidad_bonus": 164
+  },
+  {
+    "nivel": 165,
+    "coste": 1650000,
+    "capacidad_bonus": 165
+  },
+  {
+    "nivel": 166,
+    "coste": 1660000,
+    "capacidad_bonus": 166
+  },
+  {
+    "nivel": 167,
+    "coste": 1670000,
+    "capacidad_bonus": 167
+  },
+  {
+    "nivel": 168,
+    "coste": 1680000,
+    "capacidad_bonus": 168
+  },
+  {
+    "nivel": 169,
+    "coste": 1690000,
+    "capacidad_bonus": 169
+  },
+  {
+    "nivel": 170,
+    "coste": 1700000,
+    "capacidad_bonus": 170
+  },
+  {
+    "nivel": 171,
+    "coste": 1710000,
+    "capacidad_bonus": 171
+  },
+  {
+    "nivel": 172,
+    "coste": 1720000,
+    "capacidad_bonus": 172
+  },
+  {
+    "nivel": 173,
+    "coste": 1730000,
+    "capacidad_bonus": 173
+  },
+  {
+    "nivel": 174,
+    "coste": 1740000,
+    "capacidad_bonus": 174
+  },
+  {
+    "nivel": 175,
+    "coste": 1750000,
+    "capacidad_bonus": 175
+  },
+  {
+    "nivel": 176,
+    "coste": 1760000,
+    "capacidad_bonus": 176
+  },
+  {
+    "nivel": 177,
+    "coste": 1770000,
+    "capacidad_bonus": 177
+  },
+  {
+    "nivel": 178,
+    "coste": 1780000,
+    "capacidad_bonus": 178
+  },
+  {
+    "nivel": 179,
+    "coste": 1790000,
+    "capacidad_bonus": 179
+  },
+  {
+    "nivel": 180,
+    "coste": 1800000,
+    "capacidad_bonus": 180
+  },
+  {
+    "nivel": 181,
+    "coste": 1810000,
+    "capacidad_bonus": 181
+  },
+  {
+    "nivel": 182,
+    "coste": 1820000,
+    "capacidad_bonus": 182
+  },
+  {
+    "nivel": 183,
+    "coste": 1830000,
+    "capacidad_bonus": 183
+  },
+  {
+    "nivel": 184,
+    "coste": 1840000,
+    "capacidad_bonus": 184
+  },
+  {
+    "nivel": 185,
+    "coste": 1850000,
+    "capacidad_bonus": 185
+  },
+  {
+    "nivel": 186,
+    "coste": 1860000,
+    "capacidad_bonus": 186
+  },
+  {
+    "nivel": 187,
+    "coste": 1870000,
+    "capacidad_bonus": 187
+  },
+  {
+    "nivel": 188,
+    "coste": 1880000,
+    "capacidad_bonus": 188
+  },
+  {
+    "nivel": 189,
+    "coste": 1890000,
+    "capacidad_bonus": 189
+  },
+  {
+    "nivel": 190,
+    "coste": 1900000,
+    "capacidad_bonus": 190
+  },
+  {
+    "nivel": 191,
+    "coste": 1910000,
+    "capacidad_bonus": 191
+  },
+  {
+    "nivel": 192,
+    "coste": 1920000,
+    "capacidad_bonus": 192
+  },
+  {
+    "nivel": 193,
+    "coste": 1930000,
+    "capacidad_bonus": 193
+  },
+  {
+    "nivel": 194,
+    "coste": 1940000,
+    "capacidad_bonus": 194
+  },
+  {
+    "nivel": 195,
+    "coste": 1950000,
+    "capacidad_bonus": 195
+  },
+  {
+    "nivel": 196,
+    "coste": 1960000,
+    "capacidad_bonus": 196
+  },
+  {
+    "nivel": 197,
+    "coste": 1970000,
+    "capacidad_bonus": 197
+  },
+  {
+    "nivel": 198,
+    "coste": 1980000,
+    "capacidad_bonus": 198
+  },
+  {
+    "nivel": 199,
+    "coste": 1990000,
+    "capacidad_bonus": 199
+  },
+  {
+    "nivel": 200,
+    "coste": 2000000,
+    "capacidad_bonus": 200
+  },
+  {
+    "nivel": 201,
+    "coste": 2010000,
+    "capacidad_bonus": 201
+  },
+  {
+    "nivel": 202,
+    "coste": 2020000,
+    "capacidad_bonus": 202
+  },
+  {
+    "nivel": 203,
+    "coste": 2030000,
+    "capacidad_bonus": 203
+  },
+  {
+    "nivel": 204,
+    "coste": 2040000,
+    "capacidad_bonus": 204
+  },
+  {
+    "nivel": 205,
+    "coste": 2050000,
+    "capacidad_bonus": 205
+  },
+  {
+    "nivel": 206,
+    "coste": 2060000,
+    "capacidad_bonus": 206
+  },
+  {
+    "nivel": 207,
+    "coste": 2070000,
+    "capacidad_bonus": 207
+  },
+  {
+    "nivel": 208,
+    "coste": 2080000,
+    "capacidad_bonus": 208
+  },
+  {
+    "nivel": 209,
+    "coste": 2090000,
+    "capacidad_bonus": 209
+  },
+  {
+    "nivel": 210,
+    "coste": 2100000,
+    "capacidad_bonus": 210
+  },
+  {
+    "nivel": 211,
+    "coste": 2110000,
+    "capacidad_bonus": 211
+  },
+  {
+    "nivel": 212,
+    "coste": 2120000,
+    "capacidad_bonus": 212
+  },
+  {
+    "nivel": 213,
+    "coste": 2130000,
+    "capacidad_bonus": 213
+  },
+  {
+    "nivel": 214,
+    "coste": 2140000,
+    "capacidad_bonus": 214
+  },
+  {
+    "nivel": 215,
+    "coste": 2150000,
+    "capacidad_bonus": 215
+  },
+  {
+    "nivel": 216,
+    "coste": 2160000,
+    "capacidad_bonus": 216
+  },
+  {
+    "nivel": 217,
+    "coste": 2170000,
+    "capacidad_bonus": 217
+  },
+  {
+    "nivel": 218,
+    "coste": 2180000,
+    "capacidad_bonus": 218
+  },
+  {
+    "nivel": 219,
+    "coste": 2190000,
+    "capacidad_bonus": 219
+  },
+  {
+    "nivel": 220,
+    "coste": 2200000,
+    "capacidad_bonus": 220
+  },
+  {
+    "nivel": 221,
+    "coste": 2210000,
+    "capacidad_bonus": 221
+  },
+  {
+    "nivel": 222,
+    "coste": 2220000,
+    "capacidad_bonus": 222
+  },
+  {
+    "nivel": 223,
+    "coste": 2230000,
+    "capacidad_bonus": 223
+  },
+  {
+    "nivel": 224,
+    "coste": 2240000,
+    "capacidad_bonus": 224
+  },
+  {
+    "nivel": 225,
+    "coste": 2250000,
+    "capacidad_bonus": 225
+  },
+  {
+    "nivel": 226,
+    "coste": 2260000,
+    "capacidad_bonus": 226
+  },
+  {
+    "nivel": 227,
+    "coste": 2270000,
+    "capacidad_bonus": 227
+  },
+  {
+    "nivel": 228,
+    "coste": 2280000,
+    "capacidad_bonus": 228
+  },
+  {
+    "nivel": 229,
+    "coste": 2290000,
+    "capacidad_bonus": 229
+  },
+  {
+    "nivel": 230,
+    "coste": 2300000,
+    "capacidad_bonus": 230
+  },
+  {
+    "nivel": 231,
+    "coste": 2310000,
+    "capacidad_bonus": 231
+  },
+  {
+    "nivel": 232,
+    "coste": 2320000,
+    "capacidad_bonus": 232
+  },
+  {
+    "nivel": 233,
+    "coste": 2330000,
+    "capacidad_bonus": 233
+  },
+  {
+    "nivel": 234,
+    "coste": 2340000,
+    "capacidad_bonus": 234
+  },
+  {
+    "nivel": 235,
+    "coste": 2350000,
+    "capacidad_bonus": 235
+  },
+  {
+    "nivel": 236,
+    "coste": 2360000,
+    "capacidad_bonus": 236
+  },
+  {
+    "nivel": 237,
+    "coste": 2370000,
+    "capacidad_bonus": 237
+  },
+  {
+    "nivel": 238,
+    "coste": 2380000,
+    "capacidad_bonus": 238
+  },
+  {
+    "nivel": 239,
+    "coste": 2390000,
+    "capacidad_bonus": 239
+  },
+  {
+    "nivel": 240,
+    "coste": 2400000,
+    "capacidad_bonus": 240
+  },
+  {
+    "nivel": 241,
+    "coste": 2410000,
+    "capacidad_bonus": 241
+  },
+  {
+    "nivel": 242,
+    "coste": 2420000,
+    "capacidad_bonus": 242
+  },
+  {
+    "nivel": 243,
+    "coste": 2430000,
+    "capacidad_bonus": 243
+  },
+  {
+    "nivel": 244,
+    "coste": 2440000,
+    "capacidad_bonus": 244
+  },
+  {
+    "nivel": 245,
+    "coste": 2450000,
+    "capacidad_bonus": 245
+  },
+  {
+    "nivel": 246,
+    "coste": 2460000,
+    "capacidad_bonus": 246
+  },
+  {
+    "nivel": 247,
+    "coste": 2470000,
+    "capacidad_bonus": 247
+  },
+  {
+    "nivel": 248,
+    "coste": 2480000,
+    "capacidad_bonus": 248
+  },
+  {
+    "nivel": 249,
+    "coste": 2490000,
+    "capacidad_bonus": 249
+  },
+  {
+    "nivel": 250,
+    "coste": 2500000,
+    "capacidad_bonus": 250
+  },
+  {
+    "nivel": 251,
+    "coste": 2510000,
+    "capacidad_bonus": 251
+  },
+  {
+    "nivel": 252,
+    "coste": 2520000,
+    "capacidad_bonus": 252
+  },
+  {
+    "nivel": 253,
+    "coste": 2530000,
+    "capacidad_bonus": 253
+  },
+  {
+    "nivel": 254,
+    "coste": 2540000,
+    "capacidad_bonus": 254
+  },
+  {
+    "nivel": 255,
+    "coste": 2550000,
+    "capacidad_bonus": 255
+  },
+  {
+    "nivel": 256,
+    "coste": 2560000,
+    "capacidad_bonus": 256
+  },
+  {
+    "nivel": 257,
+    "coste": 2570000,
+    "capacidad_bonus": 257
+  },
+  {
+    "nivel": 258,
+    "coste": 2580000,
+    "capacidad_bonus": 258
+  },
+  {
+    "nivel": 259,
+    "coste": 2590000,
+    "capacidad_bonus": 259
+  },
+  {
+    "nivel": 260,
+    "coste": 2600000,
+    "capacidad_bonus": 260
+  },
+  {
+    "nivel": 261,
+    "coste": 2610000,
+    "capacidad_bonus": 261
+  },
+  {
+    "nivel": 262,
+    "coste": 2620000,
+    "capacidad_bonus": 262
+  },
+  {
+    "nivel": 263,
+    "coste": 2630000,
+    "capacidad_bonus": 263
+  },
+  {
+    "nivel": 264,
+    "coste": 2640000,
+    "capacidad_bonus": 264
+  },
+  {
+    "nivel": 265,
+    "coste": 2650000,
+    "capacidad_bonus": 265
+  },
+  {
+    "nivel": 266,
+    "coste": 2660000,
+    "capacidad_bonus": 266
+  },
+  {
+    "nivel": 267,
+    "coste": 2670000,
+    "capacidad_bonus": 267
+  },
+  {
+    "nivel": 268,
+    "coste": 2680000,
+    "capacidad_bonus": 268
+  },
+  {
+    "nivel": 269,
+    "coste": 2690000,
+    "capacidad_bonus": 269
+  },
+  {
+    "nivel": 270,
+    "coste": 2700000,
+    "capacidad_bonus": 270
+  },
+  {
+    "nivel": 271,
+    "coste": 2710000,
+    "capacidad_bonus": 271
+  },
+  {
+    "nivel": 272,
+    "coste": 2720000,
+    "capacidad_bonus": 272
+  },
+  {
+    "nivel": 273,
+    "coste": 2730000,
+    "capacidad_bonus": 273
+  },
+  {
+    "nivel": 274,
+    "coste": 2740000,
+    "capacidad_bonus": 274
+  },
+  {
+    "nivel": 275,
+    "coste": 2750000,
+    "capacidad_bonus": 275
+  },
+  {
+    "nivel": 276,
+    "coste": 2760000,
+    "capacidad_bonus": 276
+  },
+  {
+    "nivel": 277,
+    "coste": 2770000,
+    "capacidad_bonus": 277
+  },
+  {
+    "nivel": 278,
+    "coste": 2780000,
+    "capacidad_bonus": 278
+  },
+  {
+    "nivel": 279,
+    "coste": 2790000,
+    "capacidad_bonus": 279
+  },
+  {
+    "nivel": 280,
+    "coste": 2800000,
+    "capacidad_bonus": 280
+  },
+  {
+    "nivel": 281,
+    "coste": 2810000,
+    "capacidad_bonus": 281
+  },
+  {
+    "nivel": 282,
+    "coste": 2820000,
+    "capacidad_bonus": 282
+  },
+  {
+    "nivel": 283,
+    "coste": 2830000,
+    "capacidad_bonus": 283
+  },
+  {
+    "nivel": 284,
+    "coste": 2840000,
+    "capacidad_bonus": 284
+  },
+  {
+    "nivel": 285,
+    "coste": 2850000,
+    "capacidad_bonus": 285
+  },
+  {
+    "nivel": 286,
+    "coste": 2860000,
+    "capacidad_bonus": 286
+  },
+  {
+    "nivel": 287,
+    "coste": 2870000,
+    "capacidad_bonus": 287
+  },
+  {
+    "nivel": 288,
+    "coste": 2880000,
+    "capacidad_bonus": 288
+  },
+  {
+    "nivel": 289,
+    "coste": 2890000,
+    "capacidad_bonus": 289
+  },
+  {
+    "nivel": 290,
+    "coste": 2900000,
+    "capacidad_bonus": 290
+  },
+  {
+    "nivel": 291,
+    "coste": 2910000,
+    "capacidad_bonus": 291
+  },
+  {
+    "nivel": 292,
+    "coste": 2920000,
+    "capacidad_bonus": 292
+  },
+  {
+    "nivel": 293,
+    "coste": 2930000,
+    "capacidad_bonus": 293
+  },
+  {
+    "nivel": 294,
+    "coste": 2940000,
+    "capacidad_bonus": 294
+  },
+  {
+    "nivel": 295,
+    "coste": 2950000,
+    "capacidad_bonus": 295
+  },
+  {
+    "nivel": 296,
+    "coste": 2960000,
+    "capacidad_bonus": 296
+  },
+  {
+    "nivel": 297,
+    "coste": 2970000,
+    "capacidad_bonus": 297
+  },
+  {
+    "nivel": 298,
+    "coste": 2980000,
+    "capacidad_bonus": 298
+  },
+  {
+    "nivel": 299,
+    "coste": 2990000,
+    "capacidad_bonus": 299
+  },
+  {
+    "nivel": 300,
+    "coste": 3000000,
+    "capacidad_bonus": 300
+  },
+  {
+    "nivel": 301,
+    "coste": 3010000,
+    "capacidad_bonus": 301
+  },
+  {
+    "nivel": 302,
+    "coste": 3020000,
+    "capacidad_bonus": 302
+  },
+  {
+    "nivel": 303,
+    "coste": 3030000,
+    "capacidad_bonus": 303
+  },
+  {
+    "nivel": 304,
+    "coste": 3040000,
+    "capacidad_bonus": 304
+  },
+  {
+    "nivel": 305,
+    "coste": 3050000,
+    "capacidad_bonus": 305
+  },
+  {
+    "nivel": 306,
+    "coste": 3060000,
+    "capacidad_bonus": 306
+  },
+  {
+    "nivel": 307,
+    "coste": 3070000,
+    "capacidad_bonus": 307
+  },
+  {
+    "nivel": 308,
+    "coste": 3080000,
+    "capacidad_bonus": 308
+  },
+  {
+    "nivel": 309,
+    "coste": 3090000,
+    "capacidad_bonus": 309
+  },
+  {
+    "nivel": 310,
+    "coste": 3100000,
+    "capacidad_bonus": 310
+  },
+  {
+    "nivel": 311,
+    "coste": 3110000,
+    "capacidad_bonus": 311
+  },
+  {
+    "nivel": 312,
+    "coste": 3120000,
+    "capacidad_bonus": 312
+  },
+  {
+    "nivel": 313,
+    "coste": 3130000,
+    "capacidad_bonus": 313
+  },
+  {
+    "nivel": 314,
+    "coste": 3140000,
+    "capacidad_bonus": 314
+  },
+  {
+    "nivel": 315,
+    "coste": 3150000,
+    "capacidad_bonus": 315
+  },
+  {
+    "nivel": 316,
+    "coste": 3160000,
+    "capacidad_bonus": 316
+  },
+  {
+    "nivel": 317,
+    "coste": 3170000,
+    "capacidad_bonus": 317
+  },
+  {
+    "nivel": 318,
+    "coste": 3180000,
+    "capacidad_bonus": 318
+  },
+  {
+    "nivel": 319,
+    "coste": 3190000,
+    "capacidad_bonus": 319
+  },
+  {
+    "nivel": 320,
+    "coste": 3200000,
+    "capacidad_bonus": 320
+  },
+  {
+    "nivel": 321,
+    "coste": 3210000,
+    "capacidad_bonus": 321
+  },
+  {
+    "nivel": 322,
+    "coste": 3220000,
+    "capacidad_bonus": 322
+  },
+  {
+    "nivel": 323,
+    "coste": 3230000,
+    "capacidad_bonus": 323
+  },
+  {
+    "nivel": 324,
+    "coste": 3240000,
+    "capacidad_bonus": 324
+  },
+  {
+    "nivel": 325,
+    "coste": 3250000,
+    "capacidad_bonus": 325
+  },
+  {
+    "nivel": 326,
+    "coste": 3260000,
+    "capacidad_bonus": 326
+  },
+  {
+    "nivel": 327,
+    "coste": 3270000,
+    "capacidad_bonus": 327
+  },
+  {
+    "nivel": 328,
+    "coste": 3280000,
+    "capacidad_bonus": 328
+  },
+  {
+    "nivel": 329,
+    "coste": 3290000,
+    "capacidad_bonus": 329
+  },
+  {
+    "nivel": 330,
+    "coste": 3300000,
+    "capacidad_bonus": 330
+  },
+  {
+    "nivel": 331,
+    "coste": 3310000,
+    "capacidad_bonus": 331
+  },
+  {
+    "nivel": 332,
+    "coste": 3320000,
+    "capacidad_bonus": 332
+  },
+  {
+    "nivel": 333,
+    "coste": 3330000,
+    "capacidad_bonus": 333
+  },
+  {
+    "nivel": 334,
+    "coste": 3340000,
+    "capacidad_bonus": 334
+  },
+  {
+    "nivel": 335,
+    "coste": 3350000,
+    "capacidad_bonus": 335
+  },
+  {
+    "nivel": 336,
+    "coste": 3360000,
+    "capacidad_bonus": 336
+  },
+  {
+    "nivel": 337,
+    "coste": 3370000,
+    "capacidad_bonus": 337
+  },
+  {
+    "nivel": 338,
+    "coste": 3380000,
+    "capacidad_bonus": 338
+  },
+  {
+    "nivel": 339,
+    "coste": 3390000,
+    "capacidad_bonus": 339
+  },
+  {
+    "nivel": 340,
+    "coste": 3400000,
+    "capacidad_bonus": 340
+  },
+  {
+    "nivel": 341,
+    "coste": 3410000,
+    "capacidad_bonus": 341
+  },
+  {
+    "nivel": 342,
+    "coste": 3420000,
+    "capacidad_bonus": 342
+  },
+  {
+    "nivel": 343,
+    "coste": 3430000,
+    "capacidad_bonus": 343
+  },
+  {
+    "nivel": 344,
+    "coste": 3440000,
+    "capacidad_bonus": 344
+  },
+  {
+    "nivel": 345,
+    "coste": 3450000,
+    "capacidad_bonus": 345
+  },
+  {
+    "nivel": 346,
+    "coste": 3460000,
+    "capacidad_bonus": 346
+  },
+  {
+    "nivel": 347,
+    "coste": 3470000,
+    "capacidad_bonus": 347
+  },
+  {
+    "nivel": 348,
+    "coste": 3480000,
+    "capacidad_bonus": 348
+  },
+  {
+    "nivel": 349,
+    "coste": 3490000,
+    "capacidad_bonus": 349
+  },
+  {
+    "nivel": 350,
+    "coste": 3500000,
+    "capacidad_bonus": 350
+  },
+  {
+    "nivel": 351,
+    "coste": 3510000,
+    "capacidad_bonus": 351
+  },
+  {
+    "nivel": 352,
+    "coste": 3520000,
+    "capacidad_bonus": 352
+  },
+  {
+    "nivel": 353,
+    "coste": 3530000,
+    "capacidad_bonus": 353
+  },
+  {
+    "nivel": 354,
+    "coste": 3540000,
+    "capacidad_bonus": 354
+  },
+  {
+    "nivel": 355,
+    "coste": 3550000,
+    "capacidad_bonus": 355
+  },
+  {
+    "nivel": 356,
+    "coste": 3560000,
+    "capacidad_bonus": 356
+  },
+  {
+    "nivel": 357,
+    "coste": 3570000,
+    "capacidad_bonus": 357
+  },
+  {
+    "nivel": 358,
+    "coste": 3580000,
+    "capacidad_bonus": 358
+  },
+  {
+    "nivel": 359,
+    "coste": 3590000,
+    "capacidad_bonus": 359
+  },
+  {
+    "nivel": 360,
+    "coste": 3600000,
+    "capacidad_bonus": 360
+  },
+  {
+    "nivel": 361,
+    "coste": 3610000,
+    "capacidad_bonus": 361
+  },
+  {
+    "nivel": 362,
+    "coste": 3620000,
+    "capacidad_bonus": 362
+  },
+  {
+    "nivel": 363,
+    "coste": 3630000,
+    "capacidad_bonus": 363
+  },
+  {
+    "nivel": 364,
+    "coste": 3640000,
+    "capacidad_bonus": 364
+  },
+  {
+    "nivel": 365,
+    "coste": 3650000,
+    "capacidad_bonus": 365
+  },
+  {
+    "nivel": 366,
+    "coste": 3660000,
+    "capacidad_bonus": 366
+  },
+  {
+    "nivel": 367,
+    "coste": 3670000,
+    "capacidad_bonus": 367
+  },
+  {
+    "nivel": 368,
+    "coste": 3680000,
+    "capacidad_bonus": 368
+  },
+  {
+    "nivel": 369,
+    "coste": 3690000,
+    "capacidad_bonus": 369
+  },
+  {
+    "nivel": 370,
+    "coste": 3700000,
+    "capacidad_bonus": 370
+  },
+  {
+    "nivel": 371,
+    "coste": 3710000,
+    "capacidad_bonus": 371
+  },
+  {
+    "nivel": 372,
+    "coste": 3720000,
+    "capacidad_bonus": 372
+  },
+  {
+    "nivel": 373,
+    "coste": 3730000,
+    "capacidad_bonus": 373
+  },
+  {
+    "nivel": 374,
+    "coste": 3740000,
+    "capacidad_bonus": 374
+  },
+  {
+    "nivel": 375,
+    "coste": 3750000,
+    "capacidad_bonus": 375
+  },
+  {
+    "nivel": 376,
+    "coste": 3760000,
+    "capacidad_bonus": 376
+  },
+  {
+    "nivel": 377,
+    "coste": 3770000,
+    "capacidad_bonus": 377
+  },
+  {
+    "nivel": 378,
+    "coste": 3780000,
+    "capacidad_bonus": 378
+  },
+  {
+    "nivel": 379,
+    "coste": 3790000,
+    "capacidad_bonus": 379
+  },
+  {
+    "nivel": 380,
+    "coste": 3800000,
+    "capacidad_bonus": 380
+  },
+  {
+    "nivel": 381,
+    "coste": 3810000,
+    "capacidad_bonus": 381
+  },
+  {
+    "nivel": 382,
+    "coste": 3820000,
+    "capacidad_bonus": 382
+  },
+  {
+    "nivel": 383,
+    "coste": 3830000,
+    "capacidad_bonus": 383
+  },
+  {
+    "nivel": 384,
+    "coste": 3840000,
+    "capacidad_bonus": 384
+  },
+  {
+    "nivel": 385,
+    "coste": 3850000,
+    "capacidad_bonus": 385
+  },
+  {
+    "nivel": 386,
+    "coste": 3860000,
+    "capacidad_bonus": 386
+  },
+  {
+    "nivel": 387,
+    "coste": 3870000,
+    "capacidad_bonus": 387
+  },
+  {
+    "nivel": 388,
+    "coste": 3880000,
+    "capacidad_bonus": 388
+  },
+  {
+    "nivel": 389,
+    "coste": 3890000,
+    "capacidad_bonus": 389
+  },
+  {
+    "nivel": 390,
+    "coste": 3900000,
+    "capacidad_bonus": 390
+  },
+  {
+    "nivel": 391,
+    "coste": 3910000,
+    "capacidad_bonus": 391
+  },
+  {
+    "nivel": 392,
+    "coste": 3920000,
+    "capacidad_bonus": 392
+  },
+  {
+    "nivel": 393,
+    "coste": 3930000,
+    "capacidad_bonus": 393
+  },
+  {
+    "nivel": 394,
+    "coste": 3940000,
+    "capacidad_bonus": 394
+  },
+  {
+    "nivel": 395,
+    "coste": 3950000,
+    "capacidad_bonus": 395
+  },
+  {
+    "nivel": 396,
+    "coste": 3960000,
+    "capacidad_bonus": 396
+  },
+  {
+    "nivel": 397,
+    "coste": 3970000,
+    "capacidad_bonus": 397
+  },
+  {
+    "nivel": 398,
+    "coste": 3980000,
+    "capacidad_bonus": 398
+  },
+  {
+    "nivel": 399,
+    "coste": 3990000,
+    "capacidad_bonus": 399
+  },
+  {
+    "nivel": 400,
+    "coste": 4000000,
+    "capacidad_bonus": 400
+  },
+  {
+    "nivel": 401,
+    "coste": 4010000,
+    "capacidad_bonus": 401
+  },
+  {
+    "nivel": 402,
+    "coste": 4020000,
+    "capacidad_bonus": 402
+  },
+  {
+    "nivel": 403,
+    "coste": 4030000,
+    "capacidad_bonus": 403
+  },
+  {
+    "nivel": 404,
+    "coste": 4040000,
+    "capacidad_bonus": 404
+  },
+  {
+    "nivel": 405,
+    "coste": 4050000,
+    "capacidad_bonus": 405
+  },
+  {
+    "nivel": 406,
+    "coste": 4060000,
+    "capacidad_bonus": 406
+  },
+  {
+    "nivel": 407,
+    "coste": 4070000,
+    "capacidad_bonus": 407
+  },
+  {
+    "nivel": 408,
+    "coste": 4080000,
+    "capacidad_bonus": 408
+  },
+  {
+    "nivel": 409,
+    "coste": 4090000,
+    "capacidad_bonus": 409
+  },
+  {
+    "nivel": 410,
+    "coste": 4100000,
+    "capacidad_bonus": 410
+  },
+  {
+    "nivel": 411,
+    "coste": 4110000,
+    "capacidad_bonus": 411
+  },
+  {
+    "nivel": 412,
+    "coste": 4120000,
+    "capacidad_bonus": 412
+  },
+  {
+    "nivel": 413,
+    "coste": 4130000,
+    "capacidad_bonus": 413
+  },
+  {
+    "nivel": 414,
+    "coste": 4140000,
+    "capacidad_bonus": 414
+  },
+  {
+    "nivel": 415,
+    "coste": 4150000,
+    "capacidad_bonus": 415
+  },
+  {
+    "nivel": 416,
+    "coste": 4160000,
+    "capacidad_bonus": 416
+  },
+  {
+    "nivel": 417,
+    "coste": 4170000,
+    "capacidad_bonus": 417
+  },
+  {
+    "nivel": 418,
+    "coste": 4180000,
+    "capacidad_bonus": 418
+  },
+  {
+    "nivel": 419,
+    "coste": 4190000,
+    "capacidad_bonus": 419
+  },
+  {
+    "nivel": 420,
+    "coste": 4200000,
+    "capacidad_bonus": 420
+  },
+  {
+    "nivel": 421,
+    "coste": 4210000,
+    "capacidad_bonus": 421
+  },
+  {
+    "nivel": 422,
+    "coste": 4220000,
+    "capacidad_bonus": 422
+  },
+  {
+    "nivel": 423,
+    "coste": 4230000,
+    "capacidad_bonus": 423
+  },
+  {
+    "nivel": 424,
+    "coste": 4240000,
+    "capacidad_bonus": 424
+  },
+  {
+    "nivel": 425,
+    "coste": 4250000,
+    "capacidad_bonus": 425
+  },
+  {
+    "nivel": 426,
+    "coste": 4260000,
+    "capacidad_bonus": 426
+  },
+  {
+    "nivel": 427,
+    "coste": 4270000,
+    "capacidad_bonus": 427
+  },
+  {
+    "nivel": 428,
+    "coste": 4280000,
+    "capacidad_bonus": 428
+  },
+  {
+    "nivel": 429,
+    "coste": 4290000,
+    "capacidad_bonus": 429
+  },
+  {
+    "nivel": 430,
+    "coste": 4300000,
+    "capacidad_bonus": 430
+  },
+  {
+    "nivel": 431,
+    "coste": 4310000,
+    "capacidad_bonus": 431
+  },
+  {
+    "nivel": 432,
+    "coste": 4320000,
+    "capacidad_bonus": 432
+  },
+  {
+    "nivel": 433,
+    "coste": 4330000,
+    "capacidad_bonus": 433
+  },
+  {
+    "nivel": 434,
+    "coste": 4340000,
+    "capacidad_bonus": 434
+  },
+  {
+    "nivel": 435,
+    "coste": 4350000,
+    "capacidad_bonus": 435
+  },
+  {
+    "nivel": 436,
+    "coste": 4360000,
+    "capacidad_bonus": 436
+  },
+  {
+    "nivel": 437,
+    "coste": 4370000,
+    "capacidad_bonus": 437
+  },
+  {
+    "nivel": 438,
+    "coste": 4380000,
+    "capacidad_bonus": 438
+  },
+  {
+    "nivel": 439,
+    "coste": 4390000,
+    "capacidad_bonus": 439
+  },
+  {
+    "nivel": 440,
+    "coste": 4400000,
+    "capacidad_bonus": 440
+  },
+  {
+    "nivel": 441,
+    "coste": 4410000,
+    "capacidad_bonus": 441
+  },
+  {
+    "nivel": 442,
+    "coste": 4420000,
+    "capacidad_bonus": 442
+  },
+  {
+    "nivel": 443,
+    "coste": 4430000,
+    "capacidad_bonus": 443
+  },
+  {
+    "nivel": 444,
+    "coste": 4440000,
+    "capacidad_bonus": 444
+  },
+  {
+    "nivel": 445,
+    "coste": 4450000,
+    "capacidad_bonus": 445
+  },
+  {
+    "nivel": 446,
+    "coste": 4460000,
+    "capacidad_bonus": 446
+  },
+  {
+    "nivel": 447,
+    "coste": 4470000,
+    "capacidad_bonus": 447
+  },
+  {
+    "nivel": 448,
+    "coste": 4480000,
+    "capacidad_bonus": 448
+  },
+  {
+    "nivel": 449,
+    "coste": 4490000,
+    "capacidad_bonus": 449
+  },
+  {
+    "nivel": 450,
+    "coste": 4500000,
+    "capacidad_bonus": 450
+  },
+  {
+    "nivel": 451,
+    "coste": 4510000,
+    "capacidad_bonus": 451
+  },
+  {
+    "nivel": 452,
+    "coste": 4520000,
+    "capacidad_bonus": 452
+  },
+  {
+    "nivel": 453,
+    "coste": 4530000,
+    "capacidad_bonus": 453
+  },
+  {
+    "nivel": 454,
+    "coste": 4540000,
+    "capacidad_bonus": 454
+  },
+  {
+    "nivel": 455,
+    "coste": 4550000,
+    "capacidad_bonus": 455
+  },
+  {
+    "nivel": 456,
+    "coste": 4560000,
+    "capacidad_bonus": 456
+  },
+  {
+    "nivel": 457,
+    "coste": 4570000,
+    "capacidad_bonus": 457
+  },
+  {
+    "nivel": 458,
+    "coste": 4580000,
+    "capacidad_bonus": 458
+  },
+  {
+    "nivel": 459,
+    "coste": 4590000,
+    "capacidad_bonus": 459
+  },
+  {
+    "nivel": 460,
+    "coste": 4600000,
+    "capacidad_bonus": 460
+  },
+  {
+    "nivel": 461,
+    "coste": 4610000,
+    "capacidad_bonus": 461
+  },
+  {
+    "nivel": 462,
+    "coste": 4620000,
+    "capacidad_bonus": 462
+  },
+  {
+    "nivel": 463,
+    "coste": 4630000,
+    "capacidad_bonus": 463
+  },
+  {
+    "nivel": 464,
+    "coste": 4640000,
+    "capacidad_bonus": 464
+  },
+  {
+    "nivel": 465,
+    "coste": 4650000,
+    "capacidad_bonus": 465
+  },
+  {
+    "nivel": 466,
+    "coste": 4660000,
+    "capacidad_bonus": 466
+  },
+  {
+    "nivel": 467,
+    "coste": 4670000,
+    "capacidad_bonus": 467
+  },
+  {
+    "nivel": 468,
+    "coste": 4680000,
+    "capacidad_bonus": 468
+  },
+  {
+    "nivel": 469,
+    "coste": 4690000,
+    "capacidad_bonus": 469
+  },
+  {
+    "nivel": 470,
+    "coste": 4700000,
+    "capacidad_bonus": 470
+  },
+  {
+    "nivel": 471,
+    "coste": 4710000,
+    "capacidad_bonus": 471
+  },
+  {
+    "nivel": 472,
+    "coste": 4720000,
+    "capacidad_bonus": 472
+  },
+  {
+    "nivel": 473,
+    "coste": 4730000,
+    "capacidad_bonus": 473
+  },
+  {
+    "nivel": 474,
+    "coste": 4740000,
+    "capacidad_bonus": 474
+  },
+  {
+    "nivel": 475,
+    "coste": 4750000,
+    "capacidad_bonus": 475
+  },
+  {
+    "nivel": 476,
+    "coste": 4760000,
+    "capacidad_bonus": 476
+  },
+  {
+    "nivel": 477,
+    "coste": 4770000,
+    "capacidad_bonus": 477
+  },
+  {
+    "nivel": 478,
+    "coste": 4780000,
+    "capacidad_bonus": 478
+  },
+  {
+    "nivel": 479,
+    "coste": 4790000,
+    "capacidad_bonus": 479
+  },
+  {
+    "nivel": 480,
+    "coste": 4800000,
+    "capacidad_bonus": 480
+  },
+  {
+    "nivel": 481,
+    "coste": 4810000,
+    "capacidad_bonus": 481
+  },
+  {
+    "nivel": 482,
+    "coste": 4820000,
+    "capacidad_bonus": 482
+  },
+  {
+    "nivel": 483,
+    "coste": 4830000,
+    "capacidad_bonus": 483
+  },
+  {
+    "nivel": 484,
+    "coste": 4840000,
+    "capacidad_bonus": 484
+  },
+  {
+    "nivel": 485,
+    "coste": 4850000,
+    "capacidad_bonus": 485
+  },
+  {
+    "nivel": 486,
+    "coste": 4860000,
+    "capacidad_bonus": 486
+  },
+  {
+    "nivel": 487,
+    "coste": 4870000,
+    "capacidad_bonus": 487
+  },
+  {
+    "nivel": 488,
+    "coste": 4880000,
+    "capacidad_bonus": 488
+  },
+  {
+    "nivel": 489,
+    "coste": 4890000,
+    "capacidad_bonus": 489
+  },
+  {
+    "nivel": 490,
+    "coste": 4900000,
+    "capacidad_bonus": 490
+  },
+  {
+    "nivel": 491,
+    "coste": 4910000,
+    "capacidad_bonus": 491
+  },
+  {
+    "nivel": 492,
+    "coste": 4920000,
+    "capacidad_bonus": 492
+  },
+  {
+    "nivel": 493,
+    "coste": 4930000,
+    "capacidad_bonus": 493
+  },
+  {
+    "nivel": 494,
+    "coste": 4940000,
+    "capacidad_bonus": 494
+  },
+  {
+    "nivel": 495,
+    "coste": 4950000,
+    "capacidad_bonus": 495
+  },
+  {
+    "nivel": 496,
+    "coste": 4960000,
+    "capacidad_bonus": 496
+  },
+  {
+    "nivel": 497,
+    "coste": 4970000,
+    "capacidad_bonus": 497
+  },
+  {
+    "nivel": 498,
+    "coste": 4980000,
+    "capacidad_bonus": 498
+  },
+  {
+    "nivel": 499,
+    "coste": 4990000,
+    "capacidad_bonus": 499
+  },
+  {
+    "nivel": 500,
+    "coste": 5000000,
+    "capacidad_bonus": 500
+  }
+]

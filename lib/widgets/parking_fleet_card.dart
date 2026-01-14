@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/fleet_service.dart';
+import 'package:industrial_app/data/fleet_level/fleet_level.dart';
 
 import 'package:industrial_app/screens/buy_truck.dart';
 import 'package:industrial_app/screens/buy_driver.dart';
@@ -154,10 +157,6 @@ class ParkingFleetCard extends StatelessWidget {
             containerId != null &&
             containerId.toString().trim().isNotEmpty);
 
-    debugPrint(
-      'FleetCard - status: $status, showActionButtons: $showActionButtons, locationName: $locationName',
-    );
-
     return Stack(
       children: [
         Positioned.fill(
@@ -255,12 +254,7 @@ class ParkingFleetCard extends StatelessWidget {
 
   Widget _buildLevelButton(BuildContext context, double width, double height) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const FleetLevelScreen()),
-        );
-      },
+      onTap: () => _handleFleetLevelUpgrade(context),
       child: Container(
         width: width,
         height: height,
@@ -288,6 +282,112 @@ class ParkingFleetCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleFleetLevelUpgrade(BuildContext context) async {
+    final currentLevel = (firestoreData?['fleetLevel'] as int?) ?? 0;
+    final nextLevel = currentLevel + 1;
+
+    try {
+      // Obtener información del siguiente nivel
+      final nextLevelData = await FleetLevelRepository.getFleetLevel(nextLevel);
+      if (nextLevelData == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Has alcanzado el nivel máximo'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+        return;
+      }
+
+      final upgradeCost = nextLevelData.coste;
+
+      if (context.mounted) {
+        final bool? success = await showDialog<bool>(
+          context: context,
+          builder: (context) => GenericPurchaseDialog(
+            title: 'MEJORAR FLOTA',
+            description:
+                '¿Deseas mejorar la flota al nivel $nextLevel?\n\nAumento de capacidad: +100%',
+            price: upgradeCost,
+            priceType: UnlockCostType.money,
+            onConfirm: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) throw Exception('Usuario no identificado');
+
+              final userDocRef = FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid);
+              final fleetDocRef = FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid)
+                  .collection('fleet_users')
+                  .doc(user.uid);
+
+              await FirebaseFirestore.instance.runTransaction((
+                transaction,
+              ) async {
+                final userSnapshot = await transaction.get(userDocRef);
+                final fleetSnapshot = await transaction.get(fleetDocRef);
+
+                if (!userSnapshot.exists)
+                  throw Exception('Usuario no encontrado');
+                if (!fleetSnapshot.exists)
+                  throw Exception('Datos de flota no encontrados');
+
+                // Verificar fondos
+                final userData = userSnapshot.data()!;
+                final currentMoney = (userData['dinero'] as num?)?.toInt() ?? 0;
+
+                if (currentMoney < upgradeCost) {
+                  throw Exception('Dinero insuficiente');
+                }
+
+                // Actualizar dinero
+                transaction.update(userDocRef, {
+                  'dinero': currentMoney - upgradeCost,
+                });
+
+                // Actualizar nivel de flota
+                final fleetData = fleetSnapshot.data()! as Map<String, dynamic>;
+                List<dynamic> slots = List.from(fleetData['slots'] ?? []);
+
+                final slotIndex = slots.indexWhere(
+                  (s) => s['fleetId'] == fleetId,
+                );
+                if (slotIndex != -1) {
+                  Map<String, dynamic> updatedSlot = Map<String, dynamic>.from(
+                    slots[slotIndex],
+                  );
+                  updatedSlot['fleetLevel'] = nextLevel;
+                  slots[slotIndex] = updatedSlot;
+
+                  transaction.update(fleetDocRef, {'slots': slots});
+                }
+              });
+            },
+          ),
+        );
+
+        if (success == true && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Flota mejorada al nivel $nextLevel'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
   }
 
   Widget _buildBottomButton({
@@ -402,7 +502,21 @@ class ParkingFleetCard extends StatelessWidget {
           showOverlay: noContainer,
           onTap: () {
             if (noContainer) {
-              // Si no hay contenedor, ir a buy_container
+              // Verificar si hay camión asignado antes de permitir compra de contenedor
+              if (noTruck) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Debes asignar un camión antes de comprar un contenedor',
+                    ),
+                    backgroundColor: Colors.orange,
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+                return;
+              }
+
+              // Si hay camión, ir a buy_container
               Navigator.push(
                 context,
                 MaterialPageRoute(

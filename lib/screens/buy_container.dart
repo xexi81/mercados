@@ -24,7 +24,62 @@ class _BuyContainerScreenState extends State<BuyContainerScreen> {
   @override
   void initState() {
     super.initState();
-    _containersFuture = _loadContainers();
+    _containersFuture = _loadCompatibleContainers();
+  }
+
+  Future<List<ContainerModel>> _loadCompatibleContainers() async {
+    try {
+      // Primero obtenemos el truckId asignado a esta flota
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) throw Exception('Usuario no identificado');
+
+      final fleetDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('fleet_users')
+          .doc(user.uid);
+
+      final fleetDoc = await fleetDocRef.get();
+      if (!fleetDoc.exists) {
+        throw Exception('Datos de flota no encontrados');
+      }
+
+      final fleetData = fleetDoc.data()!;
+      final List<dynamic> slots = fleetData['slots'] ?? [];
+
+      final currentSlot = slots.firstWhere(
+        (s) => s['fleetId'] == widget.fleetId,
+        orElse: () => null,
+      );
+
+      if (currentSlot == null) {
+        throw Exception('Slot de flota no encontrado');
+      }
+
+      final truckId = currentSlot['truckId'];
+      if (truckId == null || truckId.toString().trim().isEmpty) {
+        throw Exception('Debes asignar un camión antes de ver contenedores');
+      }
+
+      // Cargar datos del camión para obtener allowedContainers
+      final truck = await _getTruckById(truckId);
+      if (truck == null) {
+        throw Exception('Camión no encontrado');
+      }
+
+      // Cargar todos los contenedores y filtrar por compatibilidad
+      final allContainers = await _loadContainers();
+      final compatibleContainers = allContainers
+          .where(
+            (container) => truck.allowedContainers.contains(container.type),
+          )
+          .toList();
+
+      return compatibleContainers;
+    } catch (e) {
+      debugPrint('Error loading compatible containers: $e');
+      return [];
+    }
   }
 
   Future<List<ContainerModel>> _loadContainers() async {
@@ -117,16 +172,10 @@ class _BuyContainerScreenState extends State<BuyContainerScreen> {
               );
             }
 
-            // 3. Validate container type is allowed by truck
+            // 3. Validate truck still exists (containers are already filtered by compatibility)
             final truck = await _getTruckById(truckId);
             if (truck == null) {
               throw Exception('Camión no encontrado');
-            }
-
-            if (!truck.allowedContainers.contains(container.type)) {
-              throw Exception(
-                'Este contenedor no es compatible con el camión ${truck.name}',
-              );
             }
 
             // 4. Process User Funds
@@ -188,9 +237,23 @@ class _BuyContainerScreenState extends State<BuyContainerScreen> {
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-              child: Text(
-                'No hay contenedores disponibles',
-                style: TextStyle(color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.info_outline, size: 64, color: Colors.white70),
+                  SizedBox(height: 16),
+                  Text(
+                    'No hay contenedores compatibles',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Asigna un camión a esta flota primero\no no hay contenedores compatibles disponibles',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             );
           }
@@ -371,6 +434,55 @@ class _ContainerCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                // Container Type MiniCard at bottom center
+                Positioned(
+                  bottom: 12,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            backgroundColor: AppColors.surface,
+                            title: Text(
+                              'Tipo de contenedor',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            content: Text(
+                              container.type.displayName,
+                              style: const TextStyle(color: Colors.white70),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Image.asset(
+                            'assets/images/containers/${container.type.name}.png',
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.inventory_2,
+                              color: Colors.white.withOpacity(0.7),
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -406,12 +518,6 @@ class _CharacteristicCard extends StatelessWidget {
               description,
               style: const TextStyle(color: Colors.white70),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cerrar'),
-              ),
-            ],
           ),
         );
       },
