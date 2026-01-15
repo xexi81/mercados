@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class IndustrialButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color gradientTop;
   final Color gradientBottom;
   final Color borderColor;

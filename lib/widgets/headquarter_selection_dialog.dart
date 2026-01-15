@@ -51,9 +51,10 @@ class _HeadquarterSelectionDialogState
       _isLoading = true;
     });
 
-    final locations = await LocationsRepository.loadLocationsByCountry(
-      country.code,
-    );
+    final locations =
+        await LocationsRepository.loadHeadquarterLocationsByCountry(
+          country.code,
+        );
     locations.sort((a, b) => a.city.compareTo(b.city));
 
     if (mounted) {
@@ -62,6 +63,10 @@ class _HeadquarterSelectionDialogState
         _isLoading = false;
       });
     }
+  }
+
+  void _handleSaveHeadquarter() {
+    _saveHeadquarter();
   }
 
   Future<void> _saveHeadquarter() async {
@@ -187,17 +192,17 @@ class _HeadquarterSelectionDialogState
                         width: double.infinity,
                         height: 55,
                         gradientTop: _selectedLocation != null
-                            ? Colors.green[400]!
-                            : Colors.red[400]!,
+                            ? Colors.green[600]!
+                            : Colors.green[400]!,
                         gradientBottom: _selectedLocation != null
-                            ? Colors.green[900]!
-                            : Colors.red[900]!,
+                            ? Colors.green[800]!
+                            : Colors.green[900]!,
                         borderColor: _selectedLocation != null
                             ? Colors.green[700]!
-                            : Colors.red[700]!,
+                            : Colors.green[700]!,
                         onPressed: _selectedLocation != null && !_isLoading
-                            ? _saveHeadquarter
-                            : () {}, // Do nothing if not ready
+                            ? _handleSaveHeadquarter
+                            : null,
                       ),
                     ],
                   ],
