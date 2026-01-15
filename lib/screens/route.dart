@@ -12,7 +12,9 @@ import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/fleet/fleet_status.dart';
 
 class RouteScreen extends StatefulWidget {
-  const RouteScreen({super.key});
+  final int fleetId;
+
+  const RouteScreen({super.key, required this.fleetId});
 
   @override
   State<RouteScreen> createState() => _RouteScreenState();
@@ -74,9 +76,16 @@ class _RouteScreenState extends State<RouteScreen> {
       if (_fleetData != null) {
         final slots = _fleetData!['slots'] as List<dynamic>? ?? [];
         if (slots.isNotEmpty) {
-          final firstSlot = slots.first as Map<String, dynamic>;
+          // Find the slot that matches the fleetId
+          final targetSlot =
+              slots.firstWhere(
+                    (s) => s['fleetId'] == widget.fleetId,
+                    orElse: () => null,
+                  )
+                  as Map<String, dynamic>?;
+
           final currentLoc =
-              firstSlot['currentLocation'] as Map<String, dynamic>?;
+              targetSlot?['currentLocation'] as Map<String, dynamic>?;
 
           if (currentLoc != null) {
             final double lat = (currentLoc['latitude'] as num).toDouble();
@@ -207,12 +216,19 @@ class _RouteScreenState extends State<RouteScreen> {
         _fleetData!['slots'] ?? [],
       );
       if (updatedSlots.isNotEmpty) {
-        updatedSlots[0]['destinyLocation'] = {
-          'latitude': destination.latitude,
-          'longitude': destination.longitude,
-        };
-        updatedSlots[0]['distanceRemaining'] = distance;
-        updatedSlots[0]['status'] = FleetStatus.enMarcha.value;
+        // Find the slot that matches the current fleetId
+        final slotIndex = updatedSlots.indexWhere(
+          (s) => s['fleetId'] == widget.fleetId,
+        );
+
+        if (slotIndex != -1) {
+          updatedSlots[slotIndex]['destinyLocation'] = {
+            'latitude': destination.latitude,
+            'longitude': destination.longitude,
+          };
+          updatedSlots[slotIndex]['distanceRemaining'] = distance;
+          updatedSlots[slotIndex]['status'] = FleetStatus.enMarcha.value;
+        }
       }
 
       transaction.update(fleetDocRef, {

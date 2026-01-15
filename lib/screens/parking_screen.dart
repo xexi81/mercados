@@ -21,6 +21,7 @@ class ParkingScreen extends StatefulWidget {
 
 class _ParkingScreenState extends State<ParkingScreen> {
   List<FleetModel> _fleetConfigs = [];
+  List<LocationModel> _locations = [];
   bool _isDataLoaded = false;
 
   @override
@@ -30,13 +31,24 @@ class _ParkingScreenState extends State<ParkingScreen> {
   }
 
   Future<void> _initData() async {
-    final fleets = await FleetRepository.loadFleets();
-    if (mounted) {
-      setState(() {
-        _fleetConfigs = fleets;
-        _isDataLoaded = true;
-      });
-      _checkHeadquarter();
+    try {
+      final fleets = await FleetRepository.loadFleets();
+      final locations = await LocationsRepository.loadLocations();
+      if (mounted) {
+        setState(() {
+          _fleetConfigs = fleets;
+          _locations = locations;
+          _isDataLoaded = true;
+        });
+        _checkHeadquarter();
+      }
+    } catch (e) {
+      debugPrint('Error loading initial data: $e');
+      if (mounted) {
+        setState(() {
+          _isDataLoaded = true; // Set to true even on error to show the UI
+        });
+      }
     }
   }
 
@@ -108,155 +120,146 @@ class _ParkingScreenState extends State<ParkingScreen> {
         final int level = ExperienceService.getLevelFromExperience(experience);
         final String? hqId = userData?['headquarter_id']?.toString();
 
-        return FutureBuilder<List<LocationModel>>(
-          future: LocationsRepository.loadLocations(),
-          builder: (context, locationsSnapshot) {
-            double? hqLat;
-            double? hqLng;
+        double? hqLat;
+        double? hqLng;
 
-            if (locationsSnapshot.hasData && hqId != null) {
-              try {
-                final hq = locationsSnapshot.data!.firstWhere(
-                  (l) => l.id.toString() == hqId,
-                );
-                hqLat = hq.latitude;
-                hqLng = hq.longitude;
-              } catch (_) {}
+        if (_locations.isNotEmpty && hqId != null) {
+          try {
+            final hq = _locations.firstWhere((l) => l.id.toString() == hqId);
+            hqLat = hq.latitude;
+            hqLng = hq.longitude;
+          } catch (_) {}
+        }
+
+        return StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user.uid)
+              .collection('fleet_users')
+              .doc(user.uid)
+              .snapshots(),
+          builder: (context, fleetSnapshot) {
+            Map<String, dynamic> fleetMap = {};
+            if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
+              fleetMap =
+                  fleetSnapshot.data?.data() as Map<String, dynamic>? ?? {};
             }
 
-            return StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('usuarios')
-                  .doc(user.uid)
-                  .collection('fleet_users')
-                  .doc(user.uid)
-                  .snapshots(),
-              builder: (context, fleetSnapshot) {
-                Map<String, dynamic> fleetMap = {};
-                if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
-                  fleetMap =
-                      fleetSnapshot.data?.data() as Map<String, dynamic>? ?? {};
-                }
+            final List<dynamic> slots = fleetMap['slots'] ?? [];
 
-                final List<dynamic> slots = fleetMap['slots'] ?? [];
+            // Check if any fleet is at a market location
+            bool isAnyFleetAtMarket = false;
+            // Check if any fleet is at headquarter location
+            bool isAnyFleetAtHeadquarter = false;
 
-                // Check if any fleet is at a market location
-                bool isAnyFleetAtMarket = false;
-                // Check if any fleet is at headquarter location
-                bool isAnyFleetAtHeadquarter = false;
+            if (_locations.isNotEmpty) {
+              for (final slot in slots) {
+                final status = slot['status'];
+                final currentLocation = slot['currentLocation'];
 
-                if (locationsSnapshot.hasData) {
-                  for (final slot in slots) {
-                    final status = slot['status'];
-                    final currentLocation = slot['currentLocation'];
+                if (status == 'en destino' && currentLocation != null) {
+                  try {
+                    final double lat = (currentLocation['latitude'] as num)
+                        .toDouble();
+                    final double lng = (currentLocation['longitude'] as num)
+                        .toDouble();
 
-                    if (status == 'en destino' && currentLocation != null) {
-                      try {
-                        final double lat = (currentLocation['latitude'] as num)
-                            .toDouble();
-                        final double lng = (currentLocation['longitude'] as num)
-                            .toDouble();
-
-                        // Check if at headquarter
-                        if (hqLat != null &&
-                            hqLng != null &&
-                            lat == hqLat &&
-                            lng == hqLng) {
-                          isAnyFleetAtHeadquarter = true;
-                        }
-
-                        // Find location with matching coordinates
-                        final location = locationsSnapshot.data!.firstWhere(
-                          (l) => l.latitude == lat && l.longitude == lng,
-                        );
-
-                        if (location.hasMarket) {
-                          isAnyFleetAtMarket = true;
-                        }
-                      } catch (e) {
-                        // Location not found, continue checking others
-                      }
+                    // Check if at headquarter
+                    if (hqLat != null &&
+                        hqLng != null &&
+                        lat == hqLat &&
+                        lng == hqLng) {
+                      isAnyFleetAtHeadquarter = true;
                     }
+
+                    // Find location with matching coordinates
+                    final location = _locations.firstWhere(
+                      (l) => l.latitude == lat && l.longitude == lng,
+                    );
+
+                    if (location.hasMarket) {
+                      isAnyFleetAtMarket = true;
+                    }
+                  } catch (e) {
+                    // Location not found, continue checking others
                   }
                 }
+              }
+            }
 
-                return Scaffold(
-                  appBar: const CustomGameAppBar(),
-                  backgroundColor: AppColors.surface,
-                  body: GridView.builder(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 12,
-                      bottom: 80,
+            return Scaffold(
+              appBar: const CustomGameAppBar(),
+              backgroundColor: AppColors.surface,
+              body: GridView.builder(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 12,
+                  bottom: 80,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 2.0,
+                ),
+                itemCount: 20,
+                itemBuilder: (context, index) {
+                  final fleetId = index + 1;
+                  final config = _fleetConfigs.firstWhere(
+                    (f) => f.fleetId == fleetId,
+                    orElse: () => FleetModel(
+                      fleetId: fleetId,
+                      name: 'Unknown',
+                      requiredLevel: 999,
+                      unlockCost: _fleetConfigs.first.unlockCost,
+                      unlockedByDefault: false,
                     ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          crossAxisSpacing: 0,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 2.0,
-                        ),
-                    itemCount: 20,
-                    itemBuilder: (context, index) {
-                      final fleetId = index + 1;
-                      final config = _fleetConfigs.firstWhere(
-                        (f) => f.fleetId == fleetId,
-                        orElse: () => FleetModel(
-                          fleetId: fleetId,
-                          name: 'Unknown',
-                          requiredLevel: 999,
-                          unlockCost: _fleetConfigs.first.unlockCost,
-                          unlockedByDefault: false,
-                        ),
+                  );
+
+                  final Map<String, dynamic>? cardData =
+                      slots.firstWhere(
+                            (s) => s['fleetId'] == fleetId,
+                            orElse: () => null,
+                          )
+                          as Map<String, dynamic>?;
+
+                  String? fleetLocationName;
+                  final String? status = cardData?['status'];
+                  final dynamic currentLocation = cardData?['currentLocation'];
+
+                  // If occupied and 'en destino', try to find location name
+                  if (status == 'en destino' &&
+                      currentLocation != null &&
+                      _locations.isNotEmpty) {
+                    try {
+                      final double lat = (currentLocation['latitude'] as num)
+                          .toDouble();
+                      final double lng = (currentLocation['longitude'] as num)
+                          .toDouble();
+
+                      // Find location with matching coordinates
+                      final location = _locations.firstWhere(
+                        (l) => l.latitude == lat && l.longitude == lng,
                       );
+                      fleetLocationName = location.city;
+                    } catch (e) {
+                      // Location not found or invalid data
+                    }
+                  }
 
-                      final Map<String, dynamic>? cardData =
-                          slots.firstWhere(
-                                (s) => s['fleetId'] == fleetId,
-                                orElse: () => null,
-                              )
-                              as Map<String, dynamic>?;
-
-                      String? fleetLocationName;
-                      final String? status = cardData?['status'];
-                      final dynamic currentLocation =
-                          cardData?['currentLocation'];
-
-                      // If occupied and 'en destino', try to find location name
-                      if (status == 'en destino' &&
-                          currentLocation != null &&
-                          locationsSnapshot.hasData) {
-                        try {
-                          final double lat =
-                              (currentLocation['latitude'] as num).toDouble();
-                          final double lng =
-                              (currentLocation['longitude'] as num).toDouble();
-
-                          // Find location with matching coordinates
-                          final location = locationsSnapshot.data!.firstWhere(
-                            (l) => l.latitude == lat && l.longitude == lng,
-                          );
-                          fleetLocationName = location.city;
-                        } catch (e) {
-                          // Location not found or invalid data
-                        }
-                      }
-
-                      return ParkingFleetCard(
-                        fleetId: fleetId,
-                        fleetConfig: config,
-                        firestoreData: cardData,
-                        userLevel: level,
-                        hqLatitude: hqLat,
-                        hqLongitude: hqLng,
-                        locations: locationsSnapshot.data,
-                        locationName: fleetLocationName,
-                      );
-                    },
-                  ),
-                );
-              },
+                  return ParkingFleetCard(
+                    fleetId: fleetId,
+                    fleetConfig: config,
+                    firestoreData: cardData,
+                    userLevel: level,
+                    hqLatitude: hqLat,
+                    hqLongitude: hqLng,
+                    locations: _locations,
+                    locationName: fleetLocationName,
+                  );
+                },
+              ),
             );
           },
         );
