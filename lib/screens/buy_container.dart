@@ -101,12 +101,7 @@ class _BuyContainerScreenState extends State<BuyContainerScreen> {
   }
 
   Map<String, dynamic> _createContainerSkills(ContainerModel container) {
-    return {
-      'capacityM3': container.capacityM3,
-      'loadingSpeedPercent': container.bonuses.loadingSpeedPercent,
-      'damageRiskReductionPercent':
-          container.bonuses.damageRiskReductionPercent,
-    };
+    return {'capacityM3': container.capacityM3};
   }
 
   Future<TruckModel?> _getTruckById(int truckId) async {
@@ -415,72 +410,49 @@ class _ContainerCard extends StatelessWidget {
                             'Capacidad máxima de carga del contenedor en metros cúbicos.',
                       ),
                       const SizedBox(height: 8),
-                      _CharacteristicCard(
-                        icon: Icons.speed,
-                        value: '${container.bonuses.loadingSpeedPercent}%',
-                        label: 'Velocidad de carga',
-                        description:
-                            'Modificador de velocidad de carga y descarga. Valores positivos aumentan la velocidad.',
-                      ),
-                      const SizedBox(height: 8),
-                      _CharacteristicCard(
-                        icon: Icons.security,
-                        value:
-                            '${container.bonuses.damageRiskReductionPercent}%',
-                        label: 'Reducción daño',
-                        description:
-                            'Porcentaje de reducción del riesgo de daño durante el transporte.',
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: AppColors.surface,
+                              title: Text(
+                                'Tipo de contenedor',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              content: Text(
+                                container.type.displayName,
+                                style: const TextStyle(color: Colors.white70),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Image.asset(
+                              'assets/images/containers/${container.type.name}.png',
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(
+                                    Icons.inventory_2,
+                                    color: Colors.white.withOpacity(0.7),
+                                    size: 20,
+                                  ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                ),
-                // Container Type MiniCard at bottom center
-                Positioned(
-                  bottom: 12,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            backgroundColor: AppColors.surface,
-                            title: Text(
-                              'Tipo de contenedor',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            content: Text(
-                              container.type.displayName,
-                              style: const TextStyle(color: Colors.white70),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 60,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Image.asset(
-                            'assets/images/containers/${container.type.name}.png',
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.inventory_2,
-                              color: Colors.white.withOpacity(0.7),
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ],

@@ -37,8 +37,6 @@ class _BuyDriverScreenState extends State<BuyDriverScreen> {
   Map<String, dynamic> _createDriverSkills(DriverModel driver) {
     return {
       'speedBonusPercent': driver.bonuses.speedBonusPercent,
-      'fuelConsumptionReductionPercent':
-          driver.bonuses.fuelConsumptionReductionPercent,
       'accidentRiskReductionPercent':
           driver.bonuses.accidentRiskReductionPercent,
       'breakdownRiskReductionPercent':
@@ -307,14 +305,6 @@ class _DriverCard extends StatelessWidget {
                               '+${driver.bonuses.speedBonusPercent}%',
                               'Bonificación de Velocidad',
                               'Aumenta la velocidad media de la flota en este porcentaje.',
-                            ),
-                            const SizedBox(height: 1),
-                            _buildStatRow(
-                              context,
-                              'assets/images/trucks/fuel_100km.png',
-                              '-${driver.bonuses.fuelConsumptionReductionPercent}%',
-                              'Reducción de Consumo',
-                              'Porcentaje de reducción en el consumo de combustible.',
                             ),
                             const SizedBox(height: 1),
                             _buildStatRow(

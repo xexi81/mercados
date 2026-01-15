@@ -2,7 +2,7 @@ enum FleetStatus {
   enDestino('en destino'),
   parado('parado'),
   enMarcha('en marcha'),
-  accidentado('accidentado');
+  averiado('averiado');
 
   final String value;
   const FleetStatus(this.value);

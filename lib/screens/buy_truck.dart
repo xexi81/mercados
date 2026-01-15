@@ -38,10 +38,7 @@ class _BuyTruckScreenState extends State<BuyTruckScreen> {
   Map<String, dynamic> _createTruckSkills(TruckModel truck) {
     return {
       'maxSpeedKmh': truck.maxSpeedKmh,
-      'fuelCapacityM3': truck.fuelCapacityM3,
-      'fuelConsumptionPer100KmM3': truck.fuelConsumptionPer100KmM3,
       'accidentRiskPercent': truck.accidentRiskPercent,
-      'breakdownRiskPercent': truck.breakdownRiskPercent,
     };
   }
 
@@ -305,7 +302,7 @@ class _TruckCard extends StatelessWidget {
                       ),
                       // Col 2: Speed & Risk
                       Expanded(
-                        flex: 33,
+                        flex: 67,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -323,30 +320,6 @@ class _TruckCard extends StatelessWidget {
                               '${truck.accidentRiskPercent}%',
                               'Riesgo de Accidente',
                               'Probabilidad de sufrir percances en ruta.',
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Col 3: Fuel Capacity & Consumption
-                      Expanded(
-                        flex: 33,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildStatRow(
-                              context,
-                              'assets/images/trucks/capacidad_fuel.png',
-                              '${truck.fuelCapacityM3} m³',
-                              'Capacidad de Combustible',
-                              'Volumen total del depósito en m³.',
-                            ),
-                            const SizedBox(height: 2),
-                            _buildStatRow(
-                              context,
-                              'assets/images/trucks/fuel_100km.png',
-                              '${truck.fuelConsumptionPer100KmM3} /100',
-                              'Consumo',
-                              'Gasto de combustible por cada 100km.',
                             ),
                           ],
                         ),
