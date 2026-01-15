@@ -72,6 +72,7 @@ flutter:
     - assets/images/parking/
     - assets/images/trucks/
     - assets/images/containers/
+    - assets/images/routes/    
     - assets/images/drivers/
     - assets/data/
 

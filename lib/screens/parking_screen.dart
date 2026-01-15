@@ -93,60 +93,108 @@ class _ParkingScreenState extends State<ParkingScreen> {
       );
     }
 
-    return Scaffold(
-      appBar: const CustomGameAppBar(),
-      backgroundColor: AppColors.surface,
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('usuarios')
-            .doc(user.uid)
-            .snapshots(),
-        builder: (context, userSnapshot) {
-          if (!userSnapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .snapshots(),
+      builder: (context, userSnapshot) {
+        if (!userSnapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          final userData = userSnapshot.data?.data() as Map<String, dynamic>?;
-          final int experience = userData?['experience'] ?? 0;
-          final int level = ExperienceService.getLevelFromExperience(
-            experience,
-          );
-          final String? hqId = userData?['headquarter_id']?.toString();
+        final userData = userSnapshot.data?.data() as Map<String, dynamic>?;
+        final int experience = userData?['experience'] ?? 0;
+        final int level = ExperienceService.getLevelFromExperience(experience);
+        final String? hqId = userData?['headquarter_id']?.toString();
 
-          return FutureBuilder<List<LocationModel>>(
-            future: LocationsRepository.loadLocations(),
-            builder: (context, locationsSnapshot) {
-              double? hqLat;
-              double? hqLng;
+        return FutureBuilder<List<LocationModel>>(
+          future: LocationsRepository.loadLocations(),
+          builder: (context, locationsSnapshot) {
+            double? hqLat;
+            double? hqLng;
 
-              if (locationsSnapshot.hasData && hqId != null) {
-                try {
-                  final hq = locationsSnapshot.data!.firstWhere(
-                    (l) => l.id.toString() == hqId,
-                  );
-                  hqLat = hq.latitude;
-                  hqLng = hq.longitude;
-                } catch (_) {}
-              }
+            if (locationsSnapshot.hasData && hqId != null) {
+              try {
+                final hq = locationsSnapshot.data!.firstWhere(
+                  (l) => l.id.toString() == hqId,
+                );
+                hqLat = hq.latitude;
+                hqLng = hq.longitude;
+              } catch (_) {}
+            }
 
-              return StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('usuarios')
-                    .doc(user.uid)
-                    .collection('fleet_users')
-                    .doc(user.uid)
-                    .snapshots(),
-                builder: (context, fleetSnapshot) {
-                  Map<String, dynamic> fleetMap = {};
-                  if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
-                    fleetMap =
-                        fleetSnapshot.data?.data() as Map<String, dynamic>? ??
-                        {};
+            return StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid)
+                  .collection('fleet_users')
+                  .doc(user.uid)
+                  .snapshots(),
+              builder: (context, fleetSnapshot) {
+                Map<String, dynamic> fleetMap = {};
+                if (fleetSnapshot.hasData && fleetSnapshot.data!.exists) {
+                  fleetMap =
+                      fleetSnapshot.data?.data() as Map<String, dynamic>? ?? {};
+                }
+
+                final List<dynamic> slots = fleetMap['slots'] ?? [];
+
+                // Check if any fleet is at a market location
+                bool isAnyFleetAtMarket = false;
+                // Check if any fleet is at headquarter location
+                bool isAnyFleetAtHeadquarter = false;
+
+                debugPrint(
+                  'Checking ${slots.length} slots for market locations',
+                );
+                if (locationsSnapshot.hasData) {
+                  for (final slot in slots) {
+                    final status = slot['status'];
+                    final currentLocation = slot['currentLocation'];
+
+                    if (status == 'en destino' && currentLocation != null) {
+                      try {
+                        final double lat = (currentLocation['latitude'] as num)
+                            .toDouble();
+                        final double lng = (currentLocation['longitude'] as num)
+                            .toDouble();
+
+                        // Check if at headquarter
+                        if (hqLat != null &&
+                            hqLng != null &&
+                            lat == hqLat &&
+                            lng == hqLng) {
+                          isAnyFleetAtHeadquarter = true;
+                          debugPrint('Fleet at headquarter detected');
+                        }
+
+                        // Find location with matching coordinates
+                        final location = locationsSnapshot.data!.firstWhere(
+                          (l) => l.latitude == lat && l.longitude == lng,
+                        );
+
+                        if (location.hasMarket) {
+                          isAnyFleetAtMarket = true;
+                          debugPrint(
+                            'Fleet at market detected: ${location.city}',
+                          );
+                        }
+                      } catch (e) {
+                        // Location not found, continue checking others
+                      }
+                    }
                   }
+                }
+                debugPrint('Is any fleet at market: $isAnyFleetAtMarket');
+                debugPrint(
+                  'Is any fleet at headquarter: $isAnyFleetAtHeadquarter',
+                );
 
-                  final List<dynamic> slots = fleetMap['slots'] ?? [];
-
-                  return GridView.builder(
+                return Scaffold(
+                  appBar: const CustomGameAppBar(),
+                  backgroundColor: AppColors.surface,
+                  body: GridView.builder(
                     padding: const EdgeInsets.only(
                       left: 16,
                       right: 16,
@@ -213,16 +261,17 @@ class _ParkingScreenState extends State<ParkingScreen> {
                         userLevel: level,
                         hqLatitude: hqLat,
                         hqLongitude: hqLng,
+                        locations: locationsSnapshot.data,
                         locationName: fleetLocationName,
                       );
                     },
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
+import 'package:industrial_app/data/locations/location_model.dart';
+import 'package:industrial_app/data/locations/location_repository.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
@@ -26,6 +28,7 @@ class ParkingFleetCard extends StatelessWidget {
   final int userLevel;
   final double? hqLatitude;
   final double? hqLongitude;
+  final List<LocationModel>? locations;
 
   final String? locationName;
 
@@ -37,6 +40,7 @@ class ParkingFleetCard extends StatelessWidget {
     required this.userLevel,
     this.hqLatitude,
     this.hqLongitude,
+    this.locations,
     this.locationName,
   });
 
@@ -47,6 +51,7 @@ class ParkingFleetCard extends StatelessWidget {
 
     // Check if it's at headquarters
     bool isAtHQ = false;
+    bool isAtMarket = false;
     if (isOccupied && hqLatitude != null && hqLongitude != null) {
       final currentLocation = firestoreData!['currentLocation'];
       final status = firestoreData!['status'];
@@ -54,8 +59,23 @@ class ParkingFleetCard extends StatelessWidget {
         final double fleetLat = (currentLocation['latitude'] as num).toDouble();
         final double fleetLng = (currentLocation['longitude'] as num)
             .toDouble();
+
+        // Check if at headquarters
         if (fleetLat == hqLatitude && fleetLng == hqLongitude) {
           isAtHQ = true;
+        } else {
+          // Check if at market
+          if (locations != null) {
+            for (final location in locations!) {
+              if (location.hasMarket) {
+                if (fleetLat == location.latitude &&
+                    fleetLng == location.longitude) {
+                  isAtMarket = true;
+                  break;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -80,12 +100,32 @@ class ParkingFleetCard extends StatelessWidget {
           children: [
             // Background Image logic
             if (isOccupied)
-              if (isAtHQ)
+              if (firestoreData!['status'] == 'en marcha')
+                Positioned.fill(
+                  child: Transform.scale(
+                    scale: 1.4,
+                    child: Image.asset(
+                      'assets/images/parking/parking_onroad.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else if (isAtHQ)
                 Positioned.fill(
                   child: Transform.scale(
                     scale: 1.4,
                     child: Image.asset(
                       'assets/images/parking/parking_sede.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else if (isAtMarket)
+                Positioned.fill(
+                  child: Transform.scale(
+                    scale: 1.4,
+                    child: Image.asset(
+                      'assets/images/parking/parking_market.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -107,7 +147,7 @@ class ParkingFleetCard extends StatelessWidget {
               ),
 
             if (isLocked) _buildLockedContent(context, requiredLevel),
-            if (isOccupied) _buildOccupiedContent(context, isAtHQ),
+            if (isOccupied) _buildOccupiedContent(context, isAtHQ, isAtMarket),
             if (!isLocked && !isOccupied) _buildAvailableContent(context),
 
             // Fleet ID and Level indicators
@@ -138,7 +178,11 @@ class ParkingFleetCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOccupiedContent(BuildContext context, bool isAtHQ) {
+  Widget _buildOccupiedContent(
+    BuildContext context,
+    bool isAtHQ,
+    bool isAtMarket,
+  ) {
     // Show content if occupied, regardless of location (isAtHQ logic logic handled separately for bg)
     // But we need to check status for specific buttons
     final status = firestoreData?['status'];
@@ -146,9 +190,9 @@ class ParkingFleetCard extends StatelessWidget {
     final driverId = firestoreData?['driverId'];
     final containerId = firestoreData?['containerId'];
 
-    // Action buttons show when NOT 'en destino' OR when 'en destino' but all components are assigned
+    // Action buttons show when NOT 'en destino' AND NOT 'en marcha' OR when 'en destino' but all components are assigned
     final bool showActionButtons =
-        status != 'en destino' ||
+        (status != 'en destino' && status != 'en marcha') ||
         (status == 'en destino' &&
             truckId != null &&
             truckId.toString().trim().isNotEmpty &&
@@ -183,8 +227,10 @@ class ParkingFleetCard extends StatelessWidget {
                     SizedBox(height: gap),
                     _buildMiniCards(context, itemW, itemH),
                     SizedBox(height: gap),
-                    // Only show Route/Load buttons if NOT 'en destino'
-                    if (showActionButtons)
+                    // Show route progress if en marcha, otherwise show route/load buttons
+                    if (status == 'en marcha')
+                      _buildRouteProgressInline(context)
+                    else if (showActionButtons)
                       Row(
                         children: [
                           _buildBottomButton(
@@ -248,6 +294,8 @@ class ParkingFleetCard extends StatelessWidget {
               ),
             ),
           ),
+        // Display estimated time when status is 'en marcha'
+        if (status == 'en marcha') _buildEstimatedTimeTopRight(context),
       ],
     );
   }
@@ -528,7 +576,10 @@ class ParkingFleetCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ContainerInformationScreen(),
+                  builder: (context) => ContainerInformationScreen(
+                    containerId: containerId,
+                    fleetId: fleetId,
+                  ),
                 ),
               );
             }
@@ -658,5 +709,194 @@ class ParkingFleetCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildRouteProgressInline(BuildContext context) {
+    final destinyLocation = firestoreData?['destinyLocation'];
+    final distanceRemaining = firestoreData?['distanceRemaining'];
+    final status = firestoreData?['status'];
+
+    if (destinyLocation == null || distanceRemaining == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: Colors.white.withOpacity(0.7), width: 1),
+      ),
+      child: FutureBuilder<String?>(
+        future: _getDestinationCityName(destinyLocation),
+        builder: (context, snapshot) {
+          final cityName = snapshot.data ?? 'Destino desconocido';
+          final distance = (distanceRemaining as num).toDouble();
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Destino:',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.white70,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      cityName,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Restante:',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Colors.white70,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${distance.toStringAsFixed(1)} km',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildEstimatedTimeTopRight(BuildContext context) {
+    final distanceRemaining = firestoreData?['distanceRemaining'];
+    if (distanceRemaining == null) return const SizedBox.shrink();
+
+    final distance = (distanceRemaining as num).toDouble();
+    final truckSkills = firestoreData?['truckSkills'];
+    if (truckSkills == null) return const SizedBox.shrink();
+
+    final maxSpeedKmh = (truckSkills['maxSpeedKmh'] as num?)?.toDouble() ?? 0;
+    final truckSpeed = (firestoreData?['truckSpeed'] as num?)?.toInt() ?? 0;
+
+    if (maxSpeedKmh <= 0) return const SizedBox.shrink();
+
+    // Calcular velocidad real con el bonus de truckSpeed
+    final speedMultiplier = 1 + (truckSpeed / 100.0);
+    final realSpeed = maxSpeedKmh * speedMultiplier;
+
+    // Calcular tiempo en horas
+    final timeInHours = distance / realSpeed;
+
+    String timeText;
+    if (timeInHours >= 1) {
+      final hours = timeInHours.floor();
+      final minutes = ((timeInHours - hours) * 60).round();
+      timeText = '${hours}h ${minutes}m';
+    } else {
+      final minutes = (timeInHours * 60).round();
+      timeText = '${minutes}m';
+    }
+
+    return Positioned(
+      top: 6,
+      right: 10,
+      child: Text(
+        timeText,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: Colors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            Shadow(
+              offset: const Offset(1, 1),
+              blurRadius: 2,
+              color: Colors.black.withOpacity(0.8),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEstimatedTime(double distance) {
+    final truckSkills = firestoreData?['truckSkills'];
+    if (truckSkills == null) return const SizedBox.shrink();
+
+    final maxSpeedKmh = (truckSkills['maxSpeedKmh'] as num?)?.toDouble() ?? 0;
+    final truckSpeed = (firestoreData?['truckSpeed'] as num?)?.toInt() ?? 0;
+
+    if (maxSpeedKmh <= 0) return const SizedBox.shrink();
+
+    // Calcular velocidad real con el bonus de truckSpeed
+    final speedMultiplier = 1 + (truckSpeed / 100.0);
+    final realSpeed = maxSpeedKmh * speedMultiplier;
+
+    // Calcular tiempo en horas
+    final timeInHours = distance / realSpeed;
+
+    String timeText;
+    if (timeInHours >= 1) {
+      final hours = timeInHours.floor();
+      final minutes = ((timeInHours - hours) * 60).round();
+      timeText = '${hours}h ${minutes}m';
+    } else {
+      final minutes = (timeInHours * 60).round();
+      timeText = '${minutes}m';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Text(
+        timeText,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 7,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
+  Future<String?> _getDestinationCityName(
+    Map<String, dynamic> destinyLocation,
+  ) async {
+    try {
+      final double lat = (destinyLocation['latitude'] as num).toDouble();
+      final double lng = (destinyLocation['longitude'] as num).toDouble();
+
+      final locations = await LocationsRepository.loadLocations();
+      final location = locations.firstWhere(
+        (l) => l.latitude == lat && l.longitude == lng,
+        orElse: () => throw Exception('Location not found'),
+      );
+
+      return location.city;
+    } catch (e) {
+      return null;
+    }
   }
 }
