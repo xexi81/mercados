@@ -145,9 +145,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
                 // Check if any fleet is at headquarter location
                 bool isAnyFleetAtHeadquarter = false;
 
-                debugPrint(
-                  'Checking ${slots.length} slots for market locations',
-                );
                 if (locationsSnapshot.hasData) {
                   for (final slot in slots) {
                     final status = slot['status'];
@@ -166,7 +163,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
                             lat == hqLat &&
                             lng == hqLng) {
                           isAnyFleetAtHeadquarter = true;
-                          debugPrint('Fleet at headquarter detected');
                         }
 
                         // Find location with matching coordinates
@@ -176,9 +172,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
 
                         if (location.hasMarket) {
                           isAnyFleetAtMarket = true;
-                          debugPrint(
-                            'Fleet at market detected: ${location.city}',
-                          );
                         }
                       } catch (e) {
                         // Location not found, continue checking others
@@ -186,10 +179,6 @@ class _ParkingScreenState extends State<ParkingScreen> {
                     }
                   }
                 }
-                debugPrint('Is any fleet at market: $isAnyFleetAtMarket');
-                debugPrint(
-                  'Is any fleet at headquarter: $isAnyFleetAtHeadquarter',
-                );
 
                 return Scaffold(
                   appBar: const CustomGameAppBar(),
