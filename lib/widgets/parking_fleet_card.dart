@@ -8,6 +8,7 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
+import 'package:industrial_app/data/locations/distance_calculator.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/fleet/fleet_status.dart';
@@ -873,11 +874,27 @@ class ParkingFleetCard extends StatelessWidget {
   Widget _buildRouteProgressInline(BuildContext context) {
     final destinyLocation = firestoreData?['destinyLocation'];
     final distanceRemaining = firestoreData?['distanceRemaining'];
+    final currentLocation = firestoreData?['currentLocation'];
     final status = firestoreData?['status'];
 
-    if (destinyLocation == null || distanceRemaining == null) {
+    if (destinyLocation == null ||
+        distanceRemaining == null ||
+        currentLocation == null) {
       return const SizedBox.shrink();
     }
+
+    final totalDistance = DistanceCalculator.calculateDistance(
+      (currentLocation['latitude'] as num).toDouble(),
+      (currentLocation['longitude'] as num).toDouble(),
+      (destinyLocation['latitude'] as num).toDouble(),
+      (destinyLocation['longitude'] as num).toDouble(),
+    );
+
+    final remaining = (distanceRemaining as num).toDouble();
+    final progress = ((totalDistance - remaining) / totalDistance).clamp(
+      0.0,
+      1.0,
+    );
 
     return Container(
       width: double.infinity,
@@ -887,65 +904,92 @@ class ParkingFleetCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: Colors.white.withOpacity(0.7), width: 1),
       ),
-      child: FutureBuilder<String?>(
-        future: _getDestinationCityName(destinyLocation),
-        builder: (context, snapshot) {
-          final cityName = snapshot.data ?? 'Destino desconocido';
-          final distance = (distanceRemaining as num).toDouble();
-
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Destino:',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.white70,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      cityName,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white,
-                        fontSize: 9,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+      child: Column(
+        children: [
+          // Progress bar
+          Container(
+            height: 4,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade700,
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: progress,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.green.shade800,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // Content
+          FutureBuilder<String?>(
+            future: _getDestinationCityName(destinyLocation),
+            builder: (context, snapshot) {
+              final cityName = snapshot.data ?? 'Destino desconocido';
+              final distance = remaining;
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Restante:',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Colors.white70,
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Destino:',
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Colors.white70,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        Text(
+                          cityName,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    '${distance.toStringAsFixed(1)} km',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Restante:',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Colors.white70,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '${distance.toStringAsFixed(1)} km',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
-          );
-        },
+              );
+            },
+          ),
+        ],
       ),
     );
   }

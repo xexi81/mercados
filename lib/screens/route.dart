@@ -226,6 +226,10 @@ class _RouteScreenState extends State<RouteScreen> {
             'latitude': destination.latitude,
             'longitude': destination.longitude,
           };
+          updatedSlots[slotIndex]['currentLocation'] = {
+            'latitude': _currentLocation!.latitude,
+            'longitude': _currentLocation!.longitude,
+          };
           updatedSlots[slotIndex]['distanceRemaining'] = distance;
           updatedSlots[slotIndex]['status'] = FleetStatus.enMarcha.value;
         }
