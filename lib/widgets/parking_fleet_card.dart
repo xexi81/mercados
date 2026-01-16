@@ -276,7 +276,7 @@ class ParkingFleetCard extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const LoadManagerScreen(),
+                                      LoadManagerScreen(fleetId: fleetId),
                                 ),
                               );
                             },
