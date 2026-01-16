@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:industrial_app/theme/app_colors.dart';
@@ -7,6 +10,7 @@ import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
+import 'package:industrial_app/data/fleet/fleet_status.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/fleet_service.dart';
 import 'package:industrial_app/data/fleet_level/fleet_level.dart';
@@ -100,7 +104,17 @@ class ParkingFleetCard extends StatelessWidget {
           children: [
             // Background Image logic
             if (isOccupied)
-              if (firestoreData!['status'] == 'en marcha')
+              if (firestoreData!['status'] == 'averiado')
+                Positioned.fill(
+                  child: Transform.scale(
+                    scale: 1.4,
+                    child: Image.asset(
+                      'assets/images/parking/parking_accident.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else if (firestoreData!['status'] == 'en marcha')
                 Positioned.fill(
                   child: Transform.scale(
                     scale: 1.4,
@@ -230,6 +244,8 @@ class ParkingFleetCard extends StatelessWidget {
                     // Show route progress if en marcha, otherwise show route/load buttons
                     if (status == 'en marcha')
                       _buildRouteProgressInline(context)
+                    else if (status == 'averiado')
+                      _buildRestartButton(context, itemW, itemH)
                     else if (showActionButtons)
                       Row(
                         children: [
@@ -297,6 +313,8 @@ class ParkingFleetCard extends StatelessWidget {
           ),
         // Display estimated time when status is 'en marcha'
         if (status == 'en marcha') _buildEstimatedTimeTopRight(context),
+        // Display fleet status
+        _buildFleetStatusTopCenter(context),
       ],
     );
   }
@@ -441,7 +459,8 @@ class ParkingFleetCard extends StatelessWidget {
 
   Widget _buildBottomButton({
     required BuildContext context,
-    required String assetPath,
+    String? assetPath,
+    Widget? child,
     required double width,
     required double height,
     required VoidCallback onTap,
@@ -465,10 +484,149 @@ class ParkingFleetCard extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(height * 0.12),
-          child: Image.asset(assetPath, fit: BoxFit.cover),
+          child: child ?? Image.asset(assetPath!, fit: BoxFit.cover),
         ),
       ),
     );
+  }
+
+  Widget _buildRestartButton(
+    BuildContext context,
+    double width,
+    double height,
+  ) {
+    return _buildBottomButton(
+      context: context,
+      child: Icon(Icons.play_arrow, color: Colors.white, size: height * 0.6),
+      width: width,
+      height: height,
+      onTap: () => _showRestartDialog(context),
+    );
+  }
+
+  Future<int?> _getTruckSellValue(int truckId) async {
+    final trucksJson = await rootBundle.loadString('assets/data/trucks.json');
+    final trucksData = json.decode(trucksJson);
+    final truckJson = (trucksData['trucks'] as List).firstWhere(
+      (t) => t['truckId'] == truckId,
+      orElse: () => null,
+    );
+    return truckJson?['sellValue'] as int?;
+  }
+
+  Future<void> _showRestartDialog(BuildContext context) async {
+    final truckId = firestoreData?['truckId'];
+    if (truckId == null) return;
+
+    final truckSellValue = await _getTruckSellValue(truckId);
+    if (truckSellValue == null) return;
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final fleetDocRef = FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(user.uid)
+        .collection('fleet_users')
+        .doc(user.uid);
+
+    int cost = 0;
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final fleetSnapshot = await transaction.get(fleetDocRef);
+      if (!fleetSnapshot.exists) return;
+
+      final fleetData = fleetSnapshot.data()!;
+      final slots = List<Map<String, dynamic>>.from(fleetData['slots'] ?? []);
+      final slotIndex = slots.indexWhere((s) => s['fleetId'] == fleetId);
+      if (slotIndex == -1) return;
+
+      final slot = slots[slotIndex];
+      final existingCost = slot['accidentCost'] as int? ?? 0;
+
+      if (existingCost > 0) {
+        cost = existingCost;
+      } else {
+        final random = Random();
+        cost = (truckSellValue * random.nextDouble() * 0.2).round();
+        slots[slotIndex]['accidentCost'] = cost;
+        transaction.update(fleetDocRef, {'slots': slots});
+      }
+    });
+
+    if (cost == 0) return; // Something went wrong
+
+    // Assume load data is in firestoreData
+    final loadAmount = firestoreData?['loadAmount'] as int? ?? 0;
+    final loadType = firestoreData?['loadType'] as String? ?? 'STANDARD';
+
+    final random = Random();
+    final lossPercent = loadType == 'GEMS'
+        ? random.nextDouble()
+        : random.nextDouble() * 0.2;
+    final lossAmount = (loadAmount * lossPercent).round();
+
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'REINICIAR FLOTA',
+        description:
+            '¿Deseas reiniciar la flota averiada?\n\nCosto de reparación: $cost\nPérdida de carga: $lossAmount ${loadType == 'GEMS' ? 'gemas' : 'unidades'}',
+        price: cost,
+        priceType: UnlockCostType.money,
+        onConfirm: () async => _restartFleet(cost, lossAmount, loadType),
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Flota reiniciada')));
+    }
+  }
+
+  Future<void> _restartFleet(int cost, int lossAmount, String loadType) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw Exception('Usuario no identificado');
+
+    final userDocRef = FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(user.uid);
+    final fleetDocRef = FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(user.uid)
+        .collection('fleet_users')
+        .doc(user.uid);
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final userSnapshot = await transaction.get(userDocRef);
+      final fleetSnapshot = await transaction.get(fleetDocRef);
+
+      if (!userSnapshot.exists) throw Exception('Usuario no encontrado');
+      if (!fleetSnapshot.exists) throw Exception('Flota no encontrada');
+
+      final userData = userSnapshot.data()!;
+      final currentMoney = (userData['dinero'] as num?)?.toInt() ?? 0;
+      if (currentMoney < cost) throw Exception('Dinero insuficiente');
+
+      final fleetData = fleetSnapshot.data()!;
+      final slots = List<Map<String, dynamic>>.from(fleetData['slots'] ?? []);
+      final slotIndex = slots.indexWhere((s) => s['fleetId'] == fleetId);
+      if (slotIndex == -1) throw Exception('Slot no encontrado');
+
+      final slot = slots[slotIndex];
+      final currentLoadAmount = slot['loadAmount'] as int? ?? 0;
+
+      // Deduct money
+      transaction.update(userDocRef, {'dinero': currentMoney - cost});
+
+      // Update load
+      final newLoadAmount = max(0, currentLoadAmount - lossAmount);
+      slots[slotIndex]['loadAmount'] = newLoadAmount;
+      slots[slotIndex]['status'] = FleetStatus.enMarcha.value;
+      slots[slotIndex]['accidentCost'] = 0;
+
+      transaction.update(fleetDocRef, {'slots': slots});
+    });
   }
 
   Widget _buildMiniCards(BuildContext context, double width, double height) {
@@ -877,6 +1035,42 @@ class ParkingFleetCard extends StatelessWidget {
           color: Colors.white,
           fontSize: 7,
           fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFleetStatusTopCenter(BuildContext context) {
+    final status = firestoreData?['status'];
+    String statusText;
+    if (status == 'averiado') {
+      statusText = 'Accidentada';
+    } else if (status == 'en destino') {
+      statusText = 'En destino';
+    } else if (status == 'en marcha') {
+      statusText = 'En ruta';
+    } else {
+      return const SizedBox.shrink();
+    }
+
+    return Positioned(
+      top: 6,
+      left: 0,
+      right: 0,
+      child: Text(
+        statusText,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: Colors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            Shadow(
+              offset: const Offset(1, 1),
+              blurRadius: 2,
+              color: Colors.black.withOpacity(0.8),
+            ),
+          ],
         ),
       ),
     );
