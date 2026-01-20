@@ -94,13 +94,6 @@ class _ContainerInformationScreenState
 
       if (hqId == null) return false;
 
-      // Get headquarter coordinates from locations
-      final locations = await LocationsRepository.loadLocations();
-      final headquarter = locations.firstWhere(
-        (l) => l.id.toString() == hqId,
-        orElse: () => throw Exception('Headquarter location not found'),
-      );
-
       // Get fleet current location and status
       final fleetDoc = await FirebaseFirestore.instance
           .collection('usuarios')
@@ -124,15 +117,34 @@ class _ContainerInformationScreenState
 
       final currentLocation = fleetSlot['currentLocation'];
       final status = fleetSlot['status'];
+      final truckLoad = fleetSlot['truckLoad'];
+      final bool isLoadEmpty =
+          truckLoad == null ||
+          truckLoad == 0 ||
+          truckLoad == '' ||
+          (truckLoad is List && truckLoad.isEmpty) ||
+          (truckLoad is Map && truckLoad.isEmpty);
 
-      // Check if at headquarters
-      if (currentLocation != null && status == 'en destino') {
-        final double fleetLat = (currentLocation['latitude'] as num).toDouble();
-        final double fleetLng = (currentLocation['longitude'] as num)
-            .toDouble();
+      if (status == 'en destino' && isLoadEmpty) {
+        if (currentLocation is String) {
+          return currentLocation == hqId;
+        } else if (currentLocation is Map) {
+          final double fleetLat = (currentLocation['latitude'] as num)
+              .toDouble();
+          final double fleetLng = (currentLocation['longitude'] as num)
+              .toDouble();
 
-        return fleetLat == headquarter.latitude &&
-            fleetLng == headquarter.longitude;
+          final locations = await LocationsRepository.loadLocations();
+          final matchingLocations = locations.where(
+            (l) =>
+                (l.latitude - fleetLat).abs() < 0.0001 &&
+                (l.longitude - fleetLng).abs() < 0.0001,
+          );
+          if (matchingLocations.isNotEmpty) {
+            final currentLoc = matchingLocations.first;
+            return currentLoc.id.toString() == hqId;
+          }
+        }
       }
 
       return false;
@@ -262,24 +274,64 @@ class _ContainerInformationScreenState
     }
   }
 
-  void _sellContainer() {
-    // Placeholder for sell container functionality
-    showDialog(
+  Future<void> _sellContainer() async {
+    final sellPrice = _container!.sellValue;
+
+    final bool? result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Vender Contenedor'),
-        content: Text(
-          'Funcionalidad de venta por implementar.\n'
-          'El contenedor ${_container?.name ?? "Desconocido"} será vendido.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-        ],
+      builder: (context) => GenericPurchaseDialog(
+        title: 'VENTA DE CONTENEDOR',
+        description:
+            '¿Estás seguro de que quieres vender ${_container!.name} por $sellPrice monedas?',
+        price: sellPrice,
+        priceType: UnlockCostType.money,
+        onConfirm: () async {
+          final user = FirebaseAuth.instance.currentUser;
+          if (user == null) throw Exception('Usuario no identificado');
+
+          final userDocRef = FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user.uid);
+          final fleetDocRef = FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(user.uid)
+              .collection('fleet_users')
+              .doc(user.uid);
+
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            final userSnapshot = await transaction.get(userDocRef);
+            final fleetSnapshot = await transaction.get(fleetDocRef);
+
+            if (!userSnapshot.exists) throw Exception('Usuario no encontrado');
+            if (!fleetSnapshot.exists)
+              throw Exception('Datos de flota no encontrados');
+
+            final userData = userSnapshot.data()!;
+            final currentMoney = (userData['dinero'] as num?)?.toInt() ?? 0;
+
+            final fleetData = fleetSnapshot.data()!;
+            final slots = List<Map<String, dynamic>>.from(
+              fleetData['slots'] ?? [],
+            );
+
+            final slotIndex = slots.indexWhere(
+              (slot) => slot['fleetId'] == widget.fleetId,
+            );
+            if (slotIndex != -1) {
+              slots[slotIndex]['containerId'] = null;
+              transaction.update(fleetDocRef, {'slots': slots});
+              transaction.update(userDocRef, {
+                'dinero': currentMoney + sellPrice,
+              });
+            }
+          });
+        },
       ),
     );
+
+    if (result == true && mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -346,6 +398,8 @@ class _ContainerInformationScreenState
 
                   // Sell Button (only if at headquarter)
                   if (_isAtHeadquarter) _buildSellButton(),
+
+                  const SizedBox(height: 80),
                 ],
               ),
             ),

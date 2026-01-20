@@ -10,6 +10,7 @@
                 "amount": 8000
             },
             "sellValue": 5000,
+            "allowsMultipleProducts": true,
             "bonuses": {
                 "loadingSpeedPercent": 0,
                 "damageRiskReductionPercent": 0
@@ -25,6 +26,7 @@
                 "amount": 20000
             },
             "sellValue": 13000,
+            "allowsMultipleProducts": true,
             "bonuses": {
                 "loadingSpeedPercent": 5,
                 "damageRiskReductionPercent": 5
@@ -40,6 +42,7 @@
                 "amount": 35000
             },
             "sellValue": 22000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": -5,
                 "damageRiskReductionPercent": 15
@@ -55,6 +58,7 @@
                 "amount": 70000
             },
             "sellValue": 48000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 0,
                 "damageRiskReductionPercent": 30
@@ -70,6 +74,7 @@
                 "amount": 50000
             },
             "sellValue": 34000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 10,
                 "damageRiskReductionPercent": 5
@@ -85,6 +90,7 @@
                 "amount": 110000
             },
             "sellValue": 78000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 15,
                 "damageRiskReductionPercent": 10
@@ -100,6 +106,7 @@
                 "amount": 65000
             },
             "sellValue": 45000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 5,
                 "damageRiskReductionPercent": 10
@@ -115,6 +122,7 @@
                 "amount": 140000
             },
             "sellValue": 100000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 0,
                 "damageRiskReductionPercent": 25
@@ -130,6 +138,7 @@
                 "amount": 120000
             },
             "sellValue": 85000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": -10,
                 "damageRiskReductionPercent": 35
@@ -145,6 +154,7 @@
                 "amount": 90000
             },
             "sellValue": 62000,
+            "allowsMultipleProducts": true,
             "bonuses": {
                 "loadingSpeedPercent": -5,
                 "damageRiskReductionPercent": 20
@@ -160,6 +170,7 @@
                 "amount": 180000
             },
             "sellValue": 130000,
+            "allowsMultipleProducts": true,
             "bonuses": {
                 "loadingSpeedPercent": -10,
                 "damageRiskReductionPercent": 35
@@ -175,6 +186,7 @@
                 "amount": 160000
             },
             "sellValue": 110000,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": -15,
                 "damageRiskReductionPercent": 50
@@ -190,6 +202,7 @@
                 "amount": 60
             },
             "sellValue": 0,
+            "allowsMultipleProducts": false,
             "bonuses": {
                 "loadingSpeedPercent": 0,
                 "damageRiskReductionPercent": 70

@@ -21,7 +21,7 @@ class MaterialModel {
     required this.components,
     required this.basePrice,
     required this.unitVolumeM3,
-    required this.allowedContainers,
+    this.allowedContainers = const [],
   });
 
   String get imagePath => 'assets/images/materials/$id.png';
@@ -35,9 +35,11 @@ class MaterialModel {
       grade: json['grade'],
       basePrice: json['basePrice'],
       unitVolumeM3: (json['unitVolumeM3'] as num).toDouble(),
-      allowedContainers: (json['allowedContainers'] as List)
-          .map((code) => ContainerType.fromCode(code as String))
-          .toList(),
+      allowedContainers:
+          (json['allowedContainers'] as List?)
+              ?.map((code) => ContainerType.fromCode(code as String))
+              .toList() ??
+          [],
       components: (json['components'] as List)
           .map((c) => MaterialComponent.fromJson(c))
           .toList(),

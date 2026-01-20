@@ -28,6 +28,9 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   Map<String, dynamic>? currentLocation;
   bool isLoading = true;
 
+  // Market data from Firestore
+  Map<String, dynamic> firestoreMaterials = {};
+
   // Market purchase variables
   bool isAtMarket = false;
   List<String> materialCategories = [];
@@ -57,6 +60,9 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     if (user == null) return;
 
     try {
+      // Load market data from Firestore first
+      await _loadMarketData();
+
       final fleetDoc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
@@ -94,6 +100,36 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _loadMarketData() async {
+    try {
+      final materialsSnapshot = await FirebaseFirestore.instance
+          .collection('materials')
+          .get();
+      final firestoreData = <String, dynamic>{};
+      for (var doc in materialsSnapshot.docs) {
+        if (doc.id == 'global') {
+          final data = doc.data();
+          for (var value in data.values) {
+            if (value is List) {
+              for (var item in value) {
+                if (item is Map && item.containsKey('materialId')) {
+                  firestoreData[item['materialId'].toString()] = item;
+                }
+              }
+            }
+          }
+        } else {
+          firestoreData[doc.id] = doc.data();
+        }
+      }
+      setState(() {
+        firestoreMaterials = firestoreData;
+      });
+    } catch (e) {
+      // Ignore errors, will use default values
     }
   }
 
@@ -211,12 +247,14 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
 
       final marketIndex = location.marketIndex ?? 0;
 
-      // Filter materials by category and get market-specific data
+      // Filter materials by category
       final filteredMaterials = materials
           .where((m) => m['category'] == category)
           .map((m) {
-            // Find market data for current marketIndex
-            final markets = m['markets'] as List<dynamic>? ?? [];
+            // Find market data for current marketIndex from Firestore
+            final materialId = m['id'].toString();
+            final firestoreData = firestoreMaterials[materialId];
+            final markets = (firestoreData?['markets'] as List<dynamic>?) ?? [];
             final marketData = markets.firstWhere(
               (market) => market['marketIndex'] == marketIndex,
               orElse: () => {

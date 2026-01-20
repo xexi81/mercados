@@ -10,6 +10,7 @@ class ContainerModel {
   final PurchaseCostModel purchaseCost;
   final int sellValue;
   final ContainerBonusesModel bonuses;
+  final bool allowsMultipleProducts;
 
   ContainerModel({
     required this.containerId,
@@ -19,6 +20,7 @@ class ContainerModel {
     required this.purchaseCost,
     required this.sellValue,
     required this.bonuses,
+    required this.allowsMultipleProducts,
   });
 
   factory ContainerModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class ContainerModel {
       purchaseCost: PurchaseCostModel.fromJson(json['purchaseCost']),
       sellValue: json['sellValue'],
       bonuses: ContainerBonusesModel.fromJson(json['bonuses']),
+      allowsMultipleProducts: json['allowsMultipleProducts'] ?? false,
     );
   }
 
@@ -41,5 +44,6 @@ class ContainerModel {
     'purchaseCost': purchaseCost.toJson(),
     'sellValue': sellValue,
     'bonuses': bonuses.toJson(),
+    'allowsMultipleProducts': allowsMultipleProducts,
   };
 }
