@@ -27,6 +27,8 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   Map<String, dynamic>? truckLoad;
   Map<String, dynamic>? currentLocation;
   bool isLoading = true;
+  bool allowsMultipleProducts = true;
+  double userMoney = 0.0;
 
   // Market data from Firestore
   Map<String, dynamic> firestoreMaterials = {};
@@ -70,6 +72,11 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
           .doc(user.uid)
           .get();
 
+      final userDoc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .get();
+
       if (fleetDoc.exists) {
         final data = fleetDoc.data()!;
         final slots = List<Map<String, dynamic>>.from(data['slots'] ?? []);
@@ -79,6 +86,18 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         );
 
         if (slot.isNotEmpty) {
+          // Get allowsMultipleProducts
+          final containerId = slot['containerId'] as int?;
+          if (containerId != null) {
+            allowsMultipleProducts = await _getAllowsMultipleProducts(
+              containerId,
+            );
+          }
+
+          // Get user money
+          final userData = userDoc.data();
+          userMoney = (userData?['money'] as num?)?.toDouble() ?? 0.0;
+
           setState(() {
             fleetData = slot;
             truckLoad = slot['truckLoad'] as Map<String, dynamic>?;
@@ -153,6 +172,23 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     return totalM3;
   }
 
+  int _calculateMaxQuantity(Map<String, dynamic> material) {
+    final maxCapacity = _calculateMaxCapacity();
+    final currentLoad = _calculateCurrentLoad();
+    final remainingCapacity = maxCapacity - currentLoad;
+    final unitVolumeM3 = (material['unitVolumeM3'] as num?)?.toDouble() ?? 0;
+    if (unitVolumeM3 <= 0) return 0;
+    final maxQty = (remainingCapacity / unitVolumeM3).floor();
+    return maxQty.clamp(0, 999);
+  }
+
+  int _calculateMaxAffordableQuantity(Map<String, dynamic> material) {
+    final unitPrice = _calculateUnitPrice(material, 0);
+    if (unitPrice <= 0) return 0;
+    final maxQty = (userMoney / unitPrice).floor();
+    return maxQty.clamp(0, 999);
+  }
+
   Future<String> _getLocationName() async {
     if (currentLocation == null) return 'Ubicación desconocida';
     try {
@@ -208,16 +244,73 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       );
       final materialsData = json.decode(materialsJson);
       final materials = materialsData['materials'] as List;
+
+      // Get container type
+      final containerType = await _getContainerType();
+
+      // Filter materials by container compatibility
+      final compatibleMaterials = materials
+          .where(
+            (m) =>
+                containerType == null ||
+                (m['allowedContainers'] as List).contains(containerType),
+          )
+          .toList();
+
+      // Collect categories from compatible materials
       final categories = <String>{};
-      for (final material in materials) {
+      for (final material in compatibleMaterials) {
         categories.add(material['category'] as String);
       }
+
       setState(() {
         materialCategories = categories.toList()..sort();
       });
     } catch (e) {
       // Ignore errors
     }
+  }
+
+  Future<String?> _getContainerType() async {
+    final containerId = fleetData?['containerId'] as int?;
+    if (containerId == null) return null;
+    try {
+      final containersJson = await rootBundle.loadString(
+        'assets/data/container.json',
+      );
+      final containersData = json.decode(containersJson);
+      final containers = containersData['containers'] as List;
+      final container = containers.firstWhere(
+        (c) => c['containerId'] == containerId,
+        orElse: () => null,
+      );
+      if (container != null) {
+        return container['type'] as String;
+      }
+    } catch (e) {
+      // Ignore
+    }
+    return null;
+  }
+
+  Future<bool> _getAllowsMultipleProducts(int containerId) async {
+    try {
+      final containersJson = await rootBundle.loadString(
+        'assets/data/container.json',
+      );
+      final containersData = json.decode(containersJson);
+      final containers = containersData['containers'] as List;
+      final container = containers.firstWhere(
+        (c) => c['containerId'] == containerId,
+        orElse: () => null,
+      );
+      if (container != null) {
+        return container['allowsMultipleProducts'] as bool? ?? true;
+      }
+    } catch (e) {
+      // Ignore
+    }
+    return true;
   }
 
   Future<void> _loadMaterialsForCategory(String category) async {
@@ -247,9 +340,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
 
       final marketIndex = location.marketIndex ?? 0;
 
-      // Filter materials by category
-      final filteredMaterials = materials
-          .where((m) => m['category'] == category)
+      // Get container type
+      final containerType = await _getContainerType();
+
+      // Filter materials by category and container compatibility
+      var filteredMaterials = materials
+          .where(
+            (m) =>
+                m['category'] == category &&
+                (containerType == null ||
+                    (m['allowedContainers'] as List).contains(containerType)),
+          )
           .map((m) {
             // Find market data for current marketIndex from Firestore
             final materialId = m['id'].toString();
@@ -273,6 +374,16 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             };
           })
           .toList();
+
+      // If container doesn't allow multiple products and there's already load, only allow the loaded material
+      if (!allowsMultipleProducts &&
+          truckLoad != null &&
+          truckLoad!.isNotEmpty) {
+        final loadedMaterialIds = truckLoad!.keys.toSet();
+        filteredMaterials = filteredMaterials
+            .where((m) => loadedMaterialIds.contains(m['id'].toString()))
+            .toList();
+      }
 
       setState(() {
         availableMaterials = filteredMaterials
@@ -436,10 +547,10 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                       margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.2),
+                        color: const Color.fromRGBO(0, 0, 0, 0.2),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
+                          color: const Color.fromRGBO(255, 255, 255, 0.1),
                         ),
                       ),
                       child: InkWell(
@@ -578,7 +689,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
+                          color: const Color.fromRGBO(0, 0, 0, 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -605,8 +716,21 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                                     controller: quantityController,
                                     onChanged: (value) {
                                       final qty = int.tryParse(value) ?? 1;
+                                      final maxQty = _calculateMaxQuantity(
+                                        selectedMaterial!,
+                                      );
+                                      final maxAffordable =
+                                          _calculateMaxAffordableQuantity(
+                                            selectedMaterial!,
+                                          );
+                                      final maxAllowed = maxQty < maxAffordable
+                                          ? maxQty
+                                          : maxAffordable;
                                       setState(() {
-                                        purchaseQuantity = qty.clamp(1, 999);
+                                        purchaseQuantity = qty.clamp(
+                                          1,
+                                          maxAllowed,
+                                        );
                                         totalPrice = _calculateTotalPrice(
                                           selectedMaterial!,
                                           purchaseQuantity,
@@ -629,51 +753,93 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                               ],
                             ),
                             const SizedBox(height: 16),
-                            Row(
+                            Column(
                               children: [
-                                Expanded(
-                                  child: IndustrialButton(
-                                    label: 'Cancelar',
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedMaterial = null;
-                                        purchaseQuantity = 1;
-                                        totalPrice = 0.0;
-                                        quantityController.text = '1';
-                                      });
-                                    },
-                                    gradientTop: const Color(0xFF757575),
-                                    gradientBottom: const Color(0xFF424242),
-                                    borderColor: const Color(0xFF212121),
-                                    height: 50,
-                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: IndustrialButton(
+                                        label: 'Cancelar',
+                                        onPressed: () {
+                                          setState(() {
+                                            selectedMaterial = null;
+                                            purchaseQuantity = 1;
+                                            totalPrice = 0.0;
+                                            quantityController.text = '1';
+                                          });
+                                        },
+                                        gradientTop: const Color(0xFF757575),
+                                        gradientBottom: const Color(0xFF424242),
+                                        borderColor: const Color(0xFF212121),
+                                        height: 50,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: IndustrialButton(
+                                        label: 'Comprar Máximo',
+                                        onPressed: () {
+                                          final maxQty = _calculateMaxQuantity(
+                                            selectedMaterial!,
+                                          );
+                                          final maxAffordable =
+                                              _calculateMaxAffordableQuantity(
+                                                selectedMaterial!,
+                                              );
+                                          final maxAllowed =
+                                              maxQty < maxAffordable
+                                              ? maxQty
+                                              : maxAffordable;
+                                          setState(() {
+                                            purchaseQuantity = maxAllowed;
+                                            totalPrice = _calculateTotalPrice(
+                                              selectedMaterial!,
+                                              purchaseQuantity,
+                                            );
+                                            quantityController.text =
+                                                purchaseQuantity.toString();
+                                          });
+                                        },
+                                        gradientTop: const Color(0xFFFF9800),
+                                        gradientBottom: const Color(0xFFF57C00),
+                                        borderColor: const Color(0xFFE65100),
+                                        height: 50,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: IndustrialButton(
-                                    label: 'Comprar',
-                                    onPressed: () async {
-                                      final confirmed = await showDialog<bool>(
-                                        context: context,
-                                        builder: (context) => GenericPurchaseDialog(
-                                          title: 'COMPRAR MATERIAL',
-                                          description:
-                                              '¿Confirmar compra de $purchaseQuantity unidades de ${selectedMaterial!['name']}?',
-                                          price: totalPrice.toInt(),
-                                          priceType: UnlockCostType.money,
-                                          onConfirm: () async => true,
-                                        ),
-                                      );
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: IndustrialButton(
+                                        label: 'Comprar',
+                                        onPressed: () async {
+                                          final confirmed = await showDialog<bool>(
+                                            context: context,
+                                            builder: (context) =>
+                                                GenericPurchaseDialog(
+                                                  title: 'COMPRAR MATERIAL',
+                                                  description:
+                                                      '¿Confirmar compra de $purchaseQuantity unidades de ${selectedMaterial!['name']}?',
+                                                  price: totalPrice.toInt(),
+                                                  priceType:
+                                                      UnlockCostType.money,
+                                                  onConfirm: () async => true,
+                                                ),
+                                          );
 
-                                      if (confirmed == true) {
-                                        await _purchaseMaterial();
-                                      }
-                                    },
-                                    gradientTop: const Color(0xFF4CAF50),
-                                    gradientBottom: const Color(0xFF2E7D32),
-                                    borderColor: const Color(0xFF1B5E20),
-                                    height: 50,
-                                  ),
+                                          if (confirmed == true) {
+                                            await _purchaseMaterial();
+                                          }
+                                        },
+                                        gradientTop: const Color(0xFF4CAF50),
+                                        gradientBottom: const Color(0xFF2E7D32),
+                                        borderColor: const Color(0xFF1B5E20),
+                                        height: 50,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -715,189 +881,190 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         ? (currentLoad / maxCapacity).clamp(0.0, 1.0)
         : 0.0;
 
-    final purchaseSection = isAtMarket
-        ? [
-            const SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.surface.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.3)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Compra de Materiales',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Category dropdown
-                  DropdownButtonFormField<String>(
-                    initialValue: selectedCategory,
-                    decoration: InputDecoration(
-                      labelText: 'Categoría',
-                      labelStyle: TextStyle(color: Colors.white70),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                    ),
-                    dropdownColor: AppColors.surface,
-                    style: TextStyle(color: Colors.white),
-                    items: materialCategories.map((category) {
-                      return DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCategory = value;
-                        selectedMaterial = null;
-                        purchaseQuantity = 1;
-                        totalPrice = 0.0;
-                        quantityController.text = '1';
-                      });
-                      if (value != null) {
-                        _loadMaterialsForCategory(value);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  // Materials list or selected material details
-                  ..._buildMaterialContent(),
-                ],
-              ),
-            ),
-          ]
-        : [];
-
-    final currentLoadSection = (truckLoad != null && truckLoad!.isNotEmpty)
-        ? [
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+    final bool canPurchase = isAtMarket && loadPercentage < 1.0;
+    List<Widget>? purchaseSection;
+    if (canPurchase) {
+      purchaseSection = [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(15, 23, 42, 0.8),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Compra de Materiales',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Carga Actual',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+              ),
+              const SizedBox(height: 12),
+              // Category dropdown
+              DropdownButtonFormField<String>(
+                initialValue: selectedCategory,
+                decoration: InputDecoration(
+                  labelText: 'Categoría',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color.fromRGBO(255, 255, 255, 0.3),
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 200, // Fixed height for scrollable list
-                      child: ListView.builder(
-                        itemCount: truckLoad!.length,
-                        itemBuilder: (context, index) {
-                          final materialId = truckLoad!.keys.elementAt(index);
-                          final data =
-                              truckLoad![materialId] as Map<String, dynamic>;
-                          final units = data['units'] as int? ?? 0;
-                          final m3PerUnit =
-                              (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
-                          final totalM3 = units * m3PerUnit;
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                ),
+                dropdownColor: AppColors.surface,
+                style: TextStyle(color: Colors.white),
+                items: materialCategories.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                    selectedMaterial = null;
+                    purchaseQuantity = 1;
+                    totalPrice = 0.0;
+                    quantityController.text = '1';
+                  });
+                  if (value != null) {
+                    _loadMaterialsForCategory(value);
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              // Materials list or selected material details
+              ..._buildMaterialContent(),
+            ],
+          ),
+        ),
+      ];
+    } else {
+      purchaseSection = [];
+    }
 
-                          return FutureBuilder<Map<String, dynamic>?>(
-                            future: _getMaterialInfo(materialId),
-                            builder: (context, snapshot) {
-                              final materialInfo = snapshot.data;
-                              final iconPath =
-                                  materialInfo?['icon'] as String? ??
-                                  'assets/images/materials/default.png';
-                              final name =
-                                  materialInfo?['name'] as String? ??
-                                  'Material $materialId';
+    List<Widget> currentLoadSection;
+    if (truckLoad != null && truckLoad!.isNotEmpty) {
+      currentLoadSection = [
+        const SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(15, 23, 42, 0.8),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Carga Actual',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 200, // Fixed height for scrollable list
+                child: ListView.builder(
+                  itemCount: truckLoad!.length,
+                  itemBuilder: (context, index) {
+                    final materialId = truckLoad!.keys.elementAt(index);
+                    final data = truckLoad![materialId] as Map<String, dynamic>;
+                    final units = data['units'] as int? ?? 0;
+                    final m3PerUnit =
+                        (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
+                    final totalM3 = units * m3PerUnit;
 
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      iconPath,
+                    return FutureBuilder<Map<String, dynamic>?>(
+                      future: _getMaterialInfo(materialId),
+                      builder: (context, snapshot) {
+                        final materialInfo = snapshot.data;
+                        final iconPath =
+                            materialInfo?['icon'] as String? ??
+                            'assets/images/materials/default.png';
+                        final name =
+                            materialInfo?['name'] as String? ??
+                            'Material $materialId';
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(0, 0, 0, 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                iconPath,
+                                width: 40,
+                                height: 40,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
                                       width: 40,
                                       height: 40,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Container(
-                                                width: 40,
-                                                height: 40,
-                                                color: Colors.grey,
-                                                child: const Icon(
-                                                  Icons.inventory,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            name,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '$units unidades',
-                                            style: TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
+                                      color: Colors.grey,
+                                      child: const Icon(
+                                        Icons.inventory,
+                                        color: Colors.white,
                                       ),
                                     ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      '${totalM3.toStringAsFixed(2)} m³',
+                                      name,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+                                    Text(
+                                      '$units unidades',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                              ),
+                              Text(
+                                '${totalM3.toStringAsFixed(2)} m³',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
-            ),
-          ]
-        : [];
+            ],
+          ),
+        ),
+      ];
+    } else {
+      currentLoadSection = [];
+    }
 
     return Scaffold(
       appBar: CustomGameAppBar(),
@@ -1007,7 +1174,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       final materialsData = json.decode(materialsJson);
       final materials = materialsData['materials'] as List;
       return materials.firstWhere(
-        (m) => m['materialId'].toString() == materialId,
+        (m) => m['id'].toString() == materialId,
         orElse: () => null,
       );
     } catch (e) {
