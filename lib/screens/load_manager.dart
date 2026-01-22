@@ -11,6 +11,7 @@ import 'package:industrial_app/widgets/material_purchase_controls.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
+import 'package:industrial_app/data/experience/experience_service.dart';
 
 class LoadManagerScreen extends StatefulWidget {
   final int fleetId;
@@ -50,7 +51,12 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   @override
   void initState() {
     super.initState();
-    _loadFleetData();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await ExperienceService.loadExperienceData();
+    await _loadFleetData();
   }
 
   @override
@@ -523,17 +529,35 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         final materialData =
             currentTruckLoad[materialId] as Map<String, dynamic>;
         final units = materialData['units'] as int;
+        final m3PerUnit =
+            (materialData['m3PerUnit'] as num?)?.toDouble() ?? 0.0;
         final averagePrice =
             (materialData['averagePrice'] as num?)?.toDouble() ?? 0.0;
+
+        // Get material info to calculate experience
+        final materialInfo = await _getMaterialInfo(materialId);
+        final materialGrade = materialInfo?['grade'] as int? ?? 1;
+        final totalVolume = units * m3PerUnit;
 
         // Calculate sell price
         final sellPrice = await _calculateSellPrice(materialId);
         final totalSellPrice = (sellPrice * units).toInt();
 
+        // Calculate experience gained from this sale
+        final xpGained = ExperienceService.calculateSaleXp(
+          totalVolume,
+          materialGrade,
+        );
+
         // ALL WRITES AFTER ALL READS
-        // Update money
+        // Get current experience
+        final currentExperience =
+            (userData['experience'] as num?)?.toInt() ?? 0;
+
+        // Update money and experience
         transaction.update(userDocRef, {
           'dinero': currentMoney + totalSellPrice,
+          'experience': currentExperience + xpGained,
         });
 
         // Remove material from truck load
@@ -640,9 +664,22 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         }
 
         // ALL WRITES MUST BE DONE AFTER ALL READS
-        // Update money
+        // Calculate experience gained from this purchase
+        final materialGrade = selectedMaterial!['grade'] as int? ?? 1;
+        final totalVolume = purchaseQuantity * m3PerUnit;
+        final xpGained = ExperienceService.calculatePurchaseXp(
+          totalVolume,
+          materialGrade,
+        );
+
+        // Get current experience
+        final currentExperience =
+            (userData['experience'] as num?)?.toInt() ?? 0;
+
+        // Update money and experience
         transaction.update(userDocRef, {
           'dinero': currentMoney - totalCost.toInt(),
+          'experience': currentExperience + xpGained,
         });
 
         // Calculate average price for the material
