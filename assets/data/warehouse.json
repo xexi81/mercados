@@ -1,0 +1,59 @@
+{
+  "warehouses": [
+    {
+      "id": 1,
+      "name": "Almacén Pequeño",
+      "grade": 1,
+      "required_level": 1,
+      "unlock_cost": {
+        "type": "money",
+        "amount": 2500
+      },
+      "capacity_m3": 250
+    },
+    {
+      "id": 2,
+      "name": "Almacén Regional",
+      "grade": 2,
+      "required_level": 50,
+      "unlock_cost": {
+        "type": "money",
+        "amount": 40000
+      },
+      "capacity_m3": 2000
+    },
+    {
+      "id": 3,
+      "name": "Centro Logístico",
+      "grade": 3,
+      "required_level": 100,
+      "unlock_cost": {
+        "type": "money",
+        "amount": 450000
+      },
+      "capacity_m3": 10000
+    },
+    {
+      "id": 4,
+      "name": "Hub Internacional",
+      "grade": 4,
+      "required_level": 150,
+      "unlock_cost": {
+        "type": "money",
+        "amount": 4000000
+      },
+      "capacity_m3": 50000
+    },
+    {
+      "id": 5,
+      "name": "Mega Almacén Automatizado",
+      "grade": 5,
+      "required_level": 200,
+      "unlock_cost": {
+        "type": "gems",
+        "amount": 250
+      },
+      "capacity_m3": 200000
+    }
+  ]
+}

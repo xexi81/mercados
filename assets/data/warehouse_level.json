@@ -1,0 +1,3004 @@
+{
+  "warehouse_level_progression": [
+    {
+      "level": 1,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 100
+    },
+    {
+      "level": 2,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 108
+    },
+    {
+      "level": 3,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 117
+    },
+    {
+      "level": 4,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 126
+    },
+    {
+      "level": 5,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 136
+    },
+    {
+      "level": 6,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 147
+    },
+    {
+      "level": 7,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 159
+    },
+    {
+      "level": 8,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 171
+    },
+    {
+      "level": 9,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 185
+    },
+    {
+      "level": 10,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 200
+    },
+    {
+      "level": 11,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 216
+    },
+    {
+      "level": 12,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 233
+    },
+    {
+      "level": 13,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 252
+    },
+    {
+      "level": 14,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 272
+    },
+    {
+      "level": 15,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 294
+    },
+    {
+      "level": 16,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 317
+    },
+    {
+      "level": 17,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 343
+    },
+    {
+      "level": 18,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 370
+    },
+    {
+      "level": 19,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 400
+    },
+    {
+      "level": 20,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 432
+    },
+    {
+      "level": 21,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 466
+    },
+    {
+      "level": 22,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 503
+    },
+    {
+      "level": 23,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 544
+    },
+    {
+      "level": 24,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 587
+    },
+    {
+      "level": 25,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 634
+    },
+    {
+      "level": 26,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 685
+    },
+    {
+      "level": 27,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 740
+    },
+    {
+      "level": 28,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 799
+    },
+    {
+      "level": 29,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 863
+    },
+    {
+      "level": 30,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 932
+    },
+    {
+      "level": 31,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1006
+    },
+    {
+      "level": 32,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1087
+    },
+    {
+      "level": 33,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1174
+    },
+    {
+      "level": 34,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1268
+    },
+    {
+      "level": 35,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1369
+    },
+    {
+      "level": 36,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1479
+    },
+    {
+      "level": 37,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1597
+    },
+    {
+      "level": 38,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1725
+    },
+    {
+      "level": 39,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1863
+    },
+    {
+      "level": 40,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2012
+    },
+    {
+      "level": 41,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2172
+    },
+    {
+      "level": 42,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2346
+    },
+    {
+      "level": 43,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2534
+    },
+    {
+      "level": 44,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2737
+    },
+    {
+      "level": 45,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2956
+    },
+    {
+      "level": 46,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3192
+    },
+    {
+      "level": 47,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3447
+    },
+    {
+      "level": 48,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3723
+    },
+    {
+      "level": 49,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4021
+    },
+    {
+      "level": 50,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4343
+    },
+    {
+      "level": 51,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4690
+    },
+    {
+      "level": 52,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5065
+    },
+    {
+      "level": 53,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5471
+    },
+    {
+      "level": 54,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5908
+    },
+    {
+      "level": 55,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6381
+    },
+    {
+      "level": 56,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6891
+    },
+    {
+      "level": 57,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7443
+    },
+    {
+      "level": 58,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8038
+    },
+    {
+      "level": 59,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8681
+    },
+    {
+      "level": 60,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9376
+    },
+    {
+      "level": 61,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 10126
+    },
+    {
+      "level": 62,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 10936
+    },
+    {
+      "level": 63,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 11811
+    },
+    {
+      "level": 64,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 12755
+    },
+    {
+      "level": 65,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 13776
+    },
+    {
+      "level": 66,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 14878
+    },
+    {
+      "level": 67,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 16068
+    },
+    {
+      "level": 68,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 17354
+    },
+    {
+      "level": 69,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 18742
+    },
+    {
+      "level": 70,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 20241
+    },
+    {
+      "level": 71,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 21861
+    },
+    {
+      "level": 72,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 23609
+    },
+    {
+      "level": 73,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 25498
+    },
+    {
+      "level": 74,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 27538
+    },
+    {
+      "level": 75,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 29741
+    },
+    {
+      "level": 76,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 32120
+    },
+    {
+      "level": 77,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 34690
+    },
+    {
+      "level": 78,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 37465
+    },
+    {
+      "level": 79,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 40463
+    },
+    {
+      "level": 80,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 43700
+    },
+    {
+      "level": 81,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 47195
+    },
+    {
+      "level": 82,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 50971
+    },
+    {
+      "level": 83,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 55049
+    },
+    {
+      "level": 84,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 59453
+    },
+    {
+      "level": 85,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 64209
+    },
+    {
+      "level": 86,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 69346
+    },
+    {
+      "level": 87,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 74893
+    },
+    {
+      "level": 88,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 80885
+    },
+    {
+      "level": 89,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 87356
+    },
+    {
+      "level": 90,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 94344
+    },
+    {
+      "level": 91,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 101892
+    },
+    {
+      "level": 92,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 110043
+    },
+    {
+      "level": 93,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 118846
+    },
+    {
+      "level": 94,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 128354
+    },
+    {
+      "level": 95,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 138622
+    },
+    {
+      "level": 96,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 149712
+    },
+    {
+      "level": 97,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 161689
+    },
+    {
+      "level": 98,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 174624
+    },
+    {
+      "level": 99,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 188594
+    },
+    {
+      "level": 100,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 203682
+    },
+    {
+      "level": 101,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 219976
+    },
+    {
+      "level": 102,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 237574
+    },
+    {
+      "level": 103,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 256580
+    },
+    {
+      "level": 104,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 277107
+    },
+    {
+      "level": 105,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 299275
+    },
+    {
+      "level": 106,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 323217
+    },
+    {
+      "level": 107,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 349074
+    },
+    {
+      "level": 108,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 377000
+    },
+    {
+      "level": 109,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 407160
+    },
+    {
+      "level": 110,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 439733
+    },
+    {
+      "level": 111,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 474912
+    },
+    {
+      "level": 112,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 512905
+    },
+    {
+      "level": 113,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 553937
+    },
+    {
+      "level": 114,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 598252
+    },
+    {
+      "level": 115,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 646112
+    },
+    {
+      "level": 116,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 697801
+    },
+    {
+      "level": 117,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 753626
+    },
+    {
+      "level": 118,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 813916
+    },
+    {
+      "level": 119,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 879029
+    },
+    {
+      "level": 120,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 949351
+    },
+    {
+      "level": 121,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1025299
+    },
+    {
+      "level": 122,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1107323
+    },
+    {
+      "level": 123,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1195909
+    },
+    {
+      "level": 124,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1291582
+    },
+    {
+      "level": 125,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1394908
+    },
+    {
+      "level": 126,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1506501
+    },
+    {
+      "level": 127,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1627021
+    },
+    {
+      "level": 128,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1757183
+    },
+    {
+      "level": 129,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1897757
+    },
+    {
+      "level": 130,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2049578
+    },
+    {
+      "level": 131,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2213544
+    },
+    {
+      "level": 132,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2390628
+    },
+    {
+      "level": 133,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2581878
+    },
+    {
+      "level": 134,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2788428
+    },
+    {
+      "level": 135,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3011503
+    },
+    {
+      "level": 136,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3252423
+    },
+    {
+      "level": 137,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3512617
+    },
+    {
+      "level": 138,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3793626
+    },
+    {
+      "level": 139,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4097116
+    },
+    {
+      "level": 140,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4424885
+    },
+    {
+      "level": 141,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4778876
+    },
+    {
+      "level": 142,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5161186
+    },
+    {
+      "level": 143,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5574081
+    },
+    {
+      "level": 144,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6020008
+    },
+    {
+      "level": 145,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6501608
+    },
+    {
+      "level": 146,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7021737
+    },
+    {
+      "level": 147,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7583476
+    },
+    {
+      "level": 148,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8190154
+    },
+    {
+      "level": 149,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8845366
+    },
+    {
+      "level": 150,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9552995
+    },
+    {
+      "level": 151,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 10317235
+    },
+    {
+      "level": 152,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 11142614
+    },
+    {
+      "level": 153,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 12034023
+    },
+    {
+      "level": 154,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 12996745
+    },
+    {
+      "level": 155,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 14036484
+    },
+    {
+      "level": 156,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 15159403
+    },
+    {
+      "level": 157,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 16372155
+    },
+    {
+      "level": 158,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 17681928
+    },
+    {
+      "level": 159,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 19096482
+    },
+    {
+      "level": 160,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 20624201
+    },
+    {
+      "level": 161,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 22274137
+    },
+    {
+      "level": 162,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 24056067
+    },
+    {
+      "level": 163,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 25980553
+    },
+    {
+      "level": 164,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 28058997
+    },
+    {
+      "level": 165,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 30303717
+    },
+    {
+      "level": 166,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 32728014
+    },
+    {
+      "level": 167,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 35346255
+    },
+    {
+      "level": 168,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 38173956
+    },
+    {
+      "level": 169,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 41227872
+    },
+    {
+      "level": 170,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 44526102
+    },
+    {
+      "level": 171,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 48088190
+    },
+    {
+      "level": 172,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 51935245
+    },
+    {
+      "level": 173,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 56090065
+    },
+    {
+      "level": 174,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 60577270
+    },
+    {
+      "level": 175,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 65423452
+    },
+    {
+      "level": 176,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 70657328
+    },
+    {
+      "level": 177,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 76309914
+    },
+    {
+      "level": 178,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 82414707
+    },
+    {
+      "level": 179,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 89007884
+    },
+    {
+      "level": 180,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 96128515
+    },
+    {
+      "level": 181,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 103818796
+    },
+    {
+      "level": 182,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 112124300
+    },
+    {
+      "level": 183,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 121094244
+    },
+    {
+      "level": 184,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 130781783
+    },
+    {
+      "level": 185,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 141244326
+    },
+    {
+      "level": 186,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 152543872
+    },
+    {
+      "level": 187,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 164747381
+    },
+    {
+      "level": 188,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 177927172
+    },
+    {
+      "level": 189,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 192161346
+    },
+    {
+      "level": 190,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 207534253
+    },
+    {
+      "level": 191,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 224136994
+    },
+    {
+      "level": 192,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 242067953
+    },
+    {
+      "level": 193,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 261433389
+    },
+    {
+      "level": 194,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 282348061
+    },
+    {
+      "level": 195,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 304935905
+    },
+    {
+      "level": 196,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 329330778
+    },
+    {
+      "level": 197,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 355677240
+    },
+    {
+      "level": 198,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 384131419
+    },
+    {
+      "level": 199,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 414861933
+    },
+    {
+      "level": 200,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 448050887
+    },
+    {
+      "level": 201,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 483894958
+    },
+    {
+      "level": 202,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 522606555
+    },
+    {
+      "level": 203,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 564415080
+    },
+    {
+      "level": 204,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 609568286
+    },
+    {
+      "level": 205,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 658333749
+    },
+    {
+      "level": 206,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 711000449
+    },
+    {
+      "level": 207,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 767880485
+    },
+    {
+      "level": 208,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 829310923
+    },
+    {
+      "level": 209,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 895655797
+    },
+    {
+      "level": 210,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 967308261
+    },
+    {
+      "level": 211,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1044692922
+    },
+    {
+      "level": 212,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1128268356
+    },
+    {
+      "level": 213,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1218529824
+    },
+    {
+      "level": 214,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1316012210
+    },
+    {
+      "level": 215,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1421293187
+    },
+    {
+      "level": 216,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1534996642
+    },
+    {
+      "level": 217,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1657796373
+    },
+    {
+      "level": 218,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1790420083
+    },
+    {
+      "level": 219,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1933653690
+    },
+    {
+      "level": 220,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2088345985
+    },
+    {
+      "level": 221,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2255413664
+    },
+    {
+      "level": 222,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2435846757
+    },
+    {
+      "level": 223,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2630714497
+    },
+    {
+      "level": 224,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2841171657
+    },
+    {
+      "level": 225,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3068465390
+    },
+    {
+      "level": 226,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3313942621
+    },
+    {
+      "level": 227,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3579058030
+    },
+    {
+      "level": 228,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3865382673
+    },
+    {
+      "level": 229,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4174613287
+    },
+    {
+      "level": 230,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4508582350
+    },
+    {
+      "level": 231,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4869268938
+    },
+    {
+      "level": 232,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5258810453
+    },
+    {
+      "level": 233,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5679515289
+    },
+    {
+      "level": 234,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6133876512
+    },
+    {
+      "level": 235,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6624586633
+    },
+    {
+      "level": 236,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7154553564
+    },
+    {
+      "level": 237,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7726917849
+    },
+    {
+      "level": 238,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8345071277
+    },
+    {
+      "level": 239,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9012676979
+    },
+    {
+      "level": 240,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9733691137
+    },
+    {
+      "level": 241,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 10512386428
+    },
+    {
+      "level": 242,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 11353377342
+    },
+    {
+      "level": 243,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 12261647530
+    },
+    {
+      "level": 244,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 13242579332
+    },
+    {
+      "level": 245,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 14301985678
+    },
+    {
+      "level": 246,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 15446144533
+    },
+    {
+      "level": 247,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 16681836095
+    },
+    {
+      "level": 248,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 18016382983
+    },
+    {
+      "level": 249,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 19457693622
+    },
+    {
+      "level": 250,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 21014309111
+    },
+    {
+      "level": 251,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 22695453840
+    },
+    {
+      "level": 252,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 24511090147
+    },
+    {
+      "level": 253,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 26471977359
+    },
+    {
+      "level": 254,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 28589735548
+    },
+    {
+      "level": 255,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 30876914392
+    },
+    {
+      "level": 256,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 33347067543
+    },
+    {
+      "level": 257,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 36014832947
+    },
+    {
+      "level": 258,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 38896019582
+    },
+    {
+      "level": 259,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 42007701149
+    },
+    {
+      "level": 260,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 45368317241
+    },
+    {
+      "level": 261,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 48997782620
+    },
+    {
+      "level": 262,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 52917605230
+    },
+    {
+      "level": 263,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 57151013648
+    },
+    {
+      "level": 264,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 61723094740
+    },
+    {
+      "level": 265,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 66660942319
+    },
+    {
+      "level": 266,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 71993817705
+    },
+    {
+      "level": 267,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 77753323121
+    },
+    {
+      "level": 268,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 83973588971
+    },
+    {
+      "level": 269,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 90691476088
+    },
+    {
+      "level": 270,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 97946794175
+    },
+    {
+      "level": 271,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 105782537709
+    },
+    {
+      "level": 272,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 114245140726
+    },
+    {
+      "level": 273,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 123384751984
+    },
+    {
+      "level": 274,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 133255532143
+    },
+    {
+      "level": 275,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 143915974714
+    },
+    {
+      "level": 276,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 155429252692
+    },
+    {
+      "level": 277,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 167863592907
+    },
+    {
+      "level": 278,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 181292680339
+    },
+    {
+      "level": 279,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 195796094767
+    },
+    {
+      "level": 280,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 211459782348
+    },
+    {
+      "level": 281,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 228376564936
+    },
+    {
+      "level": 282,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 246646690131
+    },
+    {
+      "level": 283,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 266378425341
+    },
+    {
+      "level": 284,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 287688699368
+    },
+    {
+      "level": 285,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 310703795318
+    },
+    {
+      "level": 286,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 335560098943
+    },
+    {
+      "level": 287,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 362404906859
+    },
+    {
+      "level": 288,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 391397299407
+    },
+    {
+      "level": 289,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 422709083360
+    },
+    {
+      "level": 290,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 456525810029
+    },
+    {
+      "level": 291,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 493047874831
+    },
+    {
+      "level": 292,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 532491704818
+    },
+    {
+      "level": 293,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 575091041203
+    },
+    {
+      "level": 294,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 621098324499
+    },
+    {
+      "level": 295,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 670786190459
+    },
+    {
+      "level": 296,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 724449085696
+    },
+    {
+      "level": 297,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 782405012552
+    },
+    {
+      "level": 298,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 844997413556
+    },
+    {
+      "level": 299,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 912597206640
+    },
+    {
+      "level": 300,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 985604983172
+    },
+    {
+      "level": 301,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1064453381825
+    },
+    {
+      "level": 302,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1149609652371
+    },
+    {
+      "level": 303,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1241578424561
+    },
+    {
+      "level": 304,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1340904698526
+    },
+    {
+      "level": 305,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1448177074408
+    },
+    {
+      "level": 306,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1564031240361
+    },
+    {
+      "level": 307,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1689153739589
+    },
+    {
+      "level": 308,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1824286038757
+    },
+    {
+      "level": 309,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1970228921857
+    },
+    {
+      "level": 310,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2127847235606
+    },
+    {
+      "level": 311,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2298075014454
+    },
+    {
+      "level": 312,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2481921015610
+    },
+    {
+      "level": 313,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2680474696859
+    },
+    {
+      "level": 314,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2894912672608
+    },
+    {
+      "level": 315,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3126505686417
+    },
+    {
+      "level": 316,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3376626141330
+    },
+    {
+      "level": 317,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3646756232636
+    },
+    {
+      "level": 318,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 3938496731247
+    },
+    {
+      "level": 319,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4253576469747
+    },
+    {
+      "level": 320,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4593862587327
+    },
+    {
+      "level": 321,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 4961371594313
+    },
+    {
+      "level": 322,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5358281321858
+    },
+    {
+      "level": 323,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 5786943827607
+    },
+    {
+      "level": 324,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6249899333815
+    },
+    {
+      "level": 325,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 6749891280520
+    },
+    {
+      "level": 326,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7289882582962
+    },
+    {
+      "level": 327,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 7873073189599
+    },
+    {
+      "level": 328,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 8502919044767
+    },
+    {
+      "level": 329,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9183152568348
+    },
+    {
+      "level": 330,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 9917804773816
+    },
+    {
+      "level": 331,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 10711229155721
+    },
+    {
+      "level": 332,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 11568127488179
+    },
+    {
+      "level": 333,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 12493577687233
+    },
+    {
+      "level": 334,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 13493063902212
+    },
+    {
+      "level": 335,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 14572509014389
+    },
+    {
+      "level": 336,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 15738309735540
+    },
+    {
+      "level": 337,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 16997374514383
+    },
+    {
+      "level": 338,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 18357164475534
+    },
+    {
+      "level": 339,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 19825737633577
+    },
+    {
+      "level": 340,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 21411796644263
+    },
+    {
+      "level": 341,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 23124740375804
+    },
+    {
+      "level": 342,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 24974719605868
+    },
+    {
+      "level": 343,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 26972697174338
+    },
+    {
+      "level": 344,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 29130512948285
+    },
+    {
+      "level": 345,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 31460953984147
+    },
+    {
+      "level": 346,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 33977830302879
+    },
+    {
+      "level": 347,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 36696056727109
+    },
+    {
+      "level": 348,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 39631741265278
+    },
+    {
+      "level": 349,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 42802280566500
+    },
+    {
+      "level": 350,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 46226463011820
+    },
+    {
+      "level": 351,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 49924580052766
+    },
+    {
+      "level": 352,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 53918546456987
+    },
+    {
+      "level": 353,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 58232030173546
+    },
+    {
+      "level": 354,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 62890592587430
+    },
+    {
+      "level": 355,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 67921839994424
+    },
+    {
+      "level": 356,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 73355587193978
+    },
+    {
+      "level": 357,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 79224034169497
+    },
+    {
+      "level": 358,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 85561956903056
+    },
+    {
+      "level": 359,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 92406913455301
+    },
+    {
+      "level": 360,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 99799466531725
+    },
+    {
+      "level": 361,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 107783423854263
+    },
+    {
+      "level": 362,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 116406097762604
+    },
+    {
+      "level": 363,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 125718585583612
+    },
+    {
+      "level": 364,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 135776072430301
+    },
+    {
+      "level": 365,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 146638158224726
+    },
+    {
+      "level": 366,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 158369210882704
+    },
+    {
+      "level": 367,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 171038747753320
+    },
+    {
+      "level": 368,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 184721847573586
+    },
+    {
+      "level": 369,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 199499595379472
+    },
+    {
+      "level": 370,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 215459563009830
+    },
+    {
+      "level": 371,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 232696328050617
+    },
+    {
+      "level": 372,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 251312034294666
+    },
+    {
+      "level": 373,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 271416997038239
+    },
+    {
+      "level": 374,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 293130356801299
+    },
+    {
+      "level": 375,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 316580785345402
+    },
+    {
+      "level": 376,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 341907248173035
+    },
+    {
+      "level": 377,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 369259828026877
+    },
+    {
+      "level": 378,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 398800614269028
+    },
+    {
+      "level": 379,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 430704663410550
+    },
+    {
+      "level": 380,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 465161036483394
+    },
+    {
+      "level": 381,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 502373919402065
+    },
+    {
+      "level": 382,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 542563832954231
+    },
+    {
+      "level": 383,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 585968939590569
+    },
+    {
+      "level": 384,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 632846454757815
+    },
+    {
+      "level": 385,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 683474171138440
+    },
+    {
+      "level": 386,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 738152104829515
+    },
+    {
+      "level": 387,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 797204273215876
+    },
+    {
+      "level": 388,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 860980615073147
+    },
+    {
+      "level": 389,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 929859064278999
+    },
+    {
+      "level": 390,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1004247789421318
+    },
+    {
+      "level": 391,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1084587612575024
+    },
+    {
+      "level": 392,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1171354621581026
+    },
+    {
+      "level": 393,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1265062991307508
+    },
+    {
+      "level": 394,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1366268030612109
+    },
+    {
+      "level": 395,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1475569473061078
+    },
+    {
+      "level": 396,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1593615030905964
+    },
+    {
+      "level": 397,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1721104233378442
+    },
+    {
+      "level": 398,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 1858792572048717
+    },
+    {
+      "level": 399,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2007495977812614
+    },
+    {
+      "level": 400,
+      "capacity_increase_m3": 100,
+      "currency": "money",
+      "cost": 2168095656037624
+    },
+    {
+      "level": 401,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 5
+    },
+    {
+      "level": 402,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 10
+    },
+    {
+      "level": 403,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 15
+    },
+    {
+      "level": 404,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 20
+    },
+    {
+      "level": 405,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 25
+    },
+    {
+      "level": 406,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 30
+    },
+    {
+      "level": 407,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 35
+    },
+    {
+      "level": 408,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 40
+    },
+    {
+      "level": 409,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 45
+    },
+    {
+      "level": 410,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 50
+    },
+    {
+      "level": 411,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 55
+    },
+    {
+      "level": 412,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 60
+    },
+    {
+      "level": 413,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 65
+    },
+    {
+      "level": 414,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 70
+    },
+    {
+      "level": 415,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 75
+    },
+    {
+      "level": 416,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 80
+    },
+    {
+      "level": 417,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 85
+    },
+    {
+      "level": 418,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 90
+    },
+    {
+      "level": 419,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 95
+    },
+    {
+      "level": 420,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 100
+    },
+    {
+      "level": 421,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 105
+    },
+    {
+      "level": 422,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 110
+    },
+    {
+      "level": 423,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 115
+    },
+    {
+      "level": 424,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 120
+    },
+    {
+      "level": 425,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 125
+    },
+    {
+      "level": 426,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 130
+    },
+    {
+      "level": 427,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 135
+    },
+    {
+      "level": 428,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 140
+    },
+    {
+      "level": 429,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 145
+    },
+    {
+      "level": 430,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 150
+    },
+    {
+      "level": 431,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 155
+    },
+    {
+      "level": 432,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 160
+    },
+    {
+      "level": 433,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 165
+    },
+    {
+      "level": 434,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 170
+    },
+    {
+      "level": 435,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 175
+    },
+    {
+      "level": 436,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 180
+    },
+    {
+      "level": 437,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 185
+    },
+    {
+      "level": 438,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 190
+    },
+    {
+      "level": 439,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 195
+    },
+    {
+      "level": 440,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 200
+    },
+    {
+      "level": 441,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 205
+    },
+    {
+      "level": 442,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 210
+    },
+    {
+      "level": 443,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 215
+    },
+    {
+      "level": 444,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 220
+    },
+    {
+      "level": 445,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 225
+    },
+    {
+      "level": 446,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 230
+    },
+    {
+      "level": 447,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 235
+    },
+    {
+      "level": 448,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 240
+    },
+    {
+      "level": 449,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 245
+    },
+    {
+      "level": 450,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 250
+    },
+    {
+      "level": 451,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 255
+    },
+    {
+      "level": 452,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 260
+    },
+    {
+      "level": 453,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 265
+    },
+    {
+      "level": 454,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 270
+    },
+    {
+      "level": 455,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 275
+    },
+    {
+      "level": 456,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 280
+    },
+    {
+      "level": 457,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 285
+    },
+    {
+      "level": 458,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 290
+    },
+    {
+      "level": 459,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 295
+    },
+    {
+      "level": 460,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 300
+    },
+    {
+      "level": 461,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 305
+    },
+    {
+      "level": 462,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 310
+    },
+    {
+      "level": 463,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 315
+    },
+    {
+      "level": 464,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 320
+    },
+    {
+      "level": 465,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 325
+    },
+    {
+      "level": 466,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 330
+    },
+    {
+      "level": 467,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 335
+    },
+    {
+      "level": 468,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 340
+    },
+    {
+      "level": 469,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 345
+    },
+    {
+      "level": 470,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 350
+    },
+    {
+      "level": 471,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 355
+    },
+    {
+      "level": 472,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 360
+    },
+    {
+      "level": 473,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 365
+    },
+    {
+      "level": 474,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 370
+    },
+    {
+      "level": 475,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 375
+    },
+    {
+      "level": 476,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 380
+    },
+    {
+      "level": 477,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 385
+    },
+    {
+      "level": 478,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 390
+    },
+    {
+      "level": 479,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 395
+    },
+    {
+      "level": 480,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 400
+    },
+    {
+      "level": 481,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 405
+    },
+    {
+      "level": 482,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 410
+    },
+    {
+      "level": 483,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 415
+    },
+    {
+      "level": 484,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 420
+    },
+    {
+      "level": 485,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 425
+    },
+    {
+      "level": 486,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 430
+    },
+    {
+      "level": 487,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 435
+    },
+    {
+      "level": 488,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 440
+    },
+    {
+      "level": 489,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 445
+    },
+    {
+      "level": 490,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 450
+    },
+    {
+      "level": 491,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 455
+    },
+    {
+      "level": 492,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 460
+    },
+    {
+      "level": 493,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 465
+    },
+    {
+      "level": 494,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 470
+    },
+    {
+      "level": 495,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 475
+    },
+    {
+      "level": 496,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 480
+    },
+    {
+      "level": 497,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 485
+    },
+    {
+      "level": 498,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 490
+    },
+    {
+      "level": 499,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 495
+    },
+    {
+      "level": 500,
+      "capacity_increase_m3": 100,
+      "currency": "gems",
+      "cost": 500
+    }
+  ]
+}
