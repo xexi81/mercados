@@ -10,6 +10,7 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/factories/factory_repository.dart';
 import 'package:industrial_app/data/factories/factory_model.dart';
 import 'package:industrial_app/data/factories/production_tier_model.dart';
+import 'package:industrial_app/data/factories/factory_status.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 
 class BuyFactoryScreen extends StatefulWidget {
@@ -108,6 +109,7 @@ class _BuyFactoryScreenState extends State<BuyFactoryScreen> {
             slots[slotIndex] = {
               'slotId': widget.slotId,
               'factoryId': factory.id,
+              'status': FactoryStatus.waiting.displayName,
               'currentTier': 1,
               'unlockedTiers': [1],
               'productionQueue': [],
