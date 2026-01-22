@@ -45,7 +45,7 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
           .snapshots(),
       builder: (context, snapshot) {
         // Default values
-        int dinero = 0;
+        double dinero = 0;
         int gemas = 0;
         int experience = 0;
         String? photoUrl = currentUser.photoURL;
@@ -53,9 +53,9 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
         if (snapshot.hasData && snapshot.data!.exists) {
           final data = snapshot.data!.data() as Map<String, dynamic>?;
           if (data != null) {
-            dinero = data['dinero'] ?? 0;
-            gemas = data['gemas'] ?? 0;
-            experience = data['experience'] ?? 0;
+            dinero = (data['dinero'] as num?)?.toDouble() ?? 0;
+            gemas = (data['gemas'] as num?)?.toInt() ?? 0;
+            experience = (data['experience'] as num?)?.toInt() ?? 0;
             photoUrl = data['foto_url'] ?? currentUser.photoURL;
           }
         }
@@ -174,7 +174,7 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
 
 class _CurrencyDisplay extends StatelessWidget {
   final String imagePath;
-  final int amount;
+  final num amount;
   final Color color;
 
   const _CurrencyDisplay({
@@ -191,7 +191,7 @@ class _CurrencyDisplay extends StatelessWidget {
         Image.asset(imagePath, width: 50, height: 50, fit: BoxFit.contain),
         const SizedBox(width: 12),
         Text(
-          NumberFormat('#,###').format(amount),
+          NumberFormat('#,###').format(amount.toInt()),
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

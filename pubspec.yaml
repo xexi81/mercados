@@ -74,6 +74,7 @@ flutter:
     - assets/images/containers/
     - assets/images/routes/    
     - assets/images/drivers/
+    - assets/images/warehouses/
     - assets/data/
 
   # An image asset can refer to one or more resolution-specific "variants", see

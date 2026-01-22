@@ -48,6 +48,13 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     text: '1',
   );
 
+  // Warehouse transfer variables
+  bool isAtHQ = false;
+  int? headquarterId;
+  List<Map<String, dynamic>> warehouseSlots = [];
+  Map<String, double> transferToWarehouseAmounts = {};
+  Map<String, double> transferToTruckAmounts = {};
+
   @override
   void initState() {
     super.initState();
@@ -117,6 +124,11 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             containerSkills = slot['containerSkills'] as Map<String, dynamic>?;
             isLoading = false;
           });
+
+          // Load headquarter ID and warehouses
+          headquarterId = userData?['headquarter_id'] as int?;
+          await _loadWarehouseData();
+          await _checkIfAtHQ();
 
           // Check if at market and load material categories
           await _checkMarketStatus();
@@ -247,6 +259,482 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       });
     } catch (e) {
       // Ignore errors
+    }
+  }
+
+  Future<void> _loadWarehouseData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final warehouseDoc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid)
+          .get();
+
+      if (warehouseDoc.exists) {
+        final data = warehouseDoc.data()!;
+        final slots = List<Map<String, dynamic>>.from(data['slots'] ?? []);
+        setState(() {
+          warehouseSlots = slots;
+        });
+      }
+    } catch (e) {
+      // Ignore errors
+    }
+  }
+
+  Future<void> _checkIfAtHQ() async {
+    if (currentLocation == null || headquarterId == null) {
+      setState(() {
+        isAtHQ = false;
+      });
+      return;
+    }
+
+    try {
+      final lat = (currentLocation!['latitude'] as num).toDouble();
+      final lng = (currentLocation!['longitude'] as num).toDouble();
+      final locations = await LocationsRepository.loadLocations();
+      final hqLocation = locations.firstWhere(
+        (l) => l.id == headquarterId,
+        orElse: () => LocationModel(
+          id: -1,
+          city: 'Desconocido',
+          latitude: 0,
+          longitude: 0,
+          countryIso: 'XX',
+          hasMarket: false,
+        ),
+      );
+
+      setState(() {
+        isAtHQ = (lat == hqLocation.latitude && lng == hqLocation.longitude);
+      });
+    } catch (e) {
+      setState(() {
+        isAtHQ = false;
+      });
+    }
+  }
+
+  Future<void> _transferToWarehouse(
+    String materialId,
+    Map<String, dynamic>? materialInfo,
+  ) async {
+    print('DEBUG: Starting _transferToWarehouse for materialId: $materialId');
+    final unitsToTransfer = (transferToWarehouseAmounts[materialId] ?? 0)
+        .toInt();
+    print('DEBUG: Units to transfer: $unitsToTransfer');
+    if (unitsToTransfer <= 0) return;
+
+    print('DEBUG: truckLoad: $truckLoad');
+    final materialData = truckLoad![materialId] as Map<String, dynamic>;
+    print('DEBUG: materialData: $materialData');
+    final m3PerUnit = (materialData['m3PerUnit'] as num?)?.toDouble() ?? 0;
+    final averagePrice =
+        (materialData['averagePrice'] as num?)?.toDouble() ?? 0;
+    final totalM3 = unitsToTransfer * m3PerUnit;
+    final grade = materialInfo?['grade'] as int? ?? 1;
+    print('DEBUG: grade: $grade, totalM3: $totalM3');
+
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'Mover a Almacén',
+        description:
+            '¿Deseas mover $unitsToTransfer unidades de ${materialInfo?['name'] ?? materialId} al almacén?\n\nVolumen: ${totalM3.toStringAsFixed(2)} m³',
+        price: 0, // No cost for moving
+        priceType: UnlockCostType.money,
+        onConfirm: () async => Navigator.of(context).pop(true),
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      // Load warehouse configurations once
+      final warehouseJson = await rootBundle.loadString(
+        'assets/data/warehouse.json',
+      );
+      final warehouseData = json.decode(warehouseJson);
+      final warehouses = warehouseData['warehouses'] as List;
+
+      // Find suitable warehouse
+      Map<String, dynamic>? targetWarehouse;
+      int? targetSlotIndex;
+
+      print(
+        'DEBUG: Searching warehouses. Total slots: ${warehouseSlots.length}',
+      );
+      for (int i = 0; i < warehouseSlots.length; i++) {
+        final slot = warehouseSlots[i];
+        print('DEBUG: Checking slot $i: $slot');
+        final warehouseId = slot['warehouseId'] as int?;
+        print('DEBUG: warehouseId: $warehouseId');
+        if (warehouseId == null) continue;
+
+        // Find warehouse info to check grade
+        final warehouse = warehouses.firstWhere(
+          (w) => w['id'] == warehouseId,
+          orElse: () => null,
+        );
+
+        print('DEBUG: warehouse config: $warehouse');
+        if (warehouse == null) continue;
+
+        // Check grade compatibility
+        // Warehouse grade defines max material grade it can store
+        final warehouseGrade = warehouse['grade'] as int? ?? 1;
+        print('DEBUG: warehouseGrade: $warehouseGrade, material grade: $grade');
+        if (grade > warehouseGrade) continue;
+
+        // Calculate capacity
+        final level = slot['level'] as int? ?? 1;
+        print('DEBUG: warehouse level: $level');
+        final baseCapacity =
+            (warehouse['capacity_m3'] as num?)?.toDouble() ?? 0;
+        print('DEBUG: baseCapacity: $baseCapacity');
+        final totalCapacity = baseCapacity + ((level - 1) * 100);
+
+        // Calculate current usage
+        final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+        double currentUsage = 0;
+        storage.forEach((matId, matData) {
+          final units = (matData['units'] as num?)?.toDouble() ?? 0;
+          final m3 = (matData['m3PerUnit'] as num?)?.toDouble() ?? 0;
+          currentUsage += units * m3;
+        });
+
+        // Check if there's enough space
+        if (currentUsage + totalM3 <= totalCapacity) {
+          targetWarehouse = slot;
+          targetSlotIndex = i;
+          break;
+        }
+      }
+
+      if (targetWarehouse == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'No hay almacenes disponibles con capacidad y grado compatible',
+            ),
+          ),
+        );
+        return;
+      }
+
+      // Perform Firestore transaction
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        // FIRST: Do ALL reads
+        final fleetRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .collection('fleet_users')
+            .doc(user.uid);
+
+        final warehouseRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .collection('warehouse_users')
+            .doc(user.uid);
+
+        // Read both documents first
+        final fleetSnapshot = await transaction.get(fleetRef);
+        final warehouseSnapshot = await transaction.get(warehouseRef);
+
+        if (!fleetSnapshot.exists || !warehouseSnapshot.exists) return;
+
+        // THEN: Process fleet data
+        final fleetData = fleetSnapshot.data()!;
+        final slots = List<Map<String, dynamic>>.from(fleetData['slots'] ?? []);
+        final slotIndex = slots.indexWhere(
+          (s) => s['fleetId'] == widget.fleetId,
+        );
+        if (slotIndex == -1) return;
+
+        final currentTruckLoad = Map<String, dynamic>.from(
+          slots[slotIndex]['truckLoad'] as Map<String, dynamic>? ?? {},
+        );
+
+        // Remove or update material in truck
+        final currentUnits =
+            (currentTruckLoad[materialId]['units'] as num?)?.toInt() ?? 0;
+        if (currentUnits <= unitsToTransfer) {
+          currentTruckLoad.remove(materialId);
+        } else {
+          currentTruckLoad[materialId] = {
+            'units': currentUnits - unitsToTransfer,
+            'm3PerUnit': m3PerUnit,
+            'averagePrice': averagePrice,
+          };
+        }
+
+        slots[slotIndex]['truckLoad'] = currentTruckLoad;
+
+        // Process warehouse data
+        final warehouseData = warehouseSnapshot.data()!;
+        final warehouseSlots = List<Map<String, dynamic>>.from(
+          warehouseData['slots'] ?? [],
+        );
+
+        final storage = Map<String, dynamic>.from(
+          warehouseSlots[targetSlotIndex!]['storage']
+                  as Map<String, dynamic>? ??
+              {},
+        );
+
+        // Add or update material in warehouse
+        if (storage.containsKey(materialId)) {
+          final existingUnits =
+              (storage[materialId]['units'] as num?)?.toInt() ?? 0;
+          final existingPrice =
+              (storage[materialId]['averagePrice'] as num?)?.toDouble() ?? 0.0;
+
+          // Calculate weighted average price
+          final totalUnits = existingUnits + unitsToTransfer;
+          final newAveragePrice =
+              ((existingPrice * existingUnits) +
+                  (averagePrice * unitsToTransfer)) /
+              totalUnits;
+
+          storage[materialId] = {
+            'units': totalUnits,
+            'm3PerUnit': m3PerUnit,
+            'averagePrice': newAveragePrice,
+          };
+        } else {
+          storage[materialId] = {
+            'units': unitsToTransfer,
+            'm3PerUnit': m3PerUnit,
+            'averagePrice': averagePrice,
+          };
+        }
+
+        warehouseSlots[targetSlotIndex]['storage'] = storage;
+
+        // FINALLY: Do ALL writes
+        transaction.update(fleetRef, {'slots': slots});
+        transaction.update(warehouseRef, {'slots': warehouseSlots});
+      });
+
+      // Reset slider and reload data
+      setState(() {
+        transferToWarehouseAmounts[materialId] = 0;
+      });
+      await _loadFleetData();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Se movieron $unitsToTransfer unidades al almacén'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al mover al almacén: $e')));
+    }
+  }
+
+  Future<void> _transferToTruck(
+    String materialId,
+    Map<String, dynamic>? materialInfo,
+  ) async {
+    final m3ToTransfer = transferToTruckAmounts[materialId] ?? 0;
+    if (m3ToTransfer <= 0) return;
+
+    // Find material in warehouses
+    Map<String, dynamic>? materialData;
+    double m3PerUnit = 0;
+    double averagePrice = 0;
+    int totalAvailableUnits = 0;
+
+    for (final slot in warehouseSlots) {
+      final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+      if (storage.containsKey(materialId)) {
+        materialData = storage[materialId];
+        m3PerUnit = (materialData!['m3PerUnit'] as num?)?.toDouble() ?? 0;
+        totalAvailableUnits += (materialData['units'] as num?)?.toInt() ?? 0;
+      }
+    }
+
+    if (materialData == null || m3PerUnit <= 0) return;
+
+    // Calculate units to transfer from m³
+    final unitsToTransfer = (m3ToTransfer / m3PerUnit).floor();
+    if (unitsToTransfer <= 0) return;
+
+    // Calculate weighted average price from all warehouses
+    double totalPrice = 0;
+    int countedUnits = 0;
+    for (final slot in warehouseSlots) {
+      final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+      if (storage.containsKey(materialId)) {
+        final units = (storage[materialId]['units'] as num?)?.toInt() ?? 0;
+        final price =
+            (storage[materialId]['averagePrice'] as num?)?.toDouble() ?? 0.0;
+        totalPrice += price * units;
+        countedUnits += units;
+      }
+    }
+    averagePrice = countedUnits > 0 ? totalPrice / countedUnits : 0;
+
+    // Check truck capacity
+    final maxCapacity = _calculateMaxCapacity();
+    final currentLoad = _calculateCurrentLoad();
+    final remainingCapacity = maxCapacity - currentLoad;
+    final actualM3 = unitsToTransfer * m3PerUnit;
+
+    if (actualM3 > remainingCapacity) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No hay suficiente capacidad en el camión'),
+        ),
+      );
+      return;
+    }
+
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'Cargar en Camión',
+        description:
+            '¿Deseas cargar $unitsToTransfer unidades de ${materialInfo?['name'] ?? materialId} en el camión?\n\nVolumen: ${actualM3.toStringAsFixed(2)} m³',
+        price: 0, // No cost for moving
+        priceType: UnlockCostType.money,
+        onConfirm: () async => Navigator.of(context).pop(true),
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      // Perform Firestore transaction
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        // FIRST: Do ALL reads
+        final warehouseRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .collection('warehouse_users')
+            .doc(user.uid);
+
+        final fleetRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .collection('fleet_users')
+            .doc(user.uid);
+
+        // Read both documents first
+        final warehouseSnapshot = await transaction.get(warehouseRef);
+        final fleetSnapshot = await transaction.get(fleetRef);
+
+        if (!warehouseSnapshot.exists || !fleetSnapshot.exists) return;
+
+        // THEN: Process warehouse data - remove from warehouses
+        final warehouseData = warehouseSnapshot.data()!;
+        final slots = List<Map<String, dynamic>>.from(
+          warehouseData['slots'] ?? [],
+        );
+
+        int remainingToRemove = unitsToTransfer;
+        for (int i = 0; i < slots.length && remainingToRemove > 0; i++) {
+          final storage = Map<String, dynamic>.from(
+            slots[i]['storage'] as Map<String, dynamic>? ?? {},
+          );
+
+          if (storage.containsKey(materialId)) {
+            final units = (storage[materialId]['units'] as num?)?.toInt() ?? 0;
+            if (units <= remainingToRemove) {
+              remainingToRemove -= units;
+              storage.remove(materialId);
+            } else {
+              storage[materialId] = {
+                'units': units - remainingToRemove,
+                'm3PerUnit': storage[materialId]['m3PerUnit'],
+                'averagePrice': storage[materialId]['averagePrice'],
+              };
+              remainingToRemove = 0;
+            }
+            slots[i]['storage'] = storage;
+          }
+        }
+
+        // Process fleet data - add to truck
+        final fleetData = fleetSnapshot.data()!;
+        final fleetSlots = List<Map<String, dynamic>>.from(
+          fleetData['slots'] ?? [],
+        );
+        final slotIndex = fleetSlots.indexWhere(
+          (s) => s['fleetId'] == widget.fleetId,
+        );
+        if (slotIndex == -1) return;
+
+        final currentTruckLoad = Map<String, dynamic>.from(
+          fleetSlots[slotIndex]['truckLoad'] as Map<String, dynamic>? ?? {},
+        );
+
+        // Add or update material in truck
+        if (currentTruckLoad.containsKey(materialId)) {
+          final existingUnits =
+              (currentTruckLoad[materialId]['units'] as num?)?.toInt() ?? 0;
+          final existingPrice =
+              (currentTruckLoad[materialId]['averagePrice'] as num?)
+                  ?.toDouble() ??
+              0.0;
+
+          // Calculate weighted average price
+          final totalUnits = existingUnits + unitsToTransfer;
+          final newAveragePrice =
+              ((existingPrice * existingUnits) +
+                  (averagePrice * unitsToTransfer)) /
+              totalUnits;
+
+          currentTruckLoad[materialId] = {
+            'units': totalUnits,
+            'm3PerUnit': m3PerUnit,
+            'averagePrice': newAveragePrice,
+          };
+        } else {
+          currentTruckLoad[materialId] = {
+            'units': unitsToTransfer,
+            'm3PerUnit': m3PerUnit,
+            'averagePrice': averagePrice,
+          };
+        }
+
+        fleetSlots[slotIndex]['truckLoad'] = currentTruckLoad;
+
+        // FINALLY: Do ALL writes
+        transaction.update(warehouseRef, {'slots': slots});
+        transaction.update(fleetRef, {'slots': fleetSlots});
+      });
+
+      // Reset slider and reload data
+      setState(() {
+        transferToTruckAmounts[materialId] = 0;
+      });
+      await _loadFleetData();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Se cargaron $unitsToTransfer unidades en el camión'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al cargar en camión: $e')));
     }
   }
 
@@ -1117,61 +1605,120 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                           color: const Color.fromRGBO(0, 0, 0, 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Row(
+                        child: Column(
                           children: [
-                            Image.asset(
-                              iconPath,
-                              width: 40,
-                              height: 40,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    color: Colors.grey,
-                                    child: const Icon(
-                                      Icons.inventory,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    name,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '$units unidades',
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  if (averagePrice > 0)
-                                    Text(
-                                      'Precio medio: ${averagePrice.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        color: Colors.white60,
-                                        fontSize: 11,
-                                        fontStyle: FontStyle.italic,
+                            Row(
+                              children: [
+                                Image.asset(
+                                  iconPath,
+                                  width: 40,
+                                  height: 40,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        color: Colors.grey,
+                                        child: const Icon(
+                                          Icons.inventory,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        name,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '$units unidades',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      if (averagePrice > 0)
+                                        Text(
+                                          'Precio medio: ${averagePrice.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 11,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  '${totalM3.toStringAsFixed(2)} m³',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isAtHQ) ...[
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Mover a almacén: ${(transferToWarehouseAmounts[materialId] ?? 0).toInt()} unidades',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Slider(
+                                          value:
+                                              transferToWarehouseAmounts[materialId] ??
+                                              0,
+                                          min: 0,
+                                          max: units.toDouble(),
+                                          divisions: units,
+                                          activeColor: AppColors.primary,
+                                          inactiveColor: Colors.white24,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              transferToWarehouseAmounts[materialId] =
+                                                  value;
+                                            });
+                                          },
+                                        ),
+                                      ],
                                     ),
+                                  ),
                                 ],
                               ),
-                            ),
-                            Text(
-                              '${totalM3.toStringAsFixed(2)} m³',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                              IndustrialButton(
+                                label: 'Mover a Almacén',
+                                onPressed:
+                                    (transferToWarehouseAmounts[materialId] ??
+                                            0) >
+                                        0
+                                    ? () => _transferToWarehouse(
+                                        materialId,
+                                        materialInfo,
+                                      )
+                                    : null,
+                                gradientTop: const Color(0xFF4A90E2),
+                                gradientBottom: const Color(0xFF357ABD),
+                                borderColor: const Color(0xFF2E5F8D),
+                                width: double.infinity,
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       );
@@ -1381,6 +1928,236 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       sellSection = [];
     }
 
+    // Warehouse materials section - only show if at HQ
+    List<Widget> warehouseSection;
+    if (isAtHQ && warehouseSlots.isNotEmpty) {
+      // Collect all materials from all warehouses
+      Map<String, Map<String, dynamic>> allWarehouseMaterials = {};
+      for (final slot in warehouseSlots) {
+        final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+        storage.forEach((materialId, materialData) {
+          if (allWarehouseMaterials.containsKey(materialId)) {
+            final existing = allWarehouseMaterials[materialId]!;
+            final existingUnits = (existing['units'] as num).toDouble();
+            final existingPrice = (existing['averagePrice'] as num).toDouble();
+            final newUnits = (materialData['units'] as num).toDouble();
+            final newPrice = (materialData['averagePrice'] as num).toDouble();
+
+            // Calculate weighted average price
+            final totalUnits = existingUnits + newUnits;
+            final avgPrice =
+                ((existingPrice * existingUnits) + (newPrice * newUnits)) /
+                totalUnits;
+
+            allWarehouseMaterials[materialId] = {
+              'units': totalUnits.toInt(),
+              'm3PerUnit': materialData['m3PerUnit'],
+              'averagePrice': avgPrice,
+            };
+          } else {
+            allWarehouseMaterials[materialId] = materialData;
+          }
+        });
+      }
+
+      if (allWarehouseMaterials.isNotEmpty) {
+        warehouseSection = [
+          const SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(15, 23, 42, 0.8),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color.fromRGBO(255, 255, 255, 0.3),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Materiales en Almacén',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: allWarehouseMaterials.length,
+                  itemBuilder: (context, index) {
+                    final materialId = allWarehouseMaterials.keys.elementAt(
+                      index,
+                    );
+                    final data = allWarehouseMaterials[materialId]!;
+                    final units = (data['units'] as num).toInt();
+                    final m3PerUnit =
+                        (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
+                    final averagePrice =
+                        (data['averagePrice'] as num?)?.toDouble() ?? 0.0;
+                    final totalM3 = units * m3PerUnit;
+
+                    return FutureBuilder<Map<String, dynamic>?>(
+                      future: _getMaterialInfo(materialId),
+                      builder: (context, snapshot) {
+                        final materialInfo = snapshot.data;
+                        final iconPath = materialInfo != null
+                            ? 'assets/images/materials/${materialInfo['id']}.png'
+                            : 'assets/images/materials/default.png';
+                        final name =
+                            materialInfo?['name'] as String? ??
+                            'Material $materialId';
+
+                        // Calculate max loadable based on truck capacity
+                        final maxCapacity = _calculateMaxCapacity();
+                        final currentLoad = _calculateCurrentLoad();
+                        final remainingCapacity = maxCapacity - currentLoad;
+                        final maxLoadableM3 = remainingCapacity.clamp(
+                          0,
+                          totalM3,
+                        );
+
+                        return Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(0, 0, 0, 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    iconPath,
+                                    width: 40,
+                                    height: 40,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                              width: 40,
+                                              height: 40,
+                                              color: Colors.grey,
+                                              child: const Icon(
+                                                Icons.inventory,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          name,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '$units unidades',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        if (averagePrice > 0)
+                                          Text(
+                                            'Precio medio: ${averagePrice.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              color: Colors.white60,
+                                              fontSize: 11,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '${totalM3.toStringAsFixed(2)} m³',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Cargar en camión: ${(transferToTruckAmounts[materialId] ?? 0).toStringAsFixed(2)} m³',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Slider(
+                                          value:
+                                              transferToTruckAmounts[materialId] ??
+                                              0,
+                                          min: 0,
+                                          max: maxLoadableM3.toDouble(),
+                                          divisions: maxLoadableM3 > 0
+                                              ? units
+                                              : 1,
+                                          activeColor: AppColors.primary,
+                                          inactiveColor: Colors.white24,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              transferToTruckAmounts[materialId] =
+                                                  value;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              IndustrialButton(
+                                label: 'Cargar en Camión',
+                                onPressed:
+                                    (transferToTruckAmounts[materialId] ?? 0) >
+                                        0
+                                    ? () => _transferToTruck(
+                                        materialId,
+                                        materialInfo,
+                                      )
+                                    : null,
+                                gradientTop: const Color(0xFF4A90E2),
+                                gradientBottom: const Color(0xFF357ABD),
+                                borderColor: const Color(0xFF2E5F8D),
+                                width: double.infinity,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ];
+      } else {
+        warehouseSection = [];
+      }
+    } else {
+      warehouseSection = [];
+    }
+
     return Scaffold(
       appBar: CustomGameAppBar(),
       backgroundColor: AppColors.surface,
@@ -1486,6 +2263,9 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                 const SizedBox(height: 20),
               // Material purchase section - only show if at market
               ...purchaseSection,
+              // Warehouse materials section - only show if at HQ
+              if (warehouseSection.isNotEmpty) const SizedBox(height: 20),
+              ...warehouseSection,
             ],
           ),
         ),
