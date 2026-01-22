@@ -896,53 +896,88 @@ class ParkingFleetCard extends StatelessWidget {
       1.0,
     );
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.white.withOpacity(0.7), width: 1),
-      ),
-      child: Column(
-        children: [
-          // Progress bar
-          Container(
-            height: 4,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade700,
-              borderRadius: BorderRadius.circular(2),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: progress,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.green.shade800,
-                  borderRadius: BorderRadius.circular(2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoadManagerScreen(fleetId: fleetId),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: Colors.white.withOpacity(0.7), width: 1),
+        ),
+        child: Column(
+          children: [
+            // Progress bar
+            Container(
+              height: 4,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade700,
+                borderRadius: BorderRadius.circular(2),
+              ),
+              child: FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: progress,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade800,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 4),
-          // Content
-          FutureBuilder<String?>(
-            future: _getDestinationCityName(destinyLocation),
-            builder: (context, snapshot) {
-              final cityName = snapshot.data ?? 'Destino desconocido';
-              final distance = remaining;
+            const SizedBox(height: 4),
+            // Content
+            FutureBuilder<String?>(
+              future: _getDestinationCityName(destinyLocation),
+              builder: (context, snapshot) {
+                final cityName = snapshot.data ?? 'Destino desconocido';
+                final distance = remaining;
 
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Destino:',
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: Colors.white70,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          Text(
+                            cityName,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Destino:',
+                          'Restante:',
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Colors.white70,
@@ -951,45 +986,22 @@ class ParkingFleetCard extends StatelessWidget {
                               ),
                         ),
                         Text(
-                          cityName,
+                          '${distance.toStringAsFixed(1)} km',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Colors.white,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w600,
                               ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Restante:',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.white70,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '${distance.toStringAsFixed(1)} km',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -27,6 +27,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   int fleetLevel = 1;
   Map<String, dynamic>? truckLoad;
   Map<String, dynamic>? currentLocation;
+  String? fleetStatus; // Fleet status: 'en marcha', 'en destino', etc.
   bool isLoading = true;
   bool allowsMultipleProducts = true;
   double userMoney = 0.0;
@@ -105,6 +106,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             truckLoad = slot['truckLoad'] as Map<String, dynamic>?;
             currentLocation = slot['currentLocation'] as Map<String, dynamic>?;
             fleetLevel = slot['fleetLevel'] as int? ?? 1;
+            fleetStatus = slot['status'] as String?; // Load fleet status
             truckSkills = slot['truckSkills'] as Map<String, dynamic>?;
             containerSkills = slot['containerSkills'] as Map<String, dynamic>?;
             isLoading = false;
@@ -952,7 +954,11 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         ? (currentLoad / maxCapacity).clamp(0.0, 1.0)
         : 0.0;
 
-    final bool canPurchase = isAtMarket && loadPercentage < 1.0;
+    // Determine if we should show purchase/sale options based on status
+    final bool showMarketFeatures =
+        fleetStatus == 'en destino' || fleetStatus == null;
+    final bool canPurchase =
+        isAtMarket && loadPercentage < 1.0 && showMarketFeatures;
     List<Widget>? purchaseSection;
     if (canPurchase) {
       purchaseSection = [
@@ -1146,7 +1152,10 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
 
     // Sell materials section
     List<Widget> sellSection;
-    if (isAtMarket && truckLoad != null && truckLoad!.isNotEmpty) {
+    if (isAtMarket &&
+        truckLoad != null &&
+        truckLoad!.isNotEmpty &&
+        showMarketFeatures) {
       sellSection = [
         const SizedBox(height: 20),
         Container(
@@ -1426,11 +1435,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
               ),
               // Current load display - only show if there's load
               ...currentLoadSection,
-              if (currentLoadSection.isNotEmpty && purchaseSection.isNotEmpty)
+              if (currentLoadSection.isNotEmpty &&
+                  (purchaseSection.isNotEmpty || sellSection.isNotEmpty))
                 const SizedBox(height: 20),
               // Material sell section - only show if at market and has load
               ...sellSection,
               if (sellSection.isNotEmpty && purchaseSection.isNotEmpty)
+                const SizedBox(height: 20),
+              // Add spacing before purchase section if no other sections above it
+              if (currentLoadSection.isEmpty &&
+                  sellSection.isEmpty &&
+                  purchaseSection.isNotEmpty)
                 const SizedBox(height: 20),
               // Material purchase section - only show if at market
               ...purchaseSection,
