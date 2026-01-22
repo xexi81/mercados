@@ -1,0 +1,957 @@
+{
+  "factories": [
+    {
+      "id": 1,
+      "name": "Planta de Extraccion y basicos",
+      "basePurchasePrice": 60000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 1,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 20,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 37,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 38,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 39,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 40,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 41,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 70,
+              "productionTimeSeconds": 112
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Complejo Alimentario",
+      "basePurchasePrice": 200000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 21,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 22,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 23,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 24,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 25,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 26,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 27,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 28,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 29,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 30,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 31,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 32,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 33,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 35,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 36,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 42,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 43,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 44,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 45,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 46,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 47,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 48,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 65,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 66,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 67,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 68,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 77,
+              "productionTimeSeconds": 112
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 81,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 82,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 83,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 84,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 85,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 86,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 87,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 88,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 89,
+              "productionTimeSeconds": 480
+            },
+            {
+              "materialId": 101,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 102,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 103,
+              "productionTimeSeconds": 360
+            }
+          ]
+        },
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 153,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        },
+        {
+          "tier": 5,
+          "maxGrade": 5,
+          "unlockPrice": 1500000,
+          "products": [
+            {
+              "materialId": 194,
+              "productionTimeSeconds": 1800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Fabrica de Construccion",
+      "basePurchasePrice": 250000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 6,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 7,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 8,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 9,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 19,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 51,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 52,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 53,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 54,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 78,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 79,
+              "productionTimeSeconds": 112
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 106,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 107,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 108,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 109,
+              "productionTimeSeconds": 360
+            }
+          ]
+        },
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 156,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 157,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 158,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 162,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        },
+        {
+          "tier": 5,
+          "maxGrade": 5,
+          "unlockPrice": 1500000,
+          "products": [
+            {
+              "materialId": 195,
+              "productionTimeSeconds": 1800
+            },
+            {
+              "materialId": 196,
+              "productionTimeSeconds": 1800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Planta Industrial y Metalurgica",
+      "basePurchasePrice": 300000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 10,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 11,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 12,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 15,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 16,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 34,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 49,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 50,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 55,
+              "productionTimeSeconds": 135
+            },
+            {
+              "materialId": 56,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 57,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 64,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 69,
+              "productionTimeSeconds": 135
+            },
+            {
+              "materialId": 72,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 73,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 76,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 80,
+              "productionTimeSeconds": 112
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 97,
+              "productionTimeSeconds": 480
+            },
+            {
+              "materialId": 98,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 99,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 100,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 104,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 105,
+              "productionTimeSeconds": 360
+            },
+            {
+              "materialId": 110,
+              "productionTimeSeconds": 360
+            }
+          ]
+        },
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 141,
+              "productionTimeSeconds": 1350
+            },
+            {
+              "materialId": 142,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 143,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 144,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 150,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 151,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 152,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 159,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 161,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 163,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 166,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 169,
+              "productionTimeSeconds": 900
+            },
+            {
+              "materialId": 170,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 172,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 173,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 176,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 179,
+              "productionTimeSeconds": 900
+            },
+            {
+              "materialId": 180,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        },
+        {
+          "tier": 5,
+          "maxGrade": 5,
+          "unlockPrice": 1500000,
+          "products": [
+            {
+              "materialId": 181,
+              "productionTimeSeconds": 2250
+            },
+            {
+              "materialId": 182,
+              "productionTimeSeconds": 2250
+            },
+            {
+              "materialId": 183,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 184,
+              "productionTimeSeconds": 2250
+            },
+            {
+              "materialId": 188,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 189,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 190,
+              "productionTimeSeconds": 1800
+            },
+            {
+              "materialId": 197,
+              "productionTimeSeconds": 1800
+            },
+            {
+              "materialId": 200,
+              "productionTimeSeconds": 1800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Planta Quimica",
+      "basePurchasePrice": 280000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 18,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 60,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 71,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 75,
+              "productionTimeSeconds": 112
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 90,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 91,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 92,
+              "productionTimeSeconds": 420
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Planta Energ\u00e9tica",
+      "basePurchasePrice": 120000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 2,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 3,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 4,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 5,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 17,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 61,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 62,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 63,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 74,
+              "productionTimeSeconds": 112
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 96,
+              "productionTimeSeconds": 420
+            }
+          ]
+        },
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 148,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 149,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 165,
+              "productionTimeSeconds": 900
+            },
+            {
+              "materialId": 167,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 174,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 177,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        },
+        {
+          "tier": 5,
+          "maxGrade": 5,
+          "unlockPrice": 1500000,
+          "products": [
+            {
+              "materialId": 191,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 192,
+              "productionTimeSeconds": 2025
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Fabrica Electronica",
+      "basePurchasePrice": 400000,
+      "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": [
+            {
+              "materialId": 13,
+              "productionTimeSeconds": 30
+            },
+            {
+              "materialId": 14,
+              "productionTimeSeconds": 30
+            }
+          ]
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 600000,
+          "products": [
+            {
+              "materialId": 58,
+              "productionTimeSeconds": 112
+            },
+            {
+              "materialId": 59,
+              "productionTimeSeconds": 135
+            }
+          ]
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 900000,
+          "products": [
+            {
+              "materialId": 93,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 94,
+              "productionTimeSeconds": 420
+            },
+            {
+              "materialId": 95,
+              "productionTimeSeconds": 360
+            }
+          ]
+        },
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 145,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 146,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 147,
+              "productionTimeSeconds": 1200
+            },
+            {
+              "materialId": 160,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Centro Tecnologico Avanzado",
+      "basePurchasePrice": 800000,
+      "productionTiers": [
+        {
+          "tier": 4,
+          "maxGrade": 4,
+          "unlockPrice": 1200000,
+          "products": [
+            {
+              "materialId": 154,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 155,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 164,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 168,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 171,
+              "productionTimeSeconds": 900
+            },
+            {
+              "materialId": 175,
+              "productionTimeSeconds": 1050
+            },
+            {
+              "materialId": 178,
+              "productionTimeSeconds": 1050
+            }
+          ]
+        },
+        {
+          "tier": 5,
+          "maxGrade": 5,
+          "unlockPrice": 1500000,
+          "products": [
+            {
+              "materialId": 185,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 186,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 187,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 193,
+              "productionTimeSeconds": 2025
+            },
+            {
+              "materialId": 198,
+              "productionTimeSeconds": 1800
+            },
+            {
+              "materialId": 199,
+              "productionTimeSeconds": 1800
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "factory_slots": [
+    {
+      "slotId": 1,
+      "requiredLevel": 1,
+      "cost": {
+        "money": 0,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 2,
+      "requiredLevel": 10,
+      "cost": {
+        "money": 25000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 3,
+      "requiredLevel": 25,
+      "cost": {
+        "money": 75000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 4,
+      "requiredLevel": 50,
+      "cost": {
+        "money": 150000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 5,
+      "requiredLevel": 75,
+      "cost": {
+        "money": 300000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 6,
+      "requiredLevel": 100,
+      "cost": {
+        "money": 600000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 7,
+      "requiredLevel": 125,
+      "cost": {
+        "money": 1000000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 8,
+      "requiredLevel": 150,
+      "cost": {
+        "money": 1800000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 9,
+      "requiredLevel": 175,
+      "cost": {
+        "money": 0,
+        "gems": 50
+      }
+    },
+    {
+      "slotId": 10,
+      "requiredLevel": 200,
+      "cost": {
+        "money": 0,
+        "gems": 100
+      }
+    },
+    {
+      "slotId": 11,
+      "requiredLevel": 225,
+      "cost": {
+        "money": 0,
+        "gems": 200
+      }
+    },
+    {
+      "slotId": 12,
+      "requiredLevel": 250,
+      "cost": {
+        "money": 0,
+        "gems": 300
+      }
+    },
+    {
+      "slotId": 13,
+      "requiredLevel": 275,
+      "cost": {
+        "money": 0,
+        "gems": 450
+      }
+    },
+    {
+      "slotId": 14,
+      "requiredLevel": 300,
+      "cost": {
+        "money": 0,
+        "gems": 600
+      }
+    },
+    {
+      "slotId": 15,
+      "requiredLevel": 325,
+      "cost": {
+        "money": 0,
+        "gems": 800
+      }
+    }
+  ]
+}
