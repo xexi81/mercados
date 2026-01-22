@@ -77,124 +77,126 @@ class _GenericPurchaseDialogState extends State<GenericPurchaseDialog> {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header with background style
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(22),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header with background style
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(22),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      widget.title.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Column(
-                children: [
-                  const Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.title.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2,
+
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  children: [
+                    Text(
+                      widget.description,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        height: 1.5,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 32),
+
+                    // Cost display
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            amount,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Image.asset(
+                            currencyIcon,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.contain,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // Buttons
+                    if (_isLoading)
+                      const CircularProgressIndicator(color: Colors.green)
+                    else
+                      Row(
+                        children: [
+                          Expanded(
+                            child: IndustrialButton(
+                              label: 'CANCELAR',
+                              height: 50,
+                              gradientTop: Colors.grey[600]!,
+                              gradientBottom: Colors.grey[800]!,
+                              borderColor: Colors.grey[400]!,
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: IndustrialButton(
+                              label: 'ACEPTAR',
+                              height: 50,
+                              gradientTop: Colors.green[400]!,
+                              gradientBottom: Colors.green[700]!,
+                              borderColor: Colors.green[200]!,
+                              onPressed: _handleConfirm,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  Text(
-                    widget.description,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Cost display
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white10),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          amount,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Image.asset(
-                          currencyIcon,
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Buttons
-                  if (_isLoading)
-                    const CircularProgressIndicator(color: Colors.green)
-                  else
-                    Row(
-                      children: [
-                        Expanded(
-                          child: IndustrialButton(
-                            label: 'CANCELAR',
-                            height: 50,
-                            gradientTop: Colors.grey[600]!,
-                            gradientBottom: Colors.grey[800]!,
-                            borderColor: Colors.grey[400]!,
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: IndustrialButton(
-                            label: 'ACEPTAR',
-                            height: 50,
-                            gradientTop: Colors.green[400]!,
-                            gradientBottom: Colors.green[700]!,
-                            borderColor: Colors.green[200]!,
-                            onPressed: _handleConfirm,
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

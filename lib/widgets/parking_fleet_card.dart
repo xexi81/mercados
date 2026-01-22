@@ -20,7 +20,7 @@ import 'package:industrial_app/screens/buy_truck.dart';
 import 'package:industrial_app/screens/buy_driver.dart';
 import 'package:industrial_app/screens/buy_container.dart';
 import 'package:industrial_app/screens/container_information.dart';
-import 'package:industrial_app/screens/fleet_level.dart';
+
 import 'package:industrial_app/screens/route.dart';
 import 'package:industrial_app/screens/load_manager.dart';
 import 'package:industrial_app/screens/truck_information.dart';
@@ -420,7 +420,7 @@ class ParkingFleetCard extends StatelessWidget {
                 });
 
                 // Actualizar nivel de flota
-                final fleetData = fleetSnapshot.data()! as Map<String, dynamic>;
+                final fleetData = fleetSnapshot.data()!;
                 List<dynamic> slots = List.from(fleetData['slots'] ?? []);
 
                 final slotIndex = slots.indexWhere(
@@ -875,7 +875,7 @@ class ParkingFleetCard extends StatelessWidget {
     final destinyLocation = firestoreData?['destinyLocation'];
     final distanceRemaining = firestoreData?['distanceRemaining'];
     final currentLocation = firestoreData?['currentLocation'];
-    final status = firestoreData?['status'];
+    // final status = firestoreData?['status'];
 
     if (destinyLocation == null ||
         distanceRemaining == null ||
@@ -1040,45 +1040,6 @@ class ParkingFleetCard extends StatelessWidget {
               color: Colors.black.withOpacity(0.8),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEstimatedTime(double distance) {
-    final truckSkills = firestoreData?['truckSkills'];
-    if (truckSkills == null) return const SizedBox.shrink();
-
-    final maxSpeedKmh = (truckSkills['maxSpeedKmh'] as num?)?.toDouble() ?? 0;
-    final truckSpeed = (firestoreData?['truckSpeed'] as num?)?.toInt() ?? 0;
-
-    if (maxSpeedKmh <= 0) return const SizedBox.shrink();
-
-    // Calcular velocidad real con el bonus de truckSpeed
-    final speedMultiplier = 1 + (truckSpeed / 100.0);
-    final realSpeed = maxSpeedKmh * speedMultiplier;
-
-    // Calcular tiempo en horas
-    final timeInHours = distance / realSpeed;
-
-    String timeText;
-    if (timeInHours >= 1) {
-      final hours = timeInHours.floor();
-      final minutes = ((timeInHours - hours) * 60).round();
-      timeText = '${hours}h ${minutes}m';
-    } else {
-      final minutes = (timeInHours * 60).round();
-      timeText = '${minutes}m';
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: Text(
-        timeText,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 7,
-          fontWeight: FontWeight.w400,
         ),
       ),
     );

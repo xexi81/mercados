@@ -148,9 +148,9 @@ class _ParkingScreenState extends State<ParkingScreen> {
             final List<dynamic> slots = fleetMap['slots'] ?? [];
 
             // Check if any fleet is at a market location
-            bool isAnyFleetAtMarket = false;
+            // bool isAnyFleetAtMarket = false;
             // Check if any fleet is at headquarter location
-            bool isAnyFleetAtHeadquarter = false;
+            // bool isAnyFleetAtHeadquarter = false;
 
             if (_locations.isNotEmpty) {
               for (final slot in slots) {
@@ -169,7 +169,7 @@ class _ParkingScreenState extends State<ParkingScreen> {
                         hqLng != null &&
                         lat == hqLat &&
                         lng == hqLng) {
-                      isAnyFleetAtHeadquarter = true;
+                      // isAnyFleetAtHeadquarter = true;
                     }
 
                     // Find location with matching coordinates
@@ -178,7 +178,7 @@ class _ParkingScreenState extends State<ParkingScreen> {
                     );
 
                     if (location.hasMarket) {
-                      isAnyFleetAtMarket = true;
+                      // isAnyFleetAtMarket = true;
                     }
                   } catch (e) {
                     // Location not found, continue checking others
