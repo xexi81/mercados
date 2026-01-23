@@ -14,6 +14,7 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/screens/buy_factory.dart';
 import 'package:industrial_app/screens/factory_production.dart';
 import 'package:industrial_app/screens/production_queue.dart';
+import 'package:industrial_app/screens/queue_management.dart';
 
 class FactoryCard extends StatelessWidget {
   final int slotId;
@@ -377,9 +378,7 @@ class FactoryCard extends StatelessWidget {
                 ),
 
               // Top-left level minicard for "en espera" status
-              if (isUnlocked &&
-                  hasFactory &&
-                  firestoreData!['status'] == 'en espera')
+              if (isUnlocked && hasFactory)
                 Positioned(
                   top: 8,
                   left: 8,
@@ -422,7 +421,7 @@ class FactoryCard extends StatelessWidget {
                 _buildProductionMiniCards(context, factoryId),
 
               // Sell factory button - bottom right
-              if (isUnlocked && hasFactory)
+              if (isUnlocked && hasFactory && _canSellFactory())
                 Positioned(
                   bottom: 8,
                   right: 8,
@@ -475,9 +474,17 @@ class FactoryCard extends StatelessWidget {
     String status,
     int factoryId,
   ) {
-    final String iconAsset = status == 'en espera'
-        ? 'assets/images/factories/manual.png'
-        : 'assets/images/factories/progress.png';
+    // Determine which image to show
+    String imageAsset;
+    if (status == 'en espera') {
+      imageAsset = 'assets/images/factories/manual.png';
+    } else if (status == 'fabricando' &&
+        firestoreData?['currentProduction'] != null) {
+      final materialId = firestoreData!['currentProduction']['materialId'];
+      imageAsset = 'assets/images/materials/$materialId.png';
+    } else {
+      imageAsset = 'assets/images/factories/progress.png';
+    }
 
     return GestureDetector(
       onTap: () {
@@ -512,7 +519,7 @@ class FactoryCard extends StatelessWidget {
                   child: Transform.scale(
                     scale: 1.2,
                     child: Image.asset(
-                      iconAsset,
+                      imageAsset,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
                         color: AppColors.surface,
@@ -575,34 +582,51 @@ class FactoryCard extends StatelessWidget {
             if (factoriesSnapshot.hasData && factoriesSnapshot.data!.exists) {
               final factoriesData =
                   factoriesSnapshot.data?.data() as Map<String, dynamic>?;
-              final List<dynamic> productionQueue =
-                  factoriesData?['productionQueue'] ?? [];
+              final List<dynamic> slots = factoriesData?['slots'] ?? [];
 
-              // Find production for this slot
-              final queueData = productionQueue.firstWhere(
-                (q) => q['slotId'] == slotId && q['queueSlot'] == queueSlot,
+              // Find this factory slot
+              final slot = slots.firstWhere(
+                (s) => s['slotId'] == slotId,
                 orElse: () => null,
               );
 
-              if (queueData != null && queueData['materialId'] != null) {
-                materialImagePath =
-                    'assets/images/materials/${queueData['materialId']}.png';
+              if (slot != null) {
+                // Check if productionQueue exists and is a Map
+                final productionQueueData = slot['productionQueue'];
+                if (productionQueueData is Map<String, dynamic>) {
+                  final queueKey = 'queue$queueSlot';
+
+                  if (productionQueueData.containsKey(queueKey)) {
+                    final queueData = productionQueueData[queueKey];
+                    if (queueData is Map && queueData['materialId'] != null) {
+                      materialImagePath =
+                          'assets/images/materials/${queueData['materialId']}.png';
+                    }
+                  }
+                }
               }
             }
 
             final String backgroundImage =
                 materialImagePath ?? 'assets/images/factories/automatic.png';
+            final bool hasQueueData = materialImagePath != null;
 
             return GestureDetector(
               onTap: () {
+                // Navigate to queue management if queue has data, otherwise to add new queue
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProductionQueueScreen(
-                      slotId: slotId,
-                      factoryId: factoryId,
-                      queueSlot: queueSlot,
-                    ),
+                    builder: (context) => hasQueueData
+                        ? QueueManagementScreen(
+                            slotId: slotId,
+                            factoryId: factoryId,
+                          )
+                        : ProductionQueueScreen(
+                            slotId: slotId,
+                            factoryId: factoryId,
+                            queueSlot: queueSlot,
+                          ),
                   ),
                 );
               },
@@ -814,6 +838,25 @@ class FactoryCard extends StatelessWidget {
         );
       }
     }
+  }
+
+  bool _canSellFactory() {
+    final status = firestoreData?['status'] as String? ?? 'en espera';
+    final storedMaterials = firestoreData?['storedMaterials'];
+
+    // No se puede vender si está fabricando
+    if (status == 'fabricando') {
+      return false;
+    }
+
+    // No se puede vender si hay materiales almacenados
+    if (storedMaterials != null &&
+        storedMaterials is List &&
+        storedMaterials.isNotEmpty) {
+      return false;
+    }
+
+    return true;
   }
 
   Future<void> _sellFactory(BuildContext context, int factoryId) async {
