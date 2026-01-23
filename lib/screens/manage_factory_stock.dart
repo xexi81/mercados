@@ -101,26 +101,22 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           warehousesUsersDoc.data()?['slots'] ?? [],
         );
 
-        for (var slot in slots) {
-          final materialId = slot['materialId'] as int?;
-          if (materialId != null) {
-            final material = allMaterials.firstWhere(
-              (m) => m.id == materialId,
-              orElse: () => MaterialModel(
-                id: 0,
-                name: '',
-                grade: 0,
-                category: '',
-                components: [],
-                basePrice: 0,
-                unitVolumeM3: 0,
-              ),
-            );
-            if (material.grade == grade) {
-              final quantity = (slot['quantity'] as num?)?.toDouble() ?? 0;
-              usedCapacity += quantity * material.unitVolumeM3;
-            }
-          }
+        // Find the warehouse slot for this grade
+        final warehouseSlot = slots.firstWhere(
+          (s) => s['warehouseId'] == grade,
+          orElse: () => <String, dynamic>{},
+        );
+
+        if (warehouseSlot.isNotEmpty) {
+          final storage = Map<String, dynamic>.from(
+            warehouseSlot['storage'] as Map? ?? {},
+          );
+
+          storage.forEach((materialIdStr, data) {
+            final units = (data['units'] as num?)?.toDouble() ?? 0;
+            final m3PerUnit = (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
+            usedCapacity += units * m3PerUnit;
+          });
         }
       }
 
@@ -223,19 +219,52 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           }
         }
 
-        // Add to warehouse
-        final warehouseIndex = warehouseSlots.indexWhere(
-          (s) => s['materialId'] == material.id,
+        // Add to warehouse storage for the correct grade
+        final warehouseId = material.grade; // warehouseId corresponds to grade
+        final warehouseSlotIndex = warehouseSlots.indexWhere(
+          (s) => s['warehouseId'] == warehouseId,
         );
 
-        if (warehouseIndex != -1) {
-          final currentQuantity =
-              (warehouseSlots[warehouseIndex]['quantity'] as num?)?.toInt() ??
-              0;
-          warehouseSlots[warehouseIndex]['quantity'] =
-              currentQuantity + quantity;
+        if (warehouseSlotIndex != -1) {
+          // Warehouse slot exists
+          final storage = Map<String, dynamic>.from(
+            warehouseSlots[warehouseSlotIndex]['storage'] as Map? ?? {},
+          );
+
+          final materialIdStr = material.id.toString();
+          if (storage.containsKey(materialIdStr)) {
+            // Material already exists in storage
+            final currentUnits =
+                (storage[materialIdStr]['units'] as num?)?.toInt() ?? 0;
+            storage[materialIdStr] = {
+              'units': currentUnits + quantity,
+              'm3PerUnit': material.unitVolumeM3,
+              'averagePrice':
+                  storage[materialIdStr]['averagePrice'] ?? material.basePrice,
+            };
+          } else {
+            // New material in storage
+            storage[materialIdStr] = {
+              'units': quantity,
+              'm3PerUnit': material.unitVolumeM3,
+              'averagePrice': material.basePrice,
+            };
+          }
+
+          warehouseSlots[warehouseSlotIndex]['storage'] = storage;
         } else {
-          warehouseSlots.add({'materialId': material.id, 'quantity': quantity});
+          // Warehouse slot doesn't exist, create it
+          warehouseSlots.add({
+            'warehouseId': warehouseId,
+            'warehouseLevel': 0,
+            'storage': {
+              material.id.toString(): {
+                'units': quantity,
+                'm3PerUnit': material.unitVolumeM3,
+                'averagePrice': material.basePrice,
+              },
+            },
+          });
         }
 
         // Update Firestore
