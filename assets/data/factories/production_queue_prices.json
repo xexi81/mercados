@@ -1,0 +1,8 @@
+{
+  "productionQueuePrices": {
+    "slot1Price": 100,
+    "slot2Price": 200,
+    "slot3Price": 300,
+    "slot4Price": 400
+  }
+}

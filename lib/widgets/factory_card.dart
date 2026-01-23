@@ -4,15 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:industrial_app/data/factories/factory_slot_model.dart';
-import 'package:industrial_app/data/factories/factory_status.dart';
-import 'package:industrial_app/data/factories/factory_model.dart';
 import 'package:industrial_app/data/factories/factory_repository.dart';
+import 'package:industrial_app/data/factories/production_queue_prices_repository.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
+import 'package:industrial_app/widgets/error_dialog.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/screens/buy_factory.dart';
 import 'package:industrial_app/screens/factory_production.dart';
+import 'package:industrial_app/screens/production_queue.dart';
 
 class FactoryCard extends StatelessWidget {
   final int slotId;
@@ -370,10 +371,7 @@ class FactoryCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       firestoreData!['status'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ),
                 ),
@@ -419,89 +417,24 @@ class FactoryCard extends StatelessWidget {
                   ),
                 ),
 
-              // Central minicard for "en espera" status
-              if (isUnlocked &&
-                  hasFactory &&
-                  firestoreData!['status'] == 'en espera')
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FactoryProductionScreen(
-                            slotId: slotId,
-                            factoryId: factoryId!,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.8),
-                          width: 2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.factory,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              // Row with 5 minicards for factories
+              if (isUnlocked && hasFactory)
+                _buildProductionMiniCards(context, factoryId),
 
-              // Factory info for unlocked slots with factory (NOT "en espera")
-              if (isUnlocked &&
-                  hasFactory &&
-                  firestoreData!['status'] != 'en espera')
+              // Sell factory button - bottom right
+              if (isUnlocked && hasFactory)
                 Positioned(
                   bottom: 8,
-                  left: 8,
                   right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Fábrica activa',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        if (firestoreData!['currentTier'] != null &&
-                            firestoreData!['currentTier'] > 0)
-                          Text(
-                            'Nivel: ${firestoreData!['currentTier']}',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                            ),
-                          ),
-                      ],
-                    ),
+                  child: IndustrialButton(
+                    label: 'Vender fábrica',
+                    onPressed: () => _sellFactory(context, factoryId),
+                    gradientTop: const Color(0xFFE53935),
+                    gradientBottom: const Color(0xFFB71C1C),
+                    borderColor: const Color(0xFF8B0000),
+                    width: 130,
+                    height: 30,
+                    fontSize: 10,
                   ),
                 ),
             ],
@@ -509,5 +442,485 @@ class FactoryCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildProductionMiniCards(BuildContext context, int factoryId) {
+    final String status = firestoreData?['status'] ?? 'en espera';
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // First minicard - Main production
+            _buildMainProductionCard(context, status, factoryId),
+            const SizedBox(width: 8),
+            // Four queue cards
+            _buildQueueCard(context, 1, factoryId),
+            const SizedBox(width: 8),
+            _buildQueueCard(context, 2, factoryId),
+            const SizedBox(width: 8),
+            _buildQueueCard(context, 3, factoryId),
+            const SizedBox(width: 8),
+            _buildQueueCard(context, 4, factoryId),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainProductionCard(
+    BuildContext context,
+    String status,
+    int factoryId,
+  ) {
+    final String iconAsset = status == 'en espera'
+        ? 'assets/images/factories/manual.png'
+        : 'assets/images/factories/progress.png';
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                FactoryProductionScreen(slotId: slotId, factoryId: factoryId),
+          ),
+        );
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Transform.translate(
+                  offset: const Offset(2, 2),
+                  child: Transform.scale(
+                    scale: 1.2,
+                    child: Image.asset(
+                      iconAsset,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppColors.surface,
+                        child: const Icon(
+                          Icons.factory,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQueueCard(BuildContext context, int queueSlot, int factoryId) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .snapshots(),
+      builder: (context, userSnapshot) {
+        if (!userSnapshot.hasData) {
+          return _buildLockedQueueCard(context, queueSlot, factoryId);
+        }
+
+        final userData = userSnapshot.data?.data() as Map<String, dynamic>?;
+        final String queueStatus =
+            userData?['productionQueue$queueSlot'] ?? 'N';
+
+        if (queueStatus != 'S') {
+          return _buildLockedQueueCard(context, queueSlot, factoryId);
+        }
+
+        // Queue is unlocked - check if there's production data
+        return StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('usuarios')
+              .doc(FirebaseAuth.instance.currentUser?.uid)
+              .collection('factories_users')
+              .doc(FirebaseAuth.instance.currentUser?.uid)
+              .snapshots(),
+          builder: (context, factoriesSnapshot) {
+            String? materialImagePath;
+
+            if (factoriesSnapshot.hasData && factoriesSnapshot.data!.exists) {
+              final factoriesData =
+                  factoriesSnapshot.data?.data() as Map<String, dynamic>?;
+              final List<dynamic> productionQueue =
+                  factoriesData?['productionQueue'] ?? [];
+
+              // Find production for this slot
+              final queueData = productionQueue.firstWhere(
+                (q) => q['slotId'] == slotId && q['queueSlot'] == queueSlot,
+                orElse: () => null,
+              );
+
+              if (queueData != null && queueData['materialId'] != null) {
+                materialImagePath =
+                    'assets/images/materials/${queueData['materialId']}.png';
+              }
+            }
+
+            final String backgroundImage =
+                materialImagePath ?? 'assets/images/factories/automatic.png';
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductionQueueScreen(
+                      slotId: slotId,
+                      factoryId: factoryId,
+                      queueSlot: queueSlot,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.4),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Transform.scale(
+                          scale: 1.4,
+                          child: Image.asset(
+                            backgroundImage,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  color: AppColors.surface,
+                                  child: const Icon(
+                                    Icons.queue,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.8),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildLockedQueueCard(
+    BuildContext context,
+    int queueSlot,
+    int factoryId,
+  ) {
+    return GestureDetector(
+      onTap: () => _unlockQueueSlot(context, queueSlot),
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Transform.scale(
+                  scale: 1.4,
+                  child: Image.asset(
+                    'assets/images/factories/automatic.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Container(color: AppColors.surface),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              Center(
+                child: Image.asset(
+                  'assets/images/parking/mas.png',
+                  width: 150,
+                  height: 150,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.add, color: Colors.white, size: 30),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _unlockQueueSlot(BuildContext context, int queueSlot) async {
+    try {
+      // Verificar si se intenta desbloquear una cola 2, 3 o 4
+      if (queueSlot > 1) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user == null) throw Exception('Usuario no autenticado');
+
+        final userDoc = await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          final userData = userDoc.data()!;
+          final queue1Status = userData['productionQueue1'] ?? 'N';
+
+          if (queue1Status != 'S') {
+            if (context.mounted) {
+              showDialog(
+                context: context,
+                builder: (context) => const ErrorDialog(
+                  title: 'Cola Bloqueada',
+                  description:
+                      'Debes desbloquear primero la Cola de Producción 1 antes de desbloquear las siguientes colas.',
+                ),
+              );
+            }
+            return;
+          }
+        }
+      }
+
+      final prices = await ProductionQueuePricesRepository.loadPrices();
+      final price = prices.getPriceForSlot(queueSlot);
+
+      if (context.mounted) {
+        final bool? confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => GenericPurchaseDialog(
+            title: 'Desbloquear Cola de Producción',
+            description:
+                '¿Deseas desbloquear la cola de producción $queueSlot?\n\nEsto te permitirá programar producción adicional.',
+            price: price,
+            priceType: UnlockCostType.gems,
+            onConfirm: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) throw Exception('Usuario no autenticado');
+
+              await FirebaseFirestore.instance.runTransaction((
+                transaction,
+              ) async {
+                final userRef = FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(user.uid);
+
+                final userSnapshot = await transaction.get(userRef);
+
+                if (!userSnapshot.exists) {
+                  throw Exception('Usuario no encontrado');
+                }
+
+                final userData = userSnapshot.data()!;
+                final currentGems = (userData['gemas'] as num?)?.toInt() ?? 0;
+
+                if (currentGems < price) {
+                  throw Exception('Gemas insuficientes');
+                }
+
+                // Update gems and set queue status
+                transaction.update(userRef, {
+                  'gemas': currentGems - price,
+                  'productionQueue$queueSlot': 'S',
+                });
+              });
+            },
+          ),
+        );
+
+        if (confirmed == true && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('¡Cola de producción $queueSlot desbloqueada!'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _sellFactory(BuildContext context, int factoryId) async {
+    try {
+      // Get factory data to calculate sale price
+      final factory = await FactoryRepository.getFactoryById(factoryId);
+      if (factory == null) {
+        throw Exception('Fábrica no encontrada');
+      }
+
+      // Calculate total investment: factory price + tier unlock prices
+      int totalInvestment = factory.basePurchasePrice;
+      final currentTier = (firestoreData?['currentTier'] as int?) ?? 1;
+      final unlockedTiers = List<int>.from(
+        firestoreData?['unlockedTiers'] ?? [],
+      );
+
+      // Add tier unlock prices
+      for (int tier in unlockedTiers) {
+        final tierData = factory.productionTiers
+            .where((t) => t.tier == tier)
+            .firstOrNull;
+        if (tierData != null) {
+          totalInvestment += tierData.unlockPrice;
+        }
+      }
+
+      // Calculate 30% sale price
+      final salePrice = (totalInvestment * 0.3).round();
+
+      if (context.mounted) {
+        final bool? confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => GenericPurchaseDialog(
+            title: 'Vender Fábrica',
+            description:
+                '¿Deseas vender esta fábrica?\n\nRecuperarás el 30% de tu inversión: \$$salePrice',
+            price: salePrice,
+            priceType: UnlockCostType.money,
+            onConfirm: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) throw Exception('Usuario no autenticado');
+
+              await FirebaseFirestore.instance.runTransaction((
+                transaction,
+              ) async {
+                final userRef = FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(user.uid);
+
+                final factoriesRef = FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(user.uid)
+                    .collection('factories_users')
+                    .doc(user.uid);
+
+                final userSnapshot = await transaction.get(userRef);
+                final factoriesSnapshot = await transaction.get(factoriesRef);
+
+                if (!userSnapshot.exists || !factoriesSnapshot.exists) {
+                  throw Exception('Datos no encontrados');
+                }
+
+                final userData = userSnapshot.data()!;
+                final currentMoney =
+                    (userData['dinero'] as num?)?.toDouble() ?? 0;
+
+                final factoriesData = factoriesSnapshot.data()!;
+                List<Map<String, dynamic>> slots =
+                    List<Map<String, dynamic>>.from(
+                      factoriesData['slots'] ?? [],
+                    );
+
+                // Find and update the slot
+                final slotIndex = slots.indexWhere(
+                  (s) => s['slotId'] == slotId,
+                );
+                if (slotIndex != -1) {
+                  slots[slotIndex]['factoryId'] = null;
+                  slots[slotIndex]['currentTier'] = null;
+                  slots[slotIndex]['unlockedTiers'] = [];
+                  slots[slotIndex]['status'] = 'en espera';
+                  slots[slotIndex]['productionQueue'] = [];
+                }
+
+                // Update Firestore
+                transaction.update(factoriesRef, {'slots': slots});
+                transaction.update(userRef, {
+                  'dinero': currentMoney + salePrice,
+                });
+              });
+            },
+          ),
+        );
+
+        if (confirmed == true && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('¡Fábrica vendida con éxito!')),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
   }
 }

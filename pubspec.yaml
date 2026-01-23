@@ -77,6 +77,7 @@ flutter:
     - assets/images/warehouses/
     - assets/images/factories/
     - assets/data/
+    - assets/data/factories/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

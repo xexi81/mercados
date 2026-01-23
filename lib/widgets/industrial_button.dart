@@ -9,6 +9,7 @@ class IndustrialButton extends StatelessWidget {
   final Color borderColor;
   final double? width;
   final double? height;
+  final double fontSize;
 
   const IndustrialButton({
     Key? key,
@@ -19,6 +20,7 @@ class IndustrialButton extends StatelessWidget {
     required this.borderColor,
     this.width,
     this.height,
+    this.fontSize = 18,
   }) : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class IndustrialButton extends StatelessWidget {
             child: Text(
               label.toUpperCase(),
               style: GoogleFonts.montserrat(
-                fontSize: 18,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 letterSpacing: 0.5,
