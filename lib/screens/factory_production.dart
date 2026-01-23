@@ -113,14 +113,12 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
 
         Map<int, int> stock = {};
         for (var slot in slots) {
-          final storage = Map<String, dynamic>.from(
-            slot['storage'] as Map? ?? {},
-          );
-          storage.forEach((materialId, data) {
-            final units = (data['units'] as num?)?.toInt() ?? 0;
-            final id = int.tryParse(materialId) ?? 0;
-            stock[id] = (stock[id] ?? 0) + units;
-          });
+          final materialId = slot['materialId'] as int?;
+          final quantity = (slot['quantity'] as num?)?.toInt() ?? 0;
+
+          if (materialId != null && quantity > 0) {
+            stock[materialId] = (stock[materialId] ?? 0) + quantity;
+          }
         }
 
         if (mounted) {

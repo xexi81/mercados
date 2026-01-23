@@ -15,6 +15,7 @@ import 'package:industrial_app/screens/buy_factory.dart';
 import 'package:industrial_app/screens/factory_production.dart';
 import 'package:industrial_app/screens/production_queue.dart';
 import 'package:industrial_app/screens/queue_management.dart';
+import 'package:industrial_app/screens/manage_factory_stock.dart';
 
 class FactoryCard extends StatelessWidget {
   final int slotId;
@@ -419,6 +420,55 @@ class FactoryCard extends StatelessWidget {
               // Row with 5 minicards for factories
               if (isUnlocked && hasFactory)
                 _buildProductionMiniCards(context, factoryId),
+
+              // Stored materials minicard - below production cards, aligned left
+              if (isUnlocked && hasFactory && _hasStoredMaterials())
+                Positioned(
+                  bottom: 5,
+                  left: 12,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManageFactoryStockScreen(
+                            slotId: slotId,
+                            factoryId: factoryId,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.asset(
+                          'assets/images/parking/load.png',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.inventory_2,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
 
               // Sell factory button - bottom right
               if (isUnlocked && hasFactory && _canSellFactory())
@@ -857,6 +907,13 @@ class FactoryCard extends StatelessWidget {
     }
 
     return true;
+  }
+
+  bool _hasStoredMaterials() {
+    final storedMaterials = firestoreData?['storedMaterials'];
+    return storedMaterials != null &&
+        storedMaterials is List &&
+        storedMaterials.isNotEmpty;
   }
 
   Future<void> _sellFactory(BuildContext context, int factoryId) async {

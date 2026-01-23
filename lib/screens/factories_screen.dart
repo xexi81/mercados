@@ -107,7 +107,7 @@ class _FactoriesScreenState extends State<FactoriesScreen> {
                   crossAxisCount: 1,
                   crossAxisSpacing: 0,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 2.0,
+                  childAspectRatio: 1.8,
                 ),
                 itemCount: _factorySlots.length,
                 itemBuilder: (context, index) {
