@@ -689,7 +689,7 @@
     },
     {
       "id": 6,
-      "name": "Planta Energ\u00e9tica",
+      "name": "Planta Energetica",
       "basePurchasePrice": 120000,
       "productionTiers": [
         {
@@ -885,6 +885,24 @@
       "name": "Centro Tecnologico Avanzado",
       "basePurchasePrice": 800000,
       "productionTiers": [
+        {
+          "tier": 1,
+          "maxGrade": 1,
+          "unlockPrice": 0,
+          "products": []
+        },
+        {
+          "tier": 2,
+          "maxGrade": 2,
+          "unlockPrice": 400000,
+          "products": []
+        },
+        {
+          "tier": 3,
+          "maxGrade": 3,
+          "unlockPrice": 800000,
+          "products": []
+        },
         {
           "tier": 4,
           "maxGrade": 4,
