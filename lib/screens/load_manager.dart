@@ -554,14 +554,13 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     Map<String, dynamic>? materialData;
     double m3PerUnit = 0;
     double averagePrice = 0;
-    int totalAvailableUnits = 0;
 
     for (final slot in warehouseSlots) {
       final storage = slot['storage'] as Map<String, dynamic>? ?? {};
       if (storage.containsKey(materialId)) {
         materialData = storage[materialId];
         m3PerUnit = (materialData!['m3PerUnit'] as num?)?.toDouble() ?? 0;
-        totalAvailableUnits += (materialData['units'] as num?)?.toInt() ?? 0;
+        // Removed unused totalAvailableUnits accumulation
       }
     }
 
@@ -1019,8 +1018,6 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         final units = materialData['units'] as int;
         final m3PerUnit =
             (materialData['m3PerUnit'] as num?)?.toDouble() ?? 0.0;
-        final averagePrice =
-            (materialData['averagePrice'] as num?)?.toDouble() ?? 0.0;
 
         // Get material info to calculate experience
         final materialInfo = await _getMaterialInfo(materialId);
@@ -1043,9 +1040,10 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             (userData['experience'] as num?)?.toInt() ?? 0;
 
         // Update money and experience
+        final newXp = currentExperience + xpGained;
         transaction.update(userDocRef, {
           'dinero': currentMoney + totalSellPrice,
-          'experience': currentExperience + xpGained,
+          'experience': newXp,
         });
 
         // Remove material from truck load
@@ -1165,9 +1163,10 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             (userData['experience'] as num?)?.toInt() ?? 0;
 
         // Update money and experience
+        final newXpPurchase = currentExperience + xpGained;
         transaction.update(userDocRef, {
           'dinero': currentMoney - totalCost.toInt(),
-          'experience': currentExperience + xpGained,
+          'experience': newXpPurchase,
         });
 
         // Calculate average price for the material

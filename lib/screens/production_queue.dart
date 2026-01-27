@@ -1,3 +1,5 @@
+import 'package:industrial_app/data/experience/experience_service.dart';
+import 'package:industrial_app/widgets/level_up_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -160,8 +162,10 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
 
     // Solo mostrar si el grado está desbloqueado
     availableMaterials = allMaterials
-      .where((m) => materialIds.contains(m.id) && unlockedGrades.contains(m.grade))
-      .toList();
+        .where(
+          (m) => materialIds.contains(m.id) && unlockedGrades.contains(m.grade),
+        )
+        .toList();
   }
 
   int _getMaxProducibleUnits(MaterialModel material) {
@@ -360,6 +364,21 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
 
           transaction.update(factoriesRef, {'slots': factorySlots});
         });
+        // Añadir experiencia al usuario y mostrar dialog si sube de nivel
+        final totalVolume = quantity * material.unitVolumeM3;
+        final xpToAdd = ExperienceService.calculateProduceXp(
+          totalVolume,
+          material.grade,
+        );
+        final userRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid);
+        final userSnapshot = await userRef.get();
+        final currentXp = (userSnapshot.data()?['experience'] as int?) ?? 0;
+        final oldLevel = ExperienceService.getLevelFromExperience(currentXp);
+        final newXp = currentXp + xpToAdd;
+        final newLevel = ExperienceService.getLevelFromExperience(newXp);
+        await userRef.update({'experience': newXp});
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -368,6 +387,12 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
               backgroundColor: Colors.green,
             ),
           );
+          if (newLevel > oldLevel) {
+            showDialog(
+              context: context,
+              builder: (context) => LevelUpDialog(level: newLevel),
+            );
+          }
           Navigator.pop(context);
         }
       } catch (e) {

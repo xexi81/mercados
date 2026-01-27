@@ -1,6 +1,7 @@
 class ExperienceAccountModel {
   final Map<String, double> purchaseXpPerM3;
   final Map<String, double> saleXpPerM3;
+  final Map<String, double> produceXpPerM3;
   final Map<String, double> retailSaleXpPerM3;
   final Map<String, double> contractFulfilledXpPerM3;
   final int onTimeBonusPercent;
@@ -11,6 +12,7 @@ class ExperienceAccountModel {
   ExperienceAccountModel({
     required this.purchaseXpPerM3,
     required this.saleXpPerM3,
+    required this.produceXpPerM3,
     required this.retailSaleXpPerM3,
     required this.contractFulfilledXpPerM3,
     required this.onTimeBonusPercent,
@@ -25,6 +27,7 @@ class ExperienceAccountModel {
     return ExperienceAccountModel(
       purchaseXpPerM3: _parseXpMap(rules['purchase']['baseXpPerM3']),
       saleXpPerM3: _parseXpMap(rules['sale']['baseXpPerM3']),
+      produceXpPerM3: _parseXpMap(rules['produce']['baseXpPerM3']),
       retailSaleXpPerM3: _parseXpMap(rules['retailSale']['baseXpPerM3']),
       contractFulfilledXpPerM3: _parseXpMap(
         rules['contractFulfilled']['baseXpPerM3'],

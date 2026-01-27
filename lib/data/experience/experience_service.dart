@@ -4,6 +4,13 @@ import 'experience_level_model.dart';
 import 'experience_account_model.dart';
 
 class ExperienceService {
+  /// Calcula la experiencia a sumar por producción (mover m3 al almacén).
+  static int calculateProduceXp(double volumeM3, int grade) {
+    if (_accountRules == null) return 0;
+    final baseXp = _accountRules!.produceXpPerM3[grade.toString()] ?? 0.0;
+    return (volumeM3 * baseXp).round();
+  }
+
   static List<ExperienceLevelModel>? _levels;
   static ExperienceAccountModel? _accountRules;
 
