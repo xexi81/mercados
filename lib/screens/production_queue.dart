@@ -32,6 +32,7 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
   FactoryModel? factory;
   List<MaterialModel> allMaterials = [];
   List<MaterialModel> availableMaterials = [];
+  Set<int> unlockedGrades = {}; // Grados desbloqueados en almacén
   Map<int, double> productionQuantities = {};
   Map<int, int> warehouseStock = {};
   int currentTier = 1;
@@ -110,6 +111,11 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
         final slots = List<Map<String, dynamic>>.from(data['slots'] ?? []);
 
         Map<int, int> stock = {};
+        // Leer el nivel del almacén
+        final int warehouseLevel = (data['level'] as int?) ?? 1;
+        // Desbloquear todos los grados desde 1 hasta warehouseLevel
+        Set<int> grades = {for (var i = 1; i <= warehouseLevel; i++) i};
+
         for (var slot in slots) {
           final storage = Map<String, dynamic>.from(
             slot['storage'] as Map? ?? {},
@@ -127,6 +133,7 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
         if (mounted) {
           setState(() {
             warehouseStock = stock;
+            unlockedGrades = grades;
           });
         }
       }
@@ -151,9 +158,10 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
       return;
     }
 
+    // Solo mostrar si el grado está desbloqueado
     availableMaterials = allMaterials
-        .where((m) => materialIds.contains(m.id))
-        .toList();
+      .where((m) => materialIds.contains(m.id) && unlockedGrades.contains(m.grade))
+      .toList();
   }
 
   int _getMaxProducibleUnits(MaterialModel material) {

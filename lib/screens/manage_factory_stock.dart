@@ -59,35 +59,18 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return {'capacity': 0.0, 'used': 0.0};
 
+    print('[DEBUG] Calculando capacidad para grade: $grade');
     try {
-      // Get warehouse level
-      final userDoc = await FirebaseFirestore.instance
+      // Get warehouse level and grade from Firestore
+        final userDoc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
           .get();
 
-      final warehouseLevel = (userDoc.data()?['warehouseLevel'] as int?) ?? 0;
+        // warehouseLevel: nivel del slot de almacén (para sumar 100 * level)
+        // Ya se obtiene abajo como 'level'
 
-      // Load warehouse base capacity from JSON
-      final warehousesData = await rootBundle.loadString(
-        'assets/data/warehouse.json',
-      );
-      final Map<String, dynamic> warehousesJson = jsonDecode(warehousesData);
-      final List<dynamic> warehouses = warehousesJson['warehouses'];
-
-      // Find warehouse for this grade
-      double baseCapacity = 0;
-      for (var warehouse in warehouses) {
-        if (warehouse['grade'] == grade) {
-          baseCapacity = (warehouse['capacity_m3'] as num).toDouble();
-          break;
-        }
-      }
-
-      // Calculate total capacity: base + (100 * level)
-      final totalCapacity = baseCapacity + (100 * warehouseLevel);
-
-      // Get currently used capacity in warehouse for this grade
+      // Get warehouse grade (level) from warehouse_users (for this grade)
       final warehousesUsersDoc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
@@ -95,30 +78,64 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           .doc(user.uid)
           .get();
 
+      int level = 1;
+      if (warehousesUsersDoc.exists) {
+        final slots = List<Map<String, dynamic>>.from(
+          warehousesUsersDoc.data()?['slots'] ?? [],
+        );
+        final warehouseSlot = slots.firstWhere(
+          (s) => s['warehouseId'] == grade,
+          orElse: () => <String, dynamic>{},
+        );
+        if (warehouseSlot.isNotEmpty) {
+          level = (warehouseSlot['warehouseLevel'] as int?) ?? 1;
+        }
+      }
+      print('[DEBUG] warehouseSlot level: $level');
+
+      // Load warehouse base capacity from JSON (by grade)
+      final warehousesData = await rootBundle.loadString(
+        'assets/data/warehouse.json',
+      );
+      final Map<String, dynamic> warehousesJson = jsonDecode(warehousesData);
+      final List<dynamic> warehouses = warehousesJson['warehouses'];
+
+      double baseCapacity = 0;
+      for (var warehouse in warehouses) {
+        if (warehouse['grade'] == grade) {
+          baseCapacity = (warehouse['capacity_m3'] as num).toDouble();
+          break;
+        }
+      }
+      print('[DEBUG] baseCapacity (grade $grade): $baseCapacity');
+
+      // Calculate total capacity: base + (100 * level)
+      final totalCapacity = baseCapacity + (100 * level);
+      print('[DEBUG] totalCapacity: $totalCapacity');
+
+      // Calculate used capacity for this grade
       double usedCapacity = 0;
       if (warehousesUsersDoc.exists) {
         final slots = List<Map<String, dynamic>>.from(
           warehousesUsersDoc.data()?['slots'] ?? [],
         );
-
-        // Find the warehouse slot for this grade
         final warehouseSlot = slots.firstWhere(
           (s) => s['warehouseId'] == grade,
           orElse: () => <String, dynamic>{},
         );
-
         if (warehouseSlot.isNotEmpty) {
           final storage = Map<String, dynamic>.from(
             warehouseSlot['storage'] as Map? ?? {},
           );
-
           storage.forEach((materialIdStr, data) {
             final units = (data['units'] as num?)?.toDouble() ?? 0;
             final m3PerUnit = (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
             usedCapacity += units * m3PerUnit;
+            print('[DEBUG] materialId: $materialIdStr, units: $units, m3PerUnit: $m3PerUnit, subtotal: ${units * m3PerUnit}');
           });
         }
       }
+      print('[DEBUG] usedCapacity: $usedCapacity');
 
       return {'capacity': totalCapacity, 'used': usedCapacity};
     } catch (e) {
@@ -499,7 +516,10 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                     ? maxUnits
                     : availableQuantity;
 
+                print('[DEBUG UI] grade: ${material.grade}, capacity: $capacity, used: $used, available: $available, unitVolume: ${material.unitVolumeM3}, maxUnits: $maxUnits, availableQuantity: $availableQuantity, maxToMove: $maxToMove');
+
                 if (maxToMove <= 0) {
+                  print('[DEBUG UI] Almacén lleno para este grado - bloqueando movimiento');
                   return const Text(
                     'Almacén lleno para este grado',
                     style: TextStyle(color: Colors.red, fontSize: 14),
