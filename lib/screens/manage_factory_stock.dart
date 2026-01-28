@@ -1,3 +1,4 @@
+import 'package:industrial_app/widgets/celebration_dialog.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:industrial_app/widgets/level_up_dialog.dart';
 import 'dart:convert';
@@ -217,7 +218,8 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           }
 
           // Actualizar el stock en el almacén
-          final storage = (slot['storage'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+          final storage =
+              (slot['storage'] as Map<String, dynamic>?) ?? <String, dynamic>{};
           final materialIdStr = material.id.toString();
           final prevUnits = (storage[materialIdStr]?['units'] ?? 0) as int;
           final m3PerUnit = material.unitVolumeM3;
@@ -231,7 +233,9 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
 
           // RESTAR stock en factories_users
           if (factoriesUserSnap.exists) {
-            Map<String, dynamic> factoriesUserData = Map<String, dynamic>.from(factoriesUserSnap.data() as Map);
+            Map<String, dynamic> factoriesUserData = Map<String, dynamic>.from(
+              factoriesUserSnap.data() as Map,
+            );
             List<dynamic> factorySlots = factoriesUserData['slots'] ?? [];
             // Buscar el slot correspondiente
             var factorySlot = factorySlots.firstWhere(
@@ -239,8 +243,11 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
               orElse: () => null,
             );
             if (factorySlot != null) {
-              List<dynamic> storedMaterials = factorySlot['storedMaterials'] ?? [];
-              int index = storedMaterials.indexWhere((m) => m['id'] == material.id);
+              List<dynamic> storedMaterials =
+                  factorySlot['storedMaterials'] ?? [];
+              int index = storedMaterials.indexWhere(
+                (m) => m['id'] == material.id,
+              );
               if (index != -1) {
                 var storedMaterial = storedMaterials[index];
                 int currentQty = storedMaterial['quantity'] ?? 0;
@@ -292,7 +299,8 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           if (newLevel > oldLevel) {
             showDialog(
               context: context,
-              builder: (context) => LevelUpDialog(level: newLevel),
+              builder: (context) =>
+                  CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
             );
           }
         }

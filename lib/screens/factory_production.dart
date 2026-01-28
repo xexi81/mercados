@@ -1,3 +1,4 @@
+import 'package:industrial_app/widgets/celebration_dialog.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:industrial_app/widgets/level_up_dialog.dart';
 import 'package:flutter/material.dart';
@@ -427,7 +428,8 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
           if (newLevel > oldLevel) {
             showDialog(
               context: context,
-              builder: (context) => LevelUpDialog(level: newLevel),
+              builder: (context) =>
+                  CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
             );
           }
           Navigator.pop(context);
