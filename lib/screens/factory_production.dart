@@ -1,6 +1,5 @@
 import 'package:industrial_app/widgets/celebration_dialog.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
-import 'package:industrial_app/widgets/level_up_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -455,6 +454,7 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
     }
 
     if (factoryStatus != 'en espera') {
+      // Aquí irá la UI de producción activa (foto, nombre, cantidad, progreso, velocidad, etc.)
       return Scaffold(
         appBar: const CustomGameAppBar(),
         backgroundColor: AppColors.surface,
@@ -463,24 +463,8 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.factory, color: Colors.white, size: 80),
-                const SizedBox(height: 24),
-                Text(
-                  'La fábrica está actualmente "$factoryStatus"',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'No puedes iniciar nueva producción mientras la fábrica está fabricando',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
+              children: const [
+                // TODO: Mostrar información de la producción en curso aquí
               ],
             ),
           ),

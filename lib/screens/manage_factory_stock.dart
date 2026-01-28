@@ -1,6 +1,5 @@
 import 'package:industrial_app/widgets/celebration_dialog.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
-import 'package:industrial_app/widgets/level_up_dialog.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
