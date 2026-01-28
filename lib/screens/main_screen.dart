@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:industrial_app/screens/association_screen.dart';
+import 'package:industrial_app/screens/contracts_screen.dart';
 import 'package:industrial_app/screens/parking_screen.dart';
+import 'package:industrial_app/screens/retail_screen.dart';
 import 'package:industrial_app/screens/user_data_screen.dart';
 import 'package:industrial_app/screens/warehouses_screen.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
@@ -116,6 +118,46 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const FactoriesScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Contratos
+              Positioned(
+                left: 695,
+                top: 540,
+                child: ClickableBuilding(
+                  width: 260,
+                  height: 180,
+                  label: 'Contratos',
+                  imageAsset: 'assets/images/contratos-building.png',
+                  enableDarken: false,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ContractsScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Retali
+              Positioned(
+                left: 765,
+                top: 373,
+                child: ClickableBuilding(
+                  width: 210,
+                  height: 130,
+                  label: 'Retail',
+                  imageAsset: 'assets/images/retail-building.png',
+                  enableDarken: false,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RetailScreen(),
                       ),
                     );
                   },
