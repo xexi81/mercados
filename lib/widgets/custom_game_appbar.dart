@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:industrial_app/theme/app_colors.dart';
@@ -9,8 +10,9 @@ import 'package:industrial_app/data/experience/experience_service.dart';
 
 class CustomGameAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isMainScreen;
+  final String? title;
 
-  const CustomGameAppBar({Key? key, this.isMainScreen = false})
+  const CustomGameAppBar({Key? key, this.isMainScreen = false, this.title})
     : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
 
     if (currentUser == null) {
       return AppBar(
-        title: const Text('Mapa de la Ciudad'),
+        title: Text(widget.title ?? 'Mapa de la Ciudad'),
         backgroundColor: AppColors.surface,
       );
     }
@@ -71,6 +73,16 @@ class _CustomGameAppBarState extends State<CustomGameAppBar> {
           toolbarHeight: 100,
           backgroundColor: AppColors.surface,
           elevation: 0,
+          title: widget.title != null
+              ? Text(
+                  widget.title!,
+                  style: GoogleFonts.orbitron(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : null,
+          centerTitle: true,
           leadingWidth: widget.isMainScreen ? 120 : 150,
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),

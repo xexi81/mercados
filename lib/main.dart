@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'theme/app_colors.dart';
@@ -8,6 +9,13 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Supabase.initialize(
+    url: 'https://bngizaegsyroslqgllsc.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuZ2l6YWVnc3lyb3NscWdsbHNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODA4NjksImV4cCI6MjA4NTE1Njg2OX0.QuZfrFGkoDu7bhEBCItpVCQ05ceujM_gBsnE57AqJv4',
+  );
+
   runApp(const MyApp());
 }
 
