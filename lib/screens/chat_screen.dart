@@ -27,7 +27,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.clear();
     try {
       await SupabaseService.sendMessage(widget.chatId, text);
-      // Auto scroll to bottom handled by stream update usually, but can be forced if needed
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -66,14 +65,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 return ListView.builder(
-                  reverse:
-                      true, // Para ver los mensajes nuevos abajo (si el orden es desc)
+                  reverse: true,
                   controller: _scrollController,
                   itemCount: messages.length,
                   padding: const EdgeInsets.all(16),
                   itemBuilder: (context, index) {
                     final msg = messages[index];
-                    final isMe = msg['user_id'] == _currentUserId;
+                    final userId = msg['user_id'] as String;
+                    final isMe = userId == _currentUserId;
                     final content = msg['content'] as String;
                     final createdAt = DateTime.parse(
                       msg['created_at'],
@@ -86,50 +85,76 @@ class _ChatScreenState extends State<ChatScreen> {
                           : Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 4),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.75,
                         ),
-                        decoration: BoxDecoration(
-                          color: isMe ? AppColors.primary : AppColors.card,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(16),
-                            topRight: const Radius.circular(16),
-                            bottomLeft: isMe
-                                ? const Radius.circular(16)
-                                : Radius.zero,
-                            bottomRight: isMe
-                                ? Radius.zero
-                                : const Radius.circular(16),
-                          ),
-                        ),
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.end, // Para alinear la hora
-                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: isMe
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              content,
-                              style: TextStyle(
-                                color: isMe
-                                    ? AppColors.onPrimary
-                                    : AppColors.onSurface,
-                                fontSize: 16,
+                            // Nombre de usuario (solo si no soy yo)
+                            if (!isMe)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                  bottom: 2,
+                                ),
+                                child: _UserDisplayName(userId: userId),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              timeStr,
-                              style: TextStyle(
-                                color:
-                                    (isMe
-                                            ? AppColors.onPrimary
-                                            : AppColors.onSurface)
-                                        .withOpacity(0.6),
-                                fontSize: 10,
+
+                            // Burbuja de mensaje
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isMe
+                                    ? AppColors
+                                          .primary // Azul oscuro (Mío)
+                                    : const Color(
+                                        0xFFE0F2FE,
+                                      ), // Azul muy claro (Recibido)
+                                borderRadius: BorderRadius.only(
+                                  topLeft: const Radius.circular(16),
+                                  topRight: const Radius.circular(16),
+                                  bottomLeft: isMe
+                                      ? const Radius.circular(16)
+                                      : Radius.zero,
+                                  bottomRight: isMe
+                                      ? Radius.zero
+                                      : const Radius.circular(16),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    content,
+                                    style: TextStyle(
+                                      color: isMe
+                                          ? Colors.white
+                                          : const Color(
+                                              0xFF0C4A6E,
+                                            ), // Azul muy oscuro
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    timeStr,
+                                    style: TextStyle(
+                                      color:
+                                          (isMe
+                                                  ? Colors.white
+                                                  : const Color(0xFF0C4A6E))
+                                              .withOpacity(0.6),
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -150,21 +175,23 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildMessageInput() {
     return Container(
       padding: const EdgeInsets.all(12),
-      color: AppColors.surface, // O un color ligeramente diferente
+      color: AppColors.surface,
       child: SafeArea(
         child: Row(
           children: [
             Expanded(
               child: TextField(
                 controller: _messageController,
-                style: const TextStyle(color: AppColors.onSurface),
+                // Texto azul oscuro para contraste sobre fondo blanco
+                style: const TextStyle(
+                  color: Color(0xFF0F172A),
+                  fontWeight: FontWeight.w500,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Escribe un mensaje...',
-                  hintStyle: TextStyle(
-                    color: AppColors.onSurface.withOpacity(0.5),
-                  ),
+                  hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
                   filled: true,
-                  fillColor: AppColors.card,
+                  fillColor: Colors.white, // Fondo blanco total
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide.none,
@@ -181,7 +208,7 @@ class _ChatScreenState extends State<ChatScreen> {
             FloatingActionButton(
               onPressed: _sendMessage,
               backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.onPrimary,
+              foregroundColor: Colors.white,
               elevation: 0,
               mini: true,
               child: const Icon(Icons.send, size: 20),
@@ -189,6 +216,39 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Widget helper para mostrar el nombre del usuario cargado asíncronamente
+class _UserDisplayName extends StatelessWidget {
+  final String userId;
+
+  const _UserDisplayName({required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: SupabaseService.getUserProfile(userId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox(
+            width: 20,
+            height: 10,
+          ); // Placeholder invisible o shimmer
+        }
+
+        final username = snapshot.data?['username'] ?? 'Usuario';
+
+        return Text(
+          username,
+          style: const TextStyle(
+            color: Colors.white70, // Nombre sobre el fondo oscuro de la app
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      },
     );
   }
 }

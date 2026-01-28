@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:industrial_app/screens/chat_screen.dart';
-import 'package:industrial_app/services/supabase_service.dart'; // Ajusta si la ruta es diferente
+import 'package:industrial_app/services/supabase_service.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
-import 'package:industrial_app/theme/app_colors.dart'; // Ajusta imports según estructura
+import 'package:industrial_app/theme/app_colors.dart';
 
 class AssociationScreen extends StatefulWidget {
   const AssociationScreen({super.key});
@@ -31,8 +32,7 @@ class _AssociationScreenState extends State<AssociationScreen> {
       // 1. Asegurar que el usuario existe en Supabase
       await SupabaseService.ensureUserExists(user);
 
-      // 2. Obtener/Crear el chat global (Por ahora hardcodeado a 'es')
-      // En el futuro, esto podría venir de un Provider de idioma
+      // 2. Obtener/Crear el chat global
       const languageCode = 'es';
       final chatId = await SupabaseService.getOrCreateChatId(
         'global',
@@ -63,9 +63,7 @@ class _AssociationScreenState extends State<AssociationScreen> {
     }
   }
 
-  /// Placeholder para asociaciones
   void _enterAssociations() {
-    // Aquí iría la lógica para listar asociaciones o chats de grupos
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Funcionalidad de Asociaciones próximamente'),
@@ -77,6 +75,7 @@ class _AssociationScreenState extends State<AssociationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomGameAppBar(),
+      backgroundColor: AppColors.surface, // Fondo oscuro
       body: Stack(
         children: [
           Padding(
@@ -85,32 +84,34 @@ class _AssociationScreenState extends State<AssociationScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Comunidad',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: AppColors.onSurface,
+                  'CENTR0 DE COMUNICACIONES',
+                  style: GoogleFonts.orbitron(
+                    color: Colors.white,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
 
                 // Opción 1: Chat Global
-                _MenuCard(
-                  title: 'Chat Global',
-                  subtitle: 'Conecta con jugadores de tu idioma',
+                _IndustrialMenuCard(
+                  title: 'CHAT GLOBAL',
+                  subtitle: 'Frecuencia abierta para todos los transportistas',
                   icon: Icons.public,
-                  color: Colors.blueAccent,
+                  accentColor: Colors.blueAccent,
                   onTap: _enterGlobalChat,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
                 // Opción 2: Asociaciones (Grupos)
-                _MenuCard(
-                  title: 'Asociaciones',
-                  subtitle: 'Únete a un gremio de transporte',
+                _IndustrialMenuCard(
+                  title: 'ASOCIACIONES',
+                  subtitle: 'Canales privados de gremios y alianzas',
                   icon: Icons.groups,
-                  color: Colors.purpleAccent,
+                  accentColor: Colors.purpleAccent,
                   onTap: _enterAssociations,
                 ),
               ],
@@ -128,78 +129,92 @@ class _AssociationScreenState extends State<AssociationScreen> {
   }
 }
 
-class _MenuCard extends StatelessWidget {
+class _IndustrialMenuCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final Color color;
+  final Color accentColor;
   final VoidCallback onTap;
 
-  const _MenuCard({
+  const _IndustrialMenuCard({
     required this.title,
     required this.subtitle,
     required this.icon,
-    required this.color,
+    required this.accentColor,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.card,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.3), width: 1),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(
+          0xFF1E293B,
+        ), // Slate 800 - Fondo tarjeta oscuro pero visible
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: accentColor.withOpacity(0.5), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: accentColor.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 32, color: color),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppColors.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                // Icono con efecto glow
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: accentColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: accentColor.withOpacity(0.5),
+                      width: 1,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
+                  ),
+                  child: Icon(icon, size: 32, color: accentColor),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.onSurface.withOpacity(0.3),
-                size: 16,
-              ),
-            ],
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.orbitron(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.inter(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: accentColor.withOpacity(0.8),
+                  size: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

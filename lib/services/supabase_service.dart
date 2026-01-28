@@ -1,26 +1,49 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class SupabaseService {
   static final SupabaseClient client = Supabase.instance.client;
+  static final Map<String, Map<String, dynamic>> _userCache = {};
 
-  /// Asegura que el usuario de Firebase exista en la tabla users de Supabase
+  /// Asegura que el usuario de Firebase exista en la tabla users de Supabase,
+  /// sincronizando el nombre desde Firestore.
   static Future<void> ensureUserExists(auth.User firebaseUser) async {
-    final user = client
-        .from('users')
-        .select()
-        .eq('id', firebaseUser.uid)
-        .maybeSingle();
-    final existingUser = await user;
+    // 1. Obtener el nombre más reciente de Firestore
+    String username = firebaseUser.displayName ?? 'Usuario';
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(firebaseUser.uid)
+          .get();
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        if (data['nombre'] != null && data['nombre'].toString().isNotEmpty) {
+          username = data['nombre'];
+        }
+      }
+    } catch (e) {
+      debugPrint('Error leyendo Firestore: $e');
+    }
 
-    if (existingUser == null) {
-      await client.from('users').insert({
+    // 2. Insertar o Actualizar en Supabase
+    try {
+      await client.from('users').upsert({
         'id': firebaseUser.uid,
         'email': firebaseUser.email,
-        'username': firebaseUser.displayName ?? 'Usuario',
+        'username': username,
         'avatar_url': firebaseUser.photoURL,
-        'created_at': DateTime.now().toIso8601String(),
+        // created_at se genera auto en insert, no lo tocamos
       });
+
+      // Actualizamos caché local también si es necesario
+      _userCache[firebaseUser.uid] = {
+        'username': username,
+        'avatar_url': firebaseUser.photoURL,
+      };
+    } catch (e) {
+      debugPrint('Error upsert users: $e');
     }
   }
 
@@ -74,6 +97,29 @@ class SupabaseService {
         .stream(primaryKey: ['id'])
         .eq('chat_id', chatId)
         .order('created_at', ascending: false)
-        .map((maps) => maps); // Los mapas ya vienen listos
+        .map((maps) => maps);
+  }
+
+  /// Método helper para obtener datos de un usuario por ID (con caché simple)
+  static Future<Map<String, dynamic>?> getUserProfile(String userId) async {
+    if (_userCache.containsKey(userId)) {
+      return _userCache[userId];
+    }
+
+    try {
+      final response = await client
+          .from('users')
+          .select('username, avatar_url')
+          .eq('id', userId)
+          .maybeSingle();
+
+      if (response != null) {
+        _userCache[userId] = response;
+      }
+      return response;
+    } catch (e) {
+      debugPrint('Error fetching user profile: $e');
+      return null;
+    }
   }
 }
