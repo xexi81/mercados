@@ -84,6 +84,25 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
     }
   }
 
+  String _getContainerDisplayName(String code) {
+    switch (code) {
+      case 'BULK_SOLID':
+        return 'Granel sólido';
+      case 'BULK_LIQUID':
+        return 'Granel líquido';
+      case 'REFRIGERATED':
+        return 'Refrigerado';
+      case 'STANDARD':
+        return 'Contenedor estándar';
+      case 'HEAVY':
+        return 'Carga pesada';
+      case 'HAZARDOUS':
+        return 'Peligroso';
+      default:
+        return code;
+    }
+  }
+
   Future<void> _sellMaterial(
     String materialId,
     Map<String, dynamic>? materialInfo,
@@ -467,6 +486,18 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
                                                       fontSize: 12,
                                                     ),
                                                   ),
+                                                  if (materialInfo != null &&
+                                                      (materialInfo['allowedContainers']
+                                                                  as List?)
+                                                              ?.isNotEmpty ==
+                                                          true)
+                                                    Text(
+                                                      'Contenedores: ${(materialInfo['allowedContainers'] as List).map((code) => _getContainerDisplayName(code)).join(', ')}',
+                                                      style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 11,
+                                                      ),
+                                                    ),
                                                   if (averagePrice > 0)
                                                     Text(
                                                       'Precio medio: ${averagePrice.toStringAsFixed(2)}',

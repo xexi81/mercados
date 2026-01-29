@@ -573,6 +573,14 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
+                        'Contenedores: ${material.allowedContainers.map((c) => c.displayName).join(', ')}',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
                         '⚡ $productionPerHour unidades/hora',
                         style: const TextStyle(
                           color: Color(0xFFFFD700),

@@ -32,6 +32,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   bool isLoading = true;
   bool allowsMultipleProducts = true;
   double userMoney = 0.0;
+  String? containerType;
 
   // Market data from Firestore
   Map<String, dynamic> firestoreMaterials = {};
@@ -107,6 +108,8 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             allowsMultipleProducts = await _getAllowsMultipleProducts(
               containerId,
             );
+            final containerInfo = await _getContainerInfo(containerId);
+            containerType = containerInfo?['type'] as String?;
           }
 
           // Get user money
@@ -2010,6 +2013,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                             materialInfo?['name'] as String? ??
                             'Material $materialId';
 
+                        bool isAllowed = true;
+                        if (isAtHQ &&
+                            containerType != null &&
+                            materialInfo != null) {
+                          final allowedContainers =
+                              materialInfo['allowedContainers']
+                                  as List<dynamic>? ??
+                              [];
+                          isAllowed = allowedContainers.contains(containerType);
+                        }
+
                         // Calculate max loadable based on truck capacity
                         final maxCapacity = _calculateMaxCapacity();
                         final currentLoad = _calculateCurrentLoad();
@@ -2065,6 +2079,18 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                                             fontSize: 12,
                                           ),
                                         ),
+                                        if (materialInfo != null &&
+                                            (materialInfo['allowedContainers']
+                                                        as List?)
+                                                    ?.isNotEmpty ==
+                                                true)
+                                          Text(
+                                            'Contenedores: ${(materialInfo['allowedContainers'] as List).map((code) => _getContainerDisplayName(code)).join(', ')}',
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 11,
+                                            ),
+                                          ),
                                         if (averagePrice > 0)
                                           Text(
                                             'Precio medio: ${averagePrice.toStringAsFixed(2)}',
@@ -2087,58 +2113,76 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Cargar en camión: ${(transferToTruckAmounts[materialId] ?? 0).toStringAsFixed(2)} m³',
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 12,
+                              if (isAllowed) ...[
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Cargar en camión: ${(transferToTruckAmounts[materialId] ?? 0).toStringAsFixed(2)} m³',
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 12,
+                                            ),
                                           ),
-                                        ),
-                                        Slider(
-                                          value:
-                                              transferToTruckAmounts[materialId] ??
-                                              0,
-                                          min: 0,
-                                          max: maxLoadableM3.toDouble(),
-                                          divisions: maxLoadableM3 > 0
-                                              ? units
-                                              : 1,
-                                          activeColor: AppColors.primary,
-                                          inactiveColor: Colors.white24,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              transferToTruckAmounts[materialId] =
-                                                  value;
-                                            });
-                                          },
-                                        ),
-                                      ],
+                                          Slider(
+                                            value:
+                                                transferToTruckAmounts[materialId] ??
+                                                0,
+                                            min: 0,
+                                            max: maxLoadableM3.toDouble(),
+                                            divisions: maxLoadableM3 > 0
+                                                ? units
+                                                : 1,
+                                            activeColor: AppColors.primary,
+                                            inactiveColor: Colors.white24,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                transferToTruckAmounts[materialId] =
+                                                    value;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                IndustrialButton(
+                                  label: 'Cargar en Camión',
+                                  onPressed:
+                                      (transferToTruckAmounts[materialId] ??
+                                              0) >
+                                          0
+                                      ? () => _transferToTruck(
+                                          materialId,
+                                          materialInfo,
+                                        )
+                                      : null,
+                                  gradientTop: const Color(0xFF4A90E2),
+                                  gradientBottom: const Color(0xFF357ABD),
+                                  borderColor: const Color(0xFF2E5F8D),
+                                  width: double.infinity,
+                                ),
+                              ] else
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
-                                ],
-                              ),
-                              IndustrialButton(
-                                label: 'Cargar en Camión',
-                                onPressed:
-                                    (transferToTruckAmounts[materialId] ?? 0) >
-                                        0
-                                    ? () => _transferToTruck(
-                                        materialId,
-                                        materialInfo,
-                                      )
-                                    : null,
-                                gradientTop: const Color(0xFF4A90E2),
-                                gradientBottom: const Color(0xFF357ABD),
-                                borderColor: const Color(0xFF2E5F8D),
-                                width: double.infinity,
-                              ),
+                                  child: const Text(
+                                    'Contenedor no permitido para este material',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                             ],
                           ),
                         );
@@ -2217,6 +2261,11 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                       'Actual: ${currentLoad.toStringAsFixed(1)} m³',
                       style: TextStyle(color: Colors.white70),
                     ),
+                    if (containerType != null)
+                      Text(
+                        'Tipo: ${_getContainerDisplayName(containerType!)}',
+                        style: TextStyle(color: Colors.white70),
+                      ),
                     const SizedBox(height: 12),
                     // Progress bar
                     Container(
@@ -2285,6 +2334,41 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       );
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> _getContainerInfo(int containerId) async {
+    try {
+      final containersJson = await rootBundle.loadString(
+        'assets/data/container.json',
+      );
+      final containersData = json.decode(containersJson);
+      final containers = containersData['containers'] as List;
+      return containers.firstWhere(
+        (c) => c['containerId'] == containerId,
+        orElse: () => null,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String _getContainerDisplayName(String code) {
+    switch (code) {
+      case 'BULK_SOLID':
+        return 'Granel sólido';
+      case 'BULK_LIQUID':
+        return 'Granel líquido';
+      case 'REFRIGERATED':
+        return 'Refrigerado';
+      case 'STANDARD':
+        return 'Contenedor estándar';
+      case 'HEAVY':
+        return 'Carga pesada';
+      case 'HAZARDOUS':
+        return 'Peligroso';
+      default:
+        return code;
     }
   }
 }

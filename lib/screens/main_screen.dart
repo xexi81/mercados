@@ -143,10 +143,10 @@ class _MainScreenState extends State<MainScreen> {
                   },
                 ),
               ),
-              // Retali
+              // Retail
               Positioned(
-                left: 765,
-                top: 373,
+                left: 760,
+                top: 360,
                 child: ClickableBuilding(
                   width: 210,
                   height: 130,
