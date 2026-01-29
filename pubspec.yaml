@@ -78,6 +78,7 @@ flutter:
     - assets/images/drivers/
     - assets/images/warehouses/
     - assets/images/factories/
+    - assets/images/retail/
     - assets/data/
     - assets/data/factories/
 

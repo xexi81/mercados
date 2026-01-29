@@ -1,0 +1,148 @@
+{
+  "retail_slots": [
+    {
+      "slotId": 1,
+      "requiredLevel": 1,
+      "cost": {
+        "money": 0,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 2,
+      "requiredLevel": 1,
+      "cost": {
+        "money": 0,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 3,
+      "requiredLevel": 8,
+      "cost": {
+        "money": 15000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 4,
+      "requiredLevel": 18,
+      "cost": {
+        "money": 40000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 5,
+      "requiredLevel": 30,
+      "cost": {
+        "money": 90000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 6,
+      "requiredLevel": 45,
+      "cost": {
+        "money": 160000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 7,
+      "requiredLevel": 65,
+      "cost": {
+        "money": 300000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 8,
+      "requiredLevel": 85,
+      "cost": {
+        "money": 550000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 9,
+      "requiredLevel": 110,
+      "cost": {
+        "money": 900000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 10,
+      "requiredLevel": 135,
+      "cost": {
+        "money": 1400000,
+        "gems": 0
+      }
+    },
+    {
+      "slotId": 11,
+      "requiredLevel": 160,
+      "cost": {
+        "money": 0,
+        "gems": 40
+      }
+    },
+    {
+      "slotId": 12,
+      "requiredLevel": 185,
+      "cost": {
+        "money": 0,
+        "gems": 80
+      }
+    },
+    {
+      "slotId": 13,
+      "requiredLevel": 210,
+      "cost": {
+        "money": 0,
+        "gems": 150
+      }
+    },
+    {
+      "slotId": 14,
+      "requiredLevel": 235,
+      "cost": {
+        "money": 0,
+        "gems": 250
+      }
+    },
+    {
+      "slotId": 15,
+      "requiredLevel": 260,
+      "cost": {
+        "money": 0,
+        "gems": 400
+      }
+    },
+    {
+      "slotId": 16,
+      "requiredLevel": 290,
+      "cost": {
+        "money": 0,
+        "gems": 600
+      }
+    },
+    {
+      "slotId": 17,
+      "requiredLevel": 320,
+      "cost": {
+        "money": 0,
+        "gems": 850
+      }
+    },
+    {
+      "slotId": 18,
+      "requiredLevel": 350,
+      "cost": {
+        "money": 0,
+        "gems": 1200
+      }
+    }
+  ]
+}

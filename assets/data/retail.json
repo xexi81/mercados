@@ -1,0 +1,95 @@
+{
+  "retailBuildings": [
+    {
+      "id": "basic_kiosk",
+      "name": "Kiosco básico",
+      "purchaseCost": 500,
+      "salesPerHour": 40,
+      "items": [1, 20, 27, 32, 33, 37, 38, 39, 40]
+    },
+    {
+      "id": "energy_supply_shop",
+      "name": "Punto de suministro energético",
+      "purchaseCost": 2000,
+      "salesPerHour": 35,
+      "items": [2, 4, 5, 17, 61, 62, 63, 74]
+    },
+    {
+      "id": "food_market",
+      "name": "Mercado de alimentos",
+      "purchaseCost": 3000,
+      "salesPerHour": 55,
+      "items": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+    },
+    {
+      "id": "processed_food_store",
+      "name": "Tienda de alimentos procesados",
+      "purchaseCost": 7000,
+      "salesPerHour": 40,
+      "items": [41, 42, 43, 44, 45, 46, 47, 48, 81, 82, 83, 84, 85, 88, 89]
+    },
+    {
+      "id": "construction_yard",
+      "name": "Almacén de construcción",
+      "purchaseCost": 6000,
+      "salesPerHour": 30,
+      "items": [6, 7, 8, 9, 19, 51, 52, 53, 54, 78]
+    },
+    {
+      "id": "industrial_materials_store",
+      "name": "Tienda de materiales industriales",
+      "purchaseCost": 10000,
+      "salesPerHour": 25,
+      "items": [10, 11, 12, 15, 16, 18, 49, 50, 55, 56, 57, 69, 72, 73]
+    },
+    {
+      "id": "chemical_store",
+      "name": "Distribuidor químico",
+      "purchaseCost": 12000,
+      "salesPerHour": 22,
+      "items": [18, 60, 71, 75, 90, 91, 92]
+    },
+    {
+      "id": "electronics_store",
+      "name": "Tienda electrónica",
+      "purchaseCost": 15000,
+      "salesPerHour": 20,
+      "items": [13, 14, 58, 59, 63, 93, 94, 95]
+    },
+    {
+      "id": "consumer_goods_store",
+      "name": "Tienda de bienes de consumo",
+      "purchaseCost": 18000,
+      "salesPerHour": 30,
+      "items": [35, 36, 65, 66, 67, 68, 77, 101, 102, 103]
+    },
+    {
+      "id": "automotive_parts_store",
+      "name": "Tienda de automoción",
+      "purchaseCost": 20000,
+      "salesPerHour": 18,
+      "items": [34, 64, 97, 98, 99, 100]
+    },
+    {
+      "id": "industrial_equipment_center",
+      "name": "Centro de equipamiento industrial",
+      "purchaseCost": 30000,
+      "salesPerHour": 15,
+      "items": [80, 104, 105, 110, 150, 151, 152, 161]
+    },
+    {
+      "id": "advanced_technology_store",
+      "name": "Centro tecnológico avanzado",
+      "purchaseCost": 45000,
+      "salesPerHour": 10,
+      "items": [141, 142, 143, 144, 145, 146, 147, 148, 149, 154, 155, 160]
+    },
+    {
+      "id": "mega_shopping_center",
+      "name": "Mega centro comercial",
+      "purchaseCost": 70000,
+      "salesPerHour": 65,
+      "items": [81, 85, 88, 89, 101, 102, 103, 153, 164]
+    }
+  ]
+}
