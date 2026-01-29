@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
 import 'package:industrial_app/data/retail/retail_repository.dart';
 import 'package:industrial_app/data/retail/retail_slot_model.dart';
@@ -11,6 +13,8 @@ import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/data/retail/retail_building_model.dart';
 import 'package:industrial_app/screens/retail_selling_material.dart';
 import 'package:industrial_app/screens/buy_retail.dart';
+import 'package:industrial_app/data/materials/materials_repository.dart';
+import 'package:industrial_app/data/materials/material_model.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 
 class RetailScreen extends StatefulWidget {
@@ -22,6 +26,7 @@ class RetailScreen extends StatefulWidget {
 
 class _RetailScreenState extends State<RetailScreen> {
   List<RetailSlot> _retailSlots = [];
+  Map<int, MaterialModel> _materials = {};
   bool _isDataLoaded = false;
 
   @override
@@ -34,9 +39,11 @@ class _RetailScreenState extends State<RetailScreen> {
     try {
       final retailSlots = await RetailRepository.loadRetailSlots();
       await RetailRepository.loadRetailBuildings();
+      final materials = await MaterialsRepository.loadMaterials();
       if (mounted) {
         setState(() {
           _retailSlots = retailSlots;
+          _materials = {for (var m in materials) m.id: m};
           _isDataLoaded = true;
         });
       }
@@ -273,6 +280,33 @@ class _RetailScreenState extends State<RetailScreen> {
           ),
         ),
 
+        // Price at top right (only when selling)
+        if (status == 'vendiendo' && data['sellingMaterial'] != null)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Builder(
+              builder: (context) {
+                final sellingMaterial =
+                    data['sellingMaterial'] as Map<String, dynamic>;
+                final materialId = sellingMaterial['materialId'] as int?;
+                final quantity = sellingMaterial['quantity'] as int? ?? 0;
+                final material = _materials[materialId];
+                final sellPrice = material?.basePrice ?? 0 * 2;
+                final totalRevenue = quantity * sellPrice;
+
+                return Text(
+                  '\$${totalRevenue}',
+                  style: const TextStyle(
+                    color: Colors.yellow,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+            ),
+          ),
+
         // Level card at top left
         Positioned(
           top: 8,
@@ -315,7 +349,8 @@ class _RetailScreenState extends State<RetailScreen> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const RetailSellingMaterialScreen(),
+                    builder: (context) =>
+                        RetailSellingMaterialScreen(slotId: retailSlot.slotId),
                   ),
                 );
               },
@@ -338,6 +373,16 @@ class _RetailScreenState extends State<RetailScreen> {
                 ),
               ),
             ),
+          ),
+
+        // Center card for "vendiendo" status
+        if (status == 'vendiendo')
+          Positioned(
+            top: 50,
+            bottom: 50,
+            left: 20,
+            right: 20,
+            child: _buildSellingCard(data),
           ),
 
         // Sell building button for "en espera" status
@@ -670,6 +715,408 @@ class _RetailScreenState extends State<RetailScreen> {
       debugPrint('ERROR: Failed to purchase retail slot: $e');
       debugPrint('ERROR: Stack trace: $stackTrace');
       rethrow;
+    }
+  }
+
+  Widget _buildSellingCard(Map<String, dynamic> data) {
+    final sellingMaterial = data['sellingMaterial'] as Map<String, dynamic>?;
+    if (sellingMaterial == null) return const SizedBox.shrink();
+
+    final materialId = sellingMaterial['materialId'] as int?;
+    final quantity = sellingMaterial['quantity'] as int? ?? 0;
+    final sellRate = sellingMaterial['sellRate'] as double? ?? 0.0;
+    final startTime = sellingMaterial['startTime'] as Timestamp?;
+
+    final material = _materials[materialId];
+    if (material == null) return const SizedBox.shrink();
+
+    // Calculate current sold based on time elapsed
+    int sold = 0;
+    if (startTime != null) {
+      final now = Timestamp.now();
+      final elapsedMs =
+          now.millisecondsSinceEpoch - startTime.millisecondsSinceEpoch;
+      final elapsedHours = elapsedMs / (1000 * 60 * 60);
+      sold = (elapsedHours * sellRate).floor().clamp(0, quantity);
+    }
+
+    final sellPrice = material.basePrice * 2;
+    final totalRevenue = quantity * sellPrice;
+    final remainingQuantity = quantity - sold;
+    final remainingHours = remainingQuantity / sellRate;
+    final progress = quantity > 0 ? sold / quantity : 0.0;
+
+    if (progress >= 1.0) {
+      // Sale completed - change status to "vendido" automatically
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _markSaleAsCompleted(data);
+      });
+
+      // Show completed sale card
+      return InkWell(
+        onTap: () => _showCollectSaleDialog(data, totalRevenue, material),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withAlpha(100), width: 2),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'VENTA COMPLETADA',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Ingresos: \$${totalRevenue}',
+                style: const TextStyle(color: Colors.yellow, fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Toca para recoger',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        // Material icon on the left
+        Container(
+          width: 32, // Reduced from 40 to 32
+          height: 32, // Reduced from 40 to 32
+          padding: const EdgeInsets.all(2), // Add padding for border visibility
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.white, width: 1),
+          ),
+          child: Image.asset(
+            'assets/images/materials/${material.id}.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[800],
+                child: const Icon(Icons.image, color: Colors.white, size: 16),
+              );
+            },
+          ),
+        ),
+        const SizedBox(width: 8),
+        // Content on the right
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Name only (price moved to top)
+              Text(
+                material.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              // Progress bar (20% larger, aligned with material name start)
+              SizedBox(
+                width: 144, // 120 * 1.2 = 144px (20% larger)
+                height: 4, // Increased from 3 to 4 for better visibility
+                child: LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey[700],
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                ),
+              ),
+              const SizedBox(height: 2),
+              // Sold/total and time below
+              SizedBox(
+                width: 144, // Match progress bar width
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${sold}/${quantity}',
+                      style: const TextStyle(color: Colors.white, fontSize: 9),
+                    ),
+                    const SizedBox(height: 1),
+                    // Remaining time below the sold/total
+                    if (remainingHours > 0.1)
+                      Text(
+                        remainingHours >= 1
+                            ? '${remainingHours.toStringAsFixed(1)}h restantes'
+                            : '${(remainingHours * 60).round()}min restantes',
+                        style: TextStyle(color: Colors.grey[400], fontSize: 8),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _markSaleAsCompleted(Map<String, dynamic> data) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final retailDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('retail_users')
+          .doc(user.uid);
+
+      final retailSnapshot = await retailDocRef.get();
+      if (!retailSnapshot.exists) return;
+
+      final retailData = retailSnapshot.data()!;
+      final slots = List<Map<String, dynamic>>.from(retailData['slots'] ?? []);
+
+      final slotIndex = slots.indexWhere((s) => s['slotId'] == data['slotId']);
+      if (slotIndex != -1 && slots[slotIndex]['status'] == 'vendiendo') {
+        slots[slotIndex]['status'] = 'vendido';
+        await retailDocRef.update({'slots': slots});
+      }
+    } catch (e) {
+      debugPrint('Error marking sale as completed: $e');
+    }
+  }
+
+  Future<void> _showCollectSaleDialog(
+    Map<String, dynamic> data,
+    int totalRevenue,
+    MaterialModel material,
+  ) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: const Text(
+          'RECOGER VENTA',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '¿Recoger \$${totalRevenue} de la venta?',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Se añadirá experiencia por la venta.',
+              style: TextStyle(color: Colors.grey[400], fontSize: 12),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('CANCELAR', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('RECOGER', style: TextStyle(color: Colors.green)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _collectSale(data, totalRevenue, material);
+    }
+  }
+
+  Future<double> _calculateRetailSaleExperience(
+    MaterialModel material,
+    int quantitySold,
+  ) async {
+    try {
+      // Load experience rules
+      final experienceData = json.decode(
+        await rootBundle.loadString('assets/data/experience_account.json'),
+      );
+
+      final retailSaleRules =
+          experienceData['experienceRules']['retailSale']['baseXpPerM3'];
+      final grade = material.grade.toString();
+
+      if (retailSaleRules.containsKey(grade)) {
+        final xpPerM3 = retailSaleRules[grade] as num;
+        // Assume 1 unit = 1 m³ for simplicity, adjust if needed
+        return quantitySold * xpPerM3.toDouble();
+      }
+
+      return 0.0;
+    } catch (e) {
+      debugPrint('Error calculating retail sale experience: $e');
+      return 0.0;
+    }
+  }
+
+  Future<void> _collectSale(
+    Map<String, dynamic> data,
+    int expectedRevenue,
+    MaterialModel material,
+  ) async {
+    int actualRevenue = 0;
+    int actuallySold = 0;
+    double experienceGained = 0.0;
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final userDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid);
+      final retailDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('retail_users')
+          .doc(user.uid);
+      final warehouseDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userSnapshot = await transaction.get(userDocRef);
+        final retailSnapshot = await transaction.get(retailDocRef);
+        final warehouseSnapshot = await transaction.get(warehouseDocRef);
+
+        if (!userSnapshot.exists ||
+            !retailSnapshot.exists ||
+            !warehouseSnapshot.exists)
+          return;
+
+        final userData = userSnapshot.data()!;
+        final retailData = retailSnapshot.data()!;
+        final warehouseData = warehouseSnapshot.data()!;
+
+        final currentMoney = userData['money'] as int? ?? 0;
+        final slots = List<Map<String, dynamic>>.from(
+          retailData['slots'] ?? [],
+        );
+
+        // Initialize warehouse slots
+        final warehouseSlots = List<Map<String, dynamic>>.from(
+          warehouseData['slots'] ?? [],
+        );
+
+        final slotIndex = slots.indexWhere(
+          (s) => s['slotId'] == data['slotId'],
+        );
+        if (slotIndex != -1) {
+          final sellingMaterial =
+              slots[slotIndex]['sellingMaterial'] as Map<String, dynamic>?;
+          if (sellingMaterial != null) {
+            final materialId = sellingMaterial['materialId'] as int?;
+            final quantity = sellingMaterial['quantity'] as int? ?? 0;
+            final startTime = sellingMaterial['startTime'] as Timestamp?;
+            final sellRate = sellingMaterial['sellRate'] as double? ?? 0.0;
+
+            // Calculate how much was actually sold
+            int actuallySold =
+                quantity; // Default to full quantity for completed sales
+            if (startTime != null) {
+              final now = Timestamp.now();
+              final elapsedMs =
+                  now.millisecondsSinceEpoch - startTime.millisecondsSinceEpoch;
+              final elapsedHours = elapsedMs / (1000 * 60 * 60);
+              actuallySold = (elapsedHours * sellRate).floor().clamp(
+                0,
+                quantity,
+              );
+            }
+
+            // Stock was already subtracted when sale started, no need to subtract more
+            // But if not everything was sold, we should return the unsold stock to warehouse
+            int unsoldQuantity = quantity - actuallySold;
+            if (unsoldQuantity > 0) {
+              // Return unsold stock to warehouse
+              for (var slot in warehouseSlots) {
+                if (unsoldQuantity <= 0) break;
+
+                final storage = Map<String, dynamic>.from(
+                  slot['storage'] as Map? ?? {},
+                );
+                final materialIdStr = materialId.toString();
+
+                if (storage.containsKey(materialIdStr)) {
+                  final currentUnits =
+                      (storage[materialIdStr]['units'] as num?)?.toInt() ?? 0;
+                  storage[materialIdStr]['units'] =
+                      currentUnits + unsoldQuantity;
+                  slot['storage'] = storage;
+                  unsoldQuantity = 0; // All returned to first available slot
+                  break;
+                }
+              }
+            }
+
+            // Calculate revenue based on actually sold amount
+            final material = _materials[materialId];
+            final sellPrice = (material?.basePrice ?? 0) * 2;
+            actualRevenue = actuallySold * sellPrice;
+          }
+
+          slots[slotIndex]['status'] = 'en espera';
+          slots[slotIndex].remove('sellingMaterial');
+        }
+
+        transaction.update(userDocRef, {'money': currentMoney + actualRevenue});
+        transaction.update(retailDocRef, {'slots': slots});
+        if (warehouseData['slots'] != null) {
+          transaction.update(warehouseDocRef, {'slots': warehouseSlots});
+        }
+
+        // Add experience for retail sale
+        experienceGained = await _calculateRetailSaleExperience(
+          material,
+          actuallySold,
+        );
+        final currentExperience = userData['experience'] as num? ?? 0;
+        transaction.update(userDocRef, {
+          'experience': currentExperience + experienceGained,
+        });
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '¡Recogidos \$${actualRevenue} y +${experienceGained.toStringAsFixed(1)} XP!',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error collecting sale: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al recoger la venta'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ class RetailBuilding {
   final String id;
   final String name;
   final int purchaseCost;
-  final int salesPerHour;
+  final double salesPerHour;
   final List<int> items;
 
   RetailBuilding({
@@ -18,7 +18,7 @@ class RetailBuilding {
       id: json['id'],
       name: json['name'],
       purchaseCost: json['purchaseCost'],
-      salesPerHour: json['salesPerHour'],
+      salesPerHour: (json['salesPerHour'] as num).toDouble(),
       items: List<int>.from(json['items']),
     );
   }

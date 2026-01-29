@@ -157,6 +157,40 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
       return;
     }
 
+    // Check warehouse capacity
+    final capacityData =
+        capacitiesByGrade[material.grade] ?? {'capacity': 0.0, 'used': 0.0};
+    final totalCapacity = capacityData['capacity'] as double;
+    final usedCapacity = capacityData['used'] as double;
+    final availableCapacity = totalCapacity - usedCapacity;
+    final requiredCapacity = quantity * material.unitVolumeM3;
+
+    if (requiredCapacity > availableCapacity) {
+      final maxQuantity = (availableCapacity / material.unitVolumeM3).floor();
+      if (maxQuantity <= 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'No hay espacio suficiente en el almacén de grado ${material.grade}',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Adjust quantity to maximum possible
+      quantity = maxQuantity;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Cantidad ajustada al máximo posible: $quantity unidades',
+          ),
+          backgroundColor: Colors.orange,
+        ),
+      );
+    }
+
     // Build confirmation message
     String message =
         '¿Mover ${quantity} unidades de ${material.name} al almacén?';
@@ -427,13 +461,7 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
         ? maxUnits
         : availableQuantity;
 
-    if (maxToMove <= 0) {
-      return const Text(
-        'Almacén lleno para este grado',
-        style: TextStyle(color: Colors.red, fontSize: 14),
-      );
-    }
-
+    final isWarehouseFull = maxToMove <= 0;
     final currentValue = selectedQuantities[material.id]?.toInt() ?? 0;
 
     return Card(
@@ -504,10 +532,30 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
               style: const TextStyle(color: Colors.white70, fontSize: 12),
             ),
             const SizedBox(height: 8),
+            if (isWarehouseFull)
+              Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.red.withAlpha(50),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Colors.red.withAlpha(100)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.warning, color: Colors.red, size: 16),
+                    SizedBox(width: 8),
+                    Text(
+                      'Almacén lleno - No se puede mover stock',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
             Text(
               'Cantidad a mover: $currentValue / $maxToMove',
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: isWarehouseFull ? Colors.grey : Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -518,23 +566,35 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
               max: maxToMove.toDouble(),
               divisions: maxToMove > 0 ? maxToMove : 1,
               label: currentValue.toString(),
-              onChanged: (value) {
-                setState(() {
-                  selectedQuantities[material.id] = value;
-                });
-              },
+              onChanged: isWarehouseFull
+                  ? null
+                  : (value) {
+                      setState(() {
+                        selectedQuantities[material.id] = value;
+                      });
+                    },
+              activeColor: isWarehouseFull ? Colors.grey : Colors.green,
+              inactiveColor: Colors.grey[600],
             ),
             const SizedBox(height: 12),
             IndustrialButton(
-              label: 'Mover al Almacén',
-              onPressed: () {
-                final quantityToMove =
-                    selectedQuantities[material.id]?.toInt() ?? 0;
-                _moveToWarehouse(material, quantityToMove);
-              },
-              gradientTop: const Color(0xFF4CAF50),
-              gradientBottom: const Color(0xFF2E7D32),
-              borderColor: const Color(0xFF1B5E20),
+              label: isWarehouseFull ? 'ALMACÉN LLENO' : 'Mover al Almacén',
+              onPressed: isWarehouseFull
+                  ? null
+                  : () {
+                      final quantityToMove =
+                          selectedQuantities[material.id]?.toInt() ?? 0;
+                      _moveToWarehouse(material, quantityToMove);
+                    },
+              gradientTop: isWarehouseFull
+                  ? Colors.grey[600]!
+                  : const Color(0xFF4CAF50),
+              gradientBottom: isWarehouseFull
+                  ? Colors.grey[800]!
+                  : const Color(0xFF2E7D32),
+              borderColor: isWarehouseFull
+                  ? Colors.grey[700]!
+                  : const Color(0xFF1B5E20),
               width: double.infinity,
               height: 45,
             ),
