@@ -184,7 +184,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         (containerSkills!['capacityM3'] as num?)?.toDouble() ?? 0;
     final capacityUpgrade =
         (fleetData?['containerCapacityUpgrade'] as num?)?.toInt() ?? 0;
-    return (baseCapacity + (capacityUpgrade * 10)) * fleetLevel;
+    return baseCapacity + (capacityUpgrade * 10);
   }
 
   double _calculateCurrentLoad() {
@@ -1710,7 +1710,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                                 ),
                               ],
                             ),
-                            if (isAtHQ) ...[
+                            if (isAtHQ && fleetStatus != 'en marcha') ...[
                               const SizedBox(height: 12),
                               Row(
                                 children: [
