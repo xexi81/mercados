@@ -96,8 +96,13 @@ class ExperienceService {
     return penalty;
   }
 
+  /// Devuelve el XP base por m³ para venta retail por grado.
+  static double getRetailSaleXpPerM3(int grade) {
+    if (_accountRules == null) return 0.0;
+    return _accountRules!.retailSaleXpPerM3[grade.toString()] ?? 0.0;
+  }
+
   /// Calcula el nivel actual basado en la experiencia total.
-  /// Devuelve el nivel más alto cuya experiencia requerida es menor o igual a la actual.
   static int getLevelFromExperience(int currentExperience) {
     if (_levels == null) {
       throw Exception(

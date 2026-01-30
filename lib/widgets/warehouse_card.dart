@@ -168,7 +168,10 @@ class WarehouseCard extends StatelessWidget {
   }
 
   Widget _buildLevelCard(BuildContext context, double width, double height) {
-    final currentLevel = (firestoreData?['level'] as int?) ?? (firestoreData?['warehouseLevel'] as int?) ?? 0;
+    final currentLevel =
+        (firestoreData?['level'] as int?) ??
+        (firestoreData?['warehouseLevel'] as int?) ??
+        0;
 
     return GestureDetector(
       onTap: () => _handleWarehouseLevelUpgrade(context),
@@ -239,7 +242,10 @@ class WarehouseCard extends StatelessWidget {
   }
 
   Future<void> _handleWarehouseLevelUpgrade(BuildContext context) async {
-    final currentLevel = (firestoreData?['level'] as int?) ?? (firestoreData?['warehouseLevel'] as int?) ?? 0;
+    final currentLevel =
+        (firestoreData?['level'] as int?) ??
+        (firestoreData?['warehouseLevel'] as int?) ??
+        0;
     final nextLevel = currentLevel + 1;
 
     try {

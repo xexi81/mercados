@@ -280,8 +280,9 @@ class _RetailScreenState extends State<RetailScreen> {
           ),
         ),
 
-        // Price at top right (only when selling)
-        if (status == 'vendiendo' && data['sellingMaterial'] != null)
+        // Price at top right (only when selling or sold)
+        if ((status == 'vendiendo' || status == 'vendido') &&
+            data['sellingMaterial'] != null)
           Positioned(
             top: 8,
             right: 8,
@@ -292,16 +293,27 @@ class _RetailScreenState extends State<RetailScreen> {
                 final materialId = sellingMaterial['materialId'] as int?;
                 final quantity = sellingMaterial['quantity'] as int? ?? 0;
                 final material = _materials[materialId];
-                final sellPrice = material?.basePrice ?? 0 * 2;
+                final sellPrice = (material?.basePrice ?? 0) * 2;
                 final totalRevenue = quantity * sellPrice;
 
-                return Text(
-                  '\$${totalRevenue}',
-                  style: const TextStyle(
-                    color: Colors.yellow,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/images/billete.png',
+                      width: 16,
+                      height: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$totalRevenue',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
@@ -383,6 +395,27 @@ class _RetailScreenState extends State<RetailScreen> {
             left: 20,
             right: 20,
             child: _buildSellingCard(data),
+          ),
+
+        // Collect benefits button for "vendido" status
+        if (status == 'vendido')
+          Positioned(
+            top: 50,
+            bottom: 50,
+            left: 20,
+            right: 20,
+            child: Center(
+              child: IndustrialButton(
+                label: 'RECOGER BENEFICIOS',
+                onPressed: () => _handleCollectBenefits(retailSlot, data),
+                gradientTop: Colors.green[400]!,
+                gradientBottom: Colors.green[700]!,
+                borderColor: Colors.green[800]!,
+                width: 160,
+                height: 40,
+                fontSize: 12,
+              ),
+            ),
           ),
 
         // Sell building button for "en espera" status
@@ -589,6 +622,116 @@ class _RetailScreenState extends State<RetailScreen> {
       });
     } catch (e, stackTrace) {
       debugPrint('ERROR: Failed to sell building: $e');
+      debugPrint('ERROR: Stack trace: $stackTrace');
+      rethrow;
+    }
+  }
+
+  Future<void> _handleCollectBenefits(
+    RetailSlot retailSlot,
+    Map<String, dynamic> data,
+  ) async {
+    final sellingMaterial = data['sellingMaterial'] as Map<String, dynamic>?;
+    if (sellingMaterial == null) return;
+
+    final materialId = sellingMaterial['materialId'] as int?;
+    final quantity = sellingMaterial['quantity'] as int? ?? 0;
+    final material = _materials[materialId];
+    if (material == null) return;
+
+    final moneyEarned = (quantity * material.basePrice * 2).toInt();
+    final experienceEarned =
+        (quantity *
+                material.unitVolumeM3 *
+                ExperienceService.getRetailSaleXpPerM3(material.grade))
+            .toInt();
+
+    final bool? success = await showDialog<bool>(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'RECOGER BENEFICIOS',
+        description: '¿Recoger \$${moneyEarned} y ${experienceEarned} XP?',
+        price: moneyEarned,
+        priceType: UnlockCostType.money,
+        onConfirm: () =>
+            _collectBenefits(retailSlot, moneyEarned, experienceEarned),
+      ),
+    );
+
+    if (success == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('¡Beneficios recogidos!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
+  Future<void> _collectBenefits(
+    RetailSlot retailSlot,
+    int moneyEarned,
+    int experienceEarned,
+  ) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) throw Exception('Usuario no autenticado');
+
+      final userDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid);
+      final retailDocRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('retail_users')
+          .doc(user.uid);
+
+      return FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userSnapshot = await transaction.get(userDocRef);
+        final retailSnapshot = await transaction.get(retailDocRef);
+
+        if (!userSnapshot.exists) {
+          throw Exception('Documento de usuario no encontrado');
+        }
+
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final int currentMoney = userData['dinero'] ?? 0;
+        final int currentExperience = userData['experience'] ?? 0;
+
+        final List<dynamic> existingSlots = retailSnapshot.exists
+            ? (retailSnapshot.data()?['slots'] as List<dynamic>? ?? [])
+            : [];
+
+        final slotIndex = existingSlots.indexWhere(
+          (slot) => slot['slotId'] == retailSlot.slotId,
+        );
+
+        if (slotIndex == -1) {
+          throw Exception('Slot no encontrado');
+        }
+
+        final updatedSlot = Map<String, dynamic>.from(
+          existingSlots[slotIndex] as Map<String, dynamic>,
+        );
+        updatedSlot.remove('sellingMaterial');
+        updatedSlot['status'] = 'en espera';
+
+        final updatedSlots = List<dynamic>.from(existingSlots);
+        updatedSlots[slotIndex] = updatedSlot;
+
+        transaction.update(userDocRef, {
+          'dinero': currentMoney + moneyEarned,
+          'experience': currentExperience + experienceEarned,
+        });
+
+        if (!retailSnapshot.exists) {
+          transaction.set(retailDocRef, {'slots': updatedSlots});
+        } else {
+          transaction.update(retailDocRef, {'slots': updatedSlots});
+        }
+      });
+    } catch (e, stackTrace) {
+      debugPrint('ERROR: Failed to collect benefits: $e');
       debugPrint('ERROR: Stack trace: $stackTrace');
       rethrow;
     }

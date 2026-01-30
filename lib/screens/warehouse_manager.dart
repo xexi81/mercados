@@ -263,7 +263,10 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
           );
         }
 
-        final int warehouseLevel = (warehouseSlot['level'] as int?) ?? (warehouseSlot['warehouseLevel'] as int?) ?? 0;
+        final int warehouseLevel =
+            (warehouseSlot['level'] as int?) ??
+            (warehouseSlot['warehouseLevel'] as int?) ??
+            0;
         final Map<String, dynamic> storage =
             warehouseSlot['storage'] as Map<String, dynamic>? ?? {};
         final double maxCapacity = _calculateMaxCapacity(warehouseLevel);
@@ -541,7 +544,9 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
                                                         0,
                                                     min: 0,
                                                     max: units.toDouble(),
-                                                    divisions: units,
+                                                    divisions: units > 0
+                                                        ? units
+                                                        : null,
                                                     activeColor:
                                                         AppColors.primary,
                                                     inactiveColor:

@@ -485,7 +485,9 @@ class _RetailSellingMaterialScreenState
         }
       }
 
-      debugPrint('StartSelling: Available stock for material ${material.id}: $availableStock');
+      debugPrint(
+        'StartSelling: Available stock for material ${material.id}: $availableStock',
+      );
       if (availableStock < quantity) {
         debugPrint('StartSelling: Not enough stock');
         throw Exception('No hay suficiente stock en el almacén');
@@ -500,14 +502,22 @@ class _RetailSellingMaterialScreenState
         final materialIdStr = material.id.toString();
 
         if (storage.containsKey(materialIdStr)) {
-          final currentUnits = (storage[materialIdStr]['units'] as num?)?.toInt() ?? 0;
+          final currentUnits =
+              (storage[materialIdStr]['units'] as num?)?.toInt() ?? 0;
           final subtractAmount = remainingToSubtract.clamp(0, currentUnits);
 
           if (subtractAmount > 0) {
-            storage[materialIdStr]['units'] = currentUnits - subtractAmount;
+            final newUnits = currentUnits - subtractAmount;
+            if (newUnits > 0) {
+              storage[materialIdStr]['units'] = newUnits;
+            } else {
+              storage.remove(materialIdStr);
+            }
             slot['storage'] = storage;
             remainingToSubtract -= subtractAmount;
-            debugPrint('StartSelling: Subtracted $subtractAmount from warehouse slot, remaining: $remainingToSubtract');
+            debugPrint(
+              'StartSelling: Subtracted $subtractAmount from warehouse slot, remaining: $remainingToSubtract',
+            );
           }
         }
       }
