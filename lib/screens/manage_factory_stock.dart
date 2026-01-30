@@ -88,7 +88,7 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           orElse: () => <String, dynamic>{},
         );
         if (warehouseSlot.isNotEmpty) {
-          level = (warehouseSlot['warehouseLevel'] as int?) ?? 1;
+          level = (warehouseSlot['level'] as int?) ?? (warehouseSlot['warehouseLevel'] as int?) ?? 1;
         }
       }
       print('[DEBUG] warehouseSlot level: $level');
