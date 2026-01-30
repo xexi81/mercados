@@ -15,6 +15,7 @@ import 'package:industrial_app/data/fleet/fleet_status.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/fleet_service.dart';
 import 'package:industrial_app/data/fleet_level/fleet_level.dart';
+import 'package:industrial_app/services/fleet_simulation_service.dart';
 
 import 'package:industrial_app/screens/buy_truck.dart';
 import 'package:industrial_app/screens/buy_driver.dart';
@@ -873,28 +874,27 @@ class ParkingFleetCard extends StatelessWidget {
 
   Widget _buildRouteProgressInline(BuildContext context) {
     final destinyLocation = firestoreData?['destinyLocation'];
-    final distanceRemaining = firestoreData?['distanceRemaining'];
+    final startTime = firestoreData?['startTime'] as int?;
+    final totalTimeSeconds = firestoreData?['totalTimeSeconds'] as double?;
     final currentLocation = firestoreData?['currentLocation'];
-    // final status = firestoreData?['status'];
 
     if (destinyLocation == null ||
-        distanceRemaining == null ||
+        startTime == null ||
+        totalTimeSeconds == null ||
         currentLocation == null) {
       return const SizedBox.shrink();
     }
 
-    final totalDistance = DistanceCalculator.calculateDistance(
-      (currentLocation['latitude'] as num).toDouble(),
-      (currentLocation['longitude'] as num).toDouble(),
-      (destinyLocation['latitude'] as num).toDouble(),
-      (destinyLocation['longitude'] as num).toDouble(),
-    );
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (now - startTime) / 1000;
+    final progress = (elapsedSeconds / totalTimeSeconds).clamp(0.0, 1.0);
 
-    final remaining = (distanceRemaining as num).toDouble();
-    final progress = ((totalDistance - remaining) / totalDistance).clamp(
-      0.0,
-      1.0,
-    );
+    // Si ha completado, marcar como completado
+    if (progress >= 1.0 && firestoreData?['status'] == 'en marcha') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FleetSimulationService().completeTrip(fleetId.toString());
+      });
+    }
 
     return GestureDetector(
       onTap: () {
@@ -940,7 +940,8 @@ class ParkingFleetCard extends StatelessWidget {
               future: _getDestinationCityName(destinyLocation),
               builder: (context, snapshot) {
                 final cityName = snapshot.data ?? 'Destino desconocido';
-                final distance = remaining;
+                final progressPercent =
+                    '${(progress * 100).toStringAsFixed(1)}%';
 
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -977,7 +978,7 @@ class ParkingFleetCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Restante:',
+                          'Progreso:',
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Colors.white70,
@@ -986,7 +987,7 @@ class ParkingFleetCard extends StatelessWidget {
                               ),
                         ),
                         Text(
-                          '${distance.toStringAsFixed(1)} km',
+                          '${(progress * 100).toStringAsFixed(1)}%',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Colors.white,
@@ -1007,24 +1008,20 @@ class ParkingFleetCard extends StatelessWidget {
   }
 
   Widget _buildEstimatedTimeTopRight(BuildContext context) {
-    final distanceRemaining = firestoreData?['distanceRemaining'];
-    if (distanceRemaining == null) return const SizedBox.shrink();
+    final startTime = firestoreData?['startTime'] as int?;
+    final totalTimeSeconds =
+        firestoreData?['totalTimeSeconds'] as double? ?? 0.0;
 
-    final distance = (distanceRemaining as num).toDouble();
-    final truckSkills = firestoreData?['truckSkills'];
-    if (truckSkills == null) return const SizedBox.shrink();
+    if (startTime == null || totalTimeSeconds <= 0)
+      return const SizedBox.shrink();
 
-    final maxSpeedKmh = (truckSkills['maxSpeedKmh'] as num?)?.toDouble() ?? 0;
-    final truckSpeed = (firestoreData?['truckSpeed'] as num?)?.toInt() ?? 0;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (now - startTime) / 1000;
+    final remainingTimeSeconds = totalTimeSeconds - elapsedSeconds;
 
-    if (maxSpeedKmh <= 0) return const SizedBox.shrink();
+    if (remainingTimeSeconds <= 0) return const SizedBox.shrink();
 
-    // Calcular velocidad real con el bonus de truckSpeed
-    final speedMultiplier = 1 + (truckSpeed / 100.0);
-    final realSpeed = maxSpeedKmh * speedMultiplier;
-
-    // Calcular tiempo en horas
-    final timeInHours = distance / realSpeed;
+    final timeInHours = remainingTimeSeconds / 3600;
 
     String timeText;
     if (timeInHours >= 1) {

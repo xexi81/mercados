@@ -10,6 +10,7 @@ import 'package:industrial_app/data/locations/location_repository.dart';
 import 'package:industrial_app/data/locations/distance_calculator.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/fleet/fleet_status.dart';
+import 'package:industrial_app/services/fleet_simulation_service.dart';
 
 class RouteScreen extends StatefulWidget {
   final int fleetId;
@@ -240,6 +241,39 @@ class _RouteScreenState extends State<RouteScreen> {
         'ultima_actualizacion': FieldValue.serverTimestamp(),
       });
     });
+
+    // Calculate speed
+    double speedKmh = 0.0;
+    if (_fleetData != null) {
+      final slots = _fleetData!['slots'] as List<dynamic>? ?? [];
+      final slot =
+          slots.firstWhere(
+                (s) => s['fleetId'] == widget.fleetId,
+                orElse: () => null,
+              )
+              as Map<String, dynamic>?;
+
+      if (slot != null) {
+        final truckSkills = slot['truckSkills'] as Map<String, dynamic>?;
+        final driverSkills = slot['driverSkills'] as Map<String, dynamic>?;
+        final truckSpeed = slot['truckSpeed'] as int? ?? 0;
+
+        final baseSpeed =
+            (truckSkills?['maxSpeedKmh'] as num?)?.toDouble() ?? 0.0;
+        final driverBonus =
+            (driverSkills?['speedBonusPercent'] as num?)?.toDouble() ?? 0.0;
+
+        // velocidad = base * (1 + truckSpeed/100) * (1 + driverBonus/100)
+        speedKmh = baseSpeed * (1 + truckSpeed / 100) * (1 + driverBonus / 100);
+      }
+    }
+
+    // Start simulation
+    FleetSimulationService().startSimulation(
+      widget.fleetId.toString(),
+      distance,
+      speedKmh,
+    );
   }
 
   @override

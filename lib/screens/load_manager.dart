@@ -12,6 +12,7 @@ import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
+import 'package:industrial_app/widgets/celebration_dialog.dart';
 
 class LoadManagerScreen extends StatefulWidget {
   final int fleetId;
@@ -980,6 +981,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     final userDocRef = FirebaseFirestore.instance
         .collection('usuarios')
         .doc(user.uid);
+
+    // Calcular nivel antes de la transacción
+    final userSnapshotBefore = await userDocRef.get();
+    final currentExperience =
+        (userSnapshotBefore.data()?['experience'] as int?) ?? 0;
+    final oldLevel = ExperienceService.getLevelFromExperience(
+      currentExperience,
+    );
+
+    int newXp = 0;
+
     final fleetDocRef = FirebaseFirestore.instance
         .collection('usuarios')
         .doc(user.uid)
@@ -1043,7 +1055,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             (userData['experience'] as num?)?.toInt() ?? 0;
 
         // Update money and experience
-        final newXp = currentExperience + xpGained;
+        newXp = currentExperience + xpGained;
         transaction.update(userDocRef, {
           'dinero': currentMoney + totalSellPrice,
           'experience': newXp,
@@ -1056,6 +1068,16 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         slots[slotIndex]['truckLoad'] = updatedTruckLoad;
         transaction.update(fleetDocRef, {'slots': slots});
       });
+
+      // Comprobar subida de nivel
+      final newLevel = ExperienceService.getLevelFromExperience(newXp);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
 
       // Refresh data
       await _loadFleetData();
@@ -1086,6 +1108,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     final userDocRef = FirebaseFirestore.instance
         .collection('usuarios')
         .doc(user.uid);
+
+    // Calcular nivel antes de la transacción
+    final userSnapshotBefore = await userDocRef.get();
+    final currentExperience =
+        (userSnapshotBefore.data()?['experience'] as int?) ?? 0;
+    final oldLevel = ExperienceService.getLevelFromExperience(
+      currentExperience,
+    );
+
+    int newXpPurchase = 0;
+
     final fleetDocRef = FirebaseFirestore.instance
         .collection('usuarios')
         .doc(user.uid)
@@ -1166,7 +1199,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             (userData['experience'] as num?)?.toInt() ?? 0;
 
         // Update money and experience
-        final newXpPurchase = currentExperience + xpGained;
+        newXpPurchase = currentExperience + xpGained;
         transaction.update(userDocRef, {
           'dinero': currentMoney - totalCost.toInt(),
           'experience': newXpPurchase,
@@ -1241,6 +1274,16 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
           }
         }
       });
+
+      // Comprobar subida de nivel
+      final newLevel = ExperienceService.getLevelFromExperience(newXpPurchase);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
 
       // Refresh data
       await _loadFleetData();
@@ -1930,9 +1973,9 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       sellSection = [];
     }
 
-    // Warehouse materials section - only show if at HQ
+    // Warehouse materials section - only show if at HQ and not in transit
     List<Widget> warehouseSection;
-    if (isAtHQ && warehouseSlots.isNotEmpty) {
+    if (isAtHQ && warehouseSlots.isNotEmpty && fleetStatus != 'en marcha') {
       // Collect all materials from all warehouses
       Map<String, Map<String, dynamic>> allWarehouseMaterials = {};
       for (final slot in warehouseSlots) {
@@ -2222,7 +2265,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                   builder: (context, snapshot) {
                     final locationName = snapshot.data ?? 'Cargando...';
                     return Text(
-                      'Gestión de Carga - $locationName',
+                      'Gestión de Carga - $locationName (${fleetStatus ?? 'Cargando...'})',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
                             color: Colors.white,
@@ -2254,18 +2297,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Máxima: ${maxCapacity.toStringAsFixed(1)} m³',
+                      'Máxima: ${maxCapacity > 0 ? maxCapacity.toStringAsFixed(1) : 'No disponible'} m³',
                       style: TextStyle(color: Colors.white70),
                     ),
                     Text(
                       'Actual: ${currentLoad.toStringAsFixed(1)} m³',
                       style: TextStyle(color: Colors.white70),
                     ),
-                    if (containerType != null)
-                      Text(
-                        'Tipo: ${_getContainerDisplayName(containerType!)}',
-                        style: TextStyle(color: Colors.white70),
-                      ),
+                    Text(
+                      'Tipo: ${containerType != null ? _getContainerDisplayName(containerType!) : 'No asignado'}',
+                      style: TextStyle(color: Colors.white70),
+                    ),
                     const SizedBox(height: 12),
                     // Progress bar
                     Container(

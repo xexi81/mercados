@@ -16,6 +16,7 @@ import 'package:industrial_app/screens/buy_retail.dart';
 import 'package:industrial_app/data/materials/materials_repository.dart';
 import 'package:industrial_app/data/materials/material_model.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
+import 'package:industrial_app/widgets/celebration_dialog.dart';
 
 class RetailScreen extends StatefulWidget {
   const RetailScreen({super.key});
@@ -680,13 +681,22 @@ class _RetailScreenState extends State<RetailScreen> {
       final userDocRef = FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid);
+
+      // Calcular nivel antes de la transacción
+      final userSnapshotBefore = await userDocRef.get();
+      final currentExperience =
+          (userSnapshotBefore.data()?['experience'] as int?) ?? 0;
+      final oldLevel = ExperienceService.getLevelFromExperience(
+        currentExperience,
+      );
+
       final retailDocRef = FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
           .collection('retail_users')
           .doc(user.uid);
 
-      return FirebaseFirestore.instance.runTransaction((transaction) async {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
         final userSnapshot = await transaction.get(userDocRef);
         final retailSnapshot = await transaction.get(retailDocRef);
 
@@ -696,7 +706,7 @@ class _RetailScreenState extends State<RetailScreen> {
 
         final userData = userSnapshot.data() as Map<String, dynamic>;
         final int currentMoney = userData['dinero'] ?? 0;
-        final int currentExperience = userData['experience'] ?? 0;
+        final int currentExperienceTx = userData['experience'] ?? 0;
 
         final List<dynamic> existingSlots = retailSnapshot.exists
             ? (retailSnapshot.data()?['slots'] as List<dynamic>? ?? [])
@@ -721,7 +731,7 @@ class _RetailScreenState extends State<RetailScreen> {
 
         transaction.update(userDocRef, {
           'dinero': currentMoney + moneyEarned,
-          'experience': currentExperience + experienceEarned,
+          'experience': currentExperienceTx + experienceEarned,
         });
 
         if (!retailSnapshot.exists) {
@@ -730,6 +740,17 @@ class _RetailScreenState extends State<RetailScreen> {
           transaction.update(retailDocRef, {'slots': updatedSlots});
         }
       });
+
+      // Comprobar subida de nivel
+      final newExperience = currentExperience + experienceEarned;
+      final newLevel = ExperienceService.getLevelFromExperience(newExperience);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
     } catch (e, stackTrace) {
       debugPrint('ERROR: Failed to collect benefits: $e');
       debugPrint('ERROR: Stack trace: $stackTrace');
@@ -1127,6 +1148,15 @@ class _RetailScreenState extends State<RetailScreen> {
       final userDocRef = FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid);
+
+      // Calcular nivel antes de la transacción
+      final userSnapshotBefore = await userDocRef.get();
+      final currentExperience =
+          (userSnapshotBefore.data()?['experience'] as int?) ?? 0;
+      final oldLevel = ExperienceService.getLevelFromExperience(
+        currentExperience,
+      );
+
       final retailDocRef = FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
@@ -1239,6 +1269,17 @@ class _RetailScreenState extends State<RetailScreen> {
           'experience': currentExperience + experienceGained,
         });
       });
+
+      // Comprobar subida de nivel
+      final newExperience = currentExperience + experienceGained.toInt();
+      final newLevel = ExperienceService.getLevelFromExperience(newExperience);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

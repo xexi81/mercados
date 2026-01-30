@@ -370,15 +370,15 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
           totalVolume,
           material.grade,
         );
-        final userRef = FirebaseFirestore.instance
-            .collection('usuarios')
-            .doc(user.uid);
-        final userSnapshot = await userRef.get();
-        final currentXp = (userSnapshot.data()?['experience'] as int?) ?? 0;
-        final oldLevel = ExperienceService.getLevelFromExperience(currentXp);
-        final newXp = currentXp + xpToAdd;
-        final newLevel = ExperienceService.getLevelFromExperience(newXp);
-        await userRef.update({'experience': newXp});
+        // final userRef = FirebaseFirestore.instance
+        //     .collection('usuarios')
+        //     .doc(user.uid);
+        // final userSnapshot = await userRef.get();
+        // final currentXp = (userSnapshot.data()?['experience'] as int?) ?? 0;
+        // final oldLevel = ExperienceService.getLevelFromExperience(currentXp);
+        // final newXp = currentXp + xpToAdd;
+        // final newLevel = ExperienceService.getLevelFromExperience(newXp);
+        // await userRef.update({'experience': newXp});
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -387,13 +387,6 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
               backgroundColor: Colors.green,
             ),
           );
-          if (newLevel > oldLevel) {
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
-            );
-          }
           Navigator.pop(context);
         }
       } catch (e) {
