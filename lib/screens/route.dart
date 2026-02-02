@@ -233,6 +233,32 @@ class _RouteScreenState extends State<RouteScreen> {
           };
           updatedSlots[slotIndex]['distanceRemaining'] = distance;
           updatedSlots[slotIndex]['status'] = FleetStatus.enMarcha.value;
+
+          // Distribute route cost to truck load
+          final truckLoad = Map<String, dynamic>.from(
+            updatedSlots[slotIndex]['truckLoad'] as Map<String, dynamic>? ?? {},
+          );
+
+          if (truckLoad.isNotEmpty) {
+            double totalUnits = 0;
+            truckLoad.forEach((key, value) {
+              totalUnits += (value['units'] as num).toDouble();
+            });
+
+            if (totalUnits > 0) {
+              final costPerUnit = cost / totalUnits;
+              truckLoad.forEach((key, value) {
+                final currentAvg =
+                    (value['averagePrice'] as num?)?.toDouble() ?? 0.0;
+                // Preserve other fields, update averagePrice
+                truckLoad[key] = {
+                  ...value as Map<String, dynamic>,
+                  'averagePrice': currentAvg + costPerUnit,
+                };
+              });
+              updatedSlots[slotIndex]['truckLoad'] = truckLoad;
+            }
+          }
         }
       }
 

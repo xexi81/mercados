@@ -26,6 +26,7 @@ class _RetailSellingMaterialScreenState
   RetailBuilding? _retailBuilding;
   Map<int, material_model.MaterialModel> _materials = {};
   Map<int, int> _warehouseStock = {};
+  Map<int, double> _warehouseAvgPrice = {};
   bool _isDataLoaded = false;
   final Map<int, double> _selectedQuantities = {};
 
@@ -118,24 +119,48 @@ class _RetailSellingMaterialScreenState
           );
           debugPrint('RetailSellingMaterial: Warehouse slots: $slots');
 
+          // Calculate weighted average price
+          final Map<int, double> totalValue = {};
+          final Map<int, int> totalUnits = {};
+
           for (var slot in slots) {
             final storage = Map<String, dynamic>.from(
               slot['storage'] as Map? ?? {},
             );
-            debugPrint('RetailSellingMaterial: Slot storage: $storage');
 
             storage.forEach((materialIdStr, data) {
               final materialId = int.tryParse(materialIdStr);
+
+              // Helper for safe parsing
+              double safeParseDouble(dynamic value) {
+                if (value == null) return 0.0;
+                if (value is num) return value.toDouble();
+                if (value is String) return double.tryParse(value) ?? 0.0;
+                return 0.0;
+              }
+
               final units = (data['units'] as num?)?.toInt() ?? 0;
+              final avgPrice = safeParseDouble(data['averagePrice']);
+
               if (materialId != null && units > 0) {
+                // Update stock
                 _warehouseStock[materialId] =
                     (_warehouseStock[materialId] ?? 0) + units;
-                debugPrint(
-                  'RetailSellingMaterial: Added $units units of material $materialId from slot',
-                );
+
+                // Accumulate value for average price
+                totalValue[materialId] =
+                    (totalValue[materialId] ?? 0.0) + (units * avgPrice);
+                totalUnits[materialId] = (totalUnits[materialId] ?? 0) + units;
               }
             });
           }
+
+          // Compute final average
+          totalUnits.forEach((id, units) {
+            if (units > 0) {
+              _warehouseAvgPrice[id] = (totalValue[id] ?? 0.0) / units;
+            }
+          });
 
           debugPrint(
             'RetailSellingMaterial: Final warehouse stock: $_warehouseStock',
@@ -232,6 +257,7 @@ class _RetailSellingMaterialScreenState
           if (material == null) return const SizedBox.shrink();
 
           final stock = _warehouseStock[materialId] ?? 0;
+          final avgPrice = _warehouseAvgPrice[materialId] ?? 0.0;
           final selectedQuantity = _selectedQuantities[materialId] ?? 0.0;
           final sellRate =
               _retailBuilding!.salesPerHour; // Already adjusted by level
@@ -257,6 +283,7 @@ class _RetailSellingMaterialScreenState
               selectedQuantity.toInt(),
               sellRate,
             ),
+            averagePrice: avgPrice,
           );
         },
       ),
@@ -271,6 +298,7 @@ class _RetailSellingMaterialScreenState
     required int sellPrice,
     required ValueChanged<double> onQuantityChanged,
     required VoidCallback onStartSelling,
+    required double averagePrice,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -345,6 +373,13 @@ class _RetailSellingMaterialScreenState
                         fontSize: 12,
                       ),
                     ),
+                    Text(
+                      'Precio promedio: \$${averagePrice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        color: Colors.cyanAccent,
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -353,9 +388,23 @@ class _RetailSellingMaterialScreenState
           const SizedBox(height: 16),
           if (stock > 0) ...[
             // Quantity slider
-            Text(
-              'Cantidad a vender: ${selectedQuantity.toInt()}',
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+            Builder(
+              builder: (context) {
+                final totalHours = selectedQuantity / sellRate;
+                final hours = totalHours.floor();
+                final minutes = ((totalHours - hours) * 60).round();
+                String timeString;
+                if (hours > 0) {
+                  timeString = '${hours}h ${minutes}m';
+                } else {
+                  timeString = '${minutes}m';
+                }
+
+                return Text(
+                  'Cantidad a vender: ${selectedQuantity.toInt()} ($timeString)',
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                );
+              },
             ),
             Slider(
               value: selectedQuantity,

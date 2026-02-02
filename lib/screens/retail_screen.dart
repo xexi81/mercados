@@ -529,7 +529,7 @@ class _RetailScreenState extends State<RetailScreen> {
         }
 
         final userData = userSnapshot.data() as Map<String, dynamic>;
-        final int dinero = userData['dinero'] ?? 0;
+        final int dinero = (userData['dinero'] as num?)?.toInt() ?? 0;
 
         if (dinero < upgradeCost) {
           throw Exception('No tienes suficiente dinero');
@@ -603,7 +603,7 @@ class _RetailScreenState extends State<RetailScreen> {
         }
 
         final userData = userSnapshot.data() as Map<String, dynamic>;
-        final int dinero = userData['dinero'] ?? 0;
+        final int dinero = (userData['dinero'] as num?)?.toInt() ?? 0;
 
         transaction.update(userDocRef, {'dinero': dinero + sellPrice});
 
@@ -636,7 +636,7 @@ class _RetailScreenState extends State<RetailScreen> {
     if (sellingMaterial == null) return;
 
     final materialId = sellingMaterial['materialId'] as int?;
-    final quantity = sellingMaterial['quantity'] as int? ?? 0;
+    final quantity = (sellingMaterial['quantity'] as num?)?.toInt() ?? 0;
     final material = _materials[materialId];
     if (material == null) return;
 
@@ -685,7 +685,7 @@ class _RetailScreenState extends State<RetailScreen> {
       // Calcular nivel antes de la transacción
       final userSnapshotBefore = await userDocRef.get();
       final currentExperience =
-          (userSnapshotBefore.data()?['experience'] as int?) ?? 0;
+          (userSnapshotBefore.data()?['experience'] as num?)?.toInt() ?? 0;
       final oldLevel = ExperienceService.getLevelFromExperience(
         currentExperience,
       );
@@ -705,8 +705,9 @@ class _RetailScreenState extends State<RetailScreen> {
         }
 
         final userData = userSnapshot.data() as Map<String, dynamic>;
-        final int currentMoney = userData['dinero'] ?? 0;
-        final int currentExperienceTx = userData['experience'] ?? 0;
+        final int currentMoney = (userData['dinero'] as num?)?.toInt() ?? 0;
+        final int currentExperienceTx =
+            (userData['experience'] as num?)?.toInt() ?? 0;
 
         final List<dynamic> existingSlots = retailSnapshot.exists
             ? (retailSnapshot.data()?['slots'] as List<dynamic>? ?? [])
