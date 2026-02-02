@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:industrial_app/data/warehouse/warehouse_model.dart';
+import 'package:industrial_app/data/warehouse/warehouse_repository.dart';
 import 'package:industrial_app/screens/association_screen.dart';
 import 'package:industrial_app/screens/contracts_screen.dart';
 import 'package:industrial_app/screens/parking_screen.dart';
@@ -20,10 +24,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   late TransformationController _transformationController;
 
+  // Warehouse configuration for capacity calculation
+  List<WarehouseModel> _warehouseConfigs = [];
+
   @override
   void initState() {
     super.initState();
     _transformationController = TransformationController();
+    _initWarehouseData();
 
     // Set initial scale to 0.7 (more zoomed out)
     // The matrix is set after the first frame to ensure proper initialization
@@ -31,6 +39,49 @@ class _MainScreenState extends State<MainScreen> {
       final Matrix4 matrix = Matrix4.identity()..scale(0.7);
       _transformationController.value = matrix;
     });
+  }
+
+  Future<void> _initWarehouseData() async {
+    try {
+      final warehouses = await WarehouseRepository.loadWarehouses();
+      if (mounted) {
+        setState(() {
+          _warehouseConfigs = warehouses;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading warehouse data for main screen: $e');
+    }
+  }
+
+  bool _isWarehouseFull(Map<String, dynamic> slot) {
+    if (_warehouseConfigs.isEmpty) return false;
+
+    final int warehouseId = slot['warehouseId'];
+    final int level = slot['level'] ?? 1;
+
+    // 1. Calculate Total Capacity (Base + Upgrades)
+    // Using shared logic from WarehouseRepository to match WarehouseManagerScreen
+    final warehouse = _warehouseConfigs.firstWhere(
+      (w) => w.id == warehouseId,
+      orElse: () => _warehouseConfigs.first,
+    );
+
+    final double totalCapacity = WarehouseRepository.calculateRealCapacity(
+      warehouse,
+      level,
+    );
+
+    // 2. Calculate Current Volume
+    final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+    if (storage.isEmpty) return false;
+
+    final double currentVolume = WarehouseRepository.calculateCurrentLoad(
+      storage,
+    );
+
+    // Check with tolerance
+    return currentVolume >= (totalCapacity - 0.1);
   }
 
   @override
@@ -107,18 +158,43 @@ class _MainScreenState extends State<MainScreen> {
               Positioned(
                 left: 305,
                 top: 280,
-                child: ClickableBuilding(
-                  width: 260,
-                  height: 180,
-                  label: 'Fábrica',
-                  imageAsset: 'assets/images/fabrica-building.png',
-                  enableDarken: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FactoriesScreen(),
-                      ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseAuth.instance.currentUser != null
+                      ? FirebaseFirestore.instance
+                            .collection('usuarios')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('factories_users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots()
+                      : null,
+                  builder: (context, snapshot) {
+                    bool hasWaiting = false;
+                    if (snapshot.hasData && snapshot.data!.exists) {
+                      final data =
+                          snapshot.data!.data() as Map<String, dynamic>?;
+                      if (data != null && data.containsKey('slots')) {
+                        final slots = data['slots'] as List<dynamic>;
+                        hasWaiting = slots.any(
+                          (slot) => slot['status'] == 'en espera',
+                        );
+                      }
+                    }
+
+                    return ClickableBuilding(
+                      width: 260,
+                      height: 180,
+                      label: 'Fábrica',
+                      imageAsset: 'assets/images/fabrica-building.png',
+                      enableDarken: false,
+                      showNotification: hasWaiting,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FactoriesScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -147,18 +223,43 @@ class _MainScreenState extends State<MainScreen> {
               Positioned(
                 left: 760,
                 top: 360,
-                child: ClickableBuilding(
-                  width: 210,
-                  height: 130,
-                  label: 'Retail',
-                  imageAsset: 'assets/images/retail-building.png',
-                  enableDarken: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RetailScreen(),
-                      ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseAuth.instance.currentUser != null
+                      ? FirebaseFirestore.instance
+                            .collection('usuarios')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('retail_users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots()
+                      : null,
+                  builder: (context, snapshot) {
+                    bool hasWaiting = false;
+                    if (snapshot.hasData && snapshot.data!.exists) {
+                      final data =
+                          snapshot.data!.data() as Map<String, dynamic>?;
+                      if (data != null && data.containsKey('slots')) {
+                        final slots = data['slots'] as List<dynamic>;
+                        hasWaiting = slots.any(
+                          (slot) => slot['status'] == 'en espera',
+                        );
+                      }
+                    }
+
+                    return ClickableBuilding(
+                      width: 210,
+                      height: 130,
+                      label: 'Retail',
+                      imageAsset: 'assets/images/retail-building.png',
+                      enableDarken: false,
+                      showNotification: hasWaiting,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RetailScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -167,18 +268,43 @@ class _MainScreenState extends State<MainScreen> {
               Positioned(
                 left: 286,
                 top: 120,
-                child: ClickableBuilding(
-                  width: 350,
-                  height: 100,
-                  label: 'Aparcamiento',
-                  imageAsset: 'assets/images/parking-building.png',
-                  enableDarken: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ParkingScreen(),
-                      ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseAuth.instance.currentUser != null
+                      ? FirebaseFirestore.instance
+                            .collection('usuarios')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('fleet_users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots()
+                      : null,
+                  builder: (context, snapshot) {
+                    bool hasArrived = false;
+                    if (snapshot.hasData && snapshot.data!.exists) {
+                      final data =
+                          snapshot.data!.data() as Map<String, dynamic>?;
+                      if (data != null && data.containsKey('slots')) {
+                        final slots = data['slots'] as List<dynamic>;
+                        hasArrived = slots.any(
+                          (slot) => slot['status'] == 'en destino',
+                        );
+                      }
+                    }
+
+                    return ClickableBuilding(
+                      width: 350,
+                      height: 100,
+                      label: 'Muelles',
+                      imageAsset: 'assets/images/parking-building.png',
+                      enableDarken: false,
+                      showNotification: hasArrived,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ParkingScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -187,18 +313,50 @@ class _MainScreenState extends State<MainScreen> {
               Positioned(
                 left: 500,
                 top: 250,
-                child: ClickableBuilding(
-                  width: 250,
-                  height: 120,
-                  label: 'Almacén',
-                  imageAsset: 'assets/images/almacen-building.png',
-                  enableDarken: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WarehousesScreen(),
-                      ),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseAuth.instance.currentUser != null
+                      ? FirebaseFirestore.instance
+                            .collection('usuarios')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('warehouse_users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots()
+                      : null,
+                  builder: (context, snapshot) {
+                    bool isFull = false;
+
+                    // Only check if we have config data loaded
+                    if (_warehouseConfigs.isNotEmpty &&
+                        snapshot.hasData &&
+                        snapshot.data!.exists) {
+                      final data =
+                          snapshot.data!.data() as Map<String, dynamic>?;
+                      if (data != null && data.containsKey('slots')) {
+                        final slots = data['slots'] as List<dynamic>;
+
+                        // Check if ANY occupied warehouse is full
+                        isFull = slots.any(
+                          (slot) =>
+                              _isWarehouseFull(slot as Map<String, dynamic>),
+                        );
+                      }
+                    }
+
+                    return ClickableBuilding(
+                      width: 250,
+                      height: 120,
+                      label: 'Almacén',
+                      imageAsset: 'assets/images/almacen-building.png',
+                      enableDarken: false,
+                      showNotification: isFull,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WarehousesScreen(),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -258,6 +416,7 @@ class ClickableBuilding extends StatefulWidget {
   final String label;
   final String? imageAsset;
   final bool enableDarken;
+  final bool showNotification;
   final VoidCallback? onTap; // Made optional
 
   const ClickableBuilding({
@@ -267,6 +426,7 @@ class ClickableBuilding extends StatefulWidget {
     required this.label,
     this.imageAsset,
     this.enableDarken = true,
+    this.showNotification = false,
     this.onTap,
   }) : super(key: key);
 
@@ -275,11 +435,13 @@ class ClickableBuilding extends StatefulWidget {
 }
 
 class _ClickableBuildingState extends State<ClickableBuilding>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<Color?> _colorAnimation;
   bool _isPressed = false;
+  late AnimationController _blinkController;
+  late Animation<double> _blinkAnimation;
 
   @override
   void initState() {
@@ -287,6 +449,15 @@ class _ClickableBuildingState extends State<ClickableBuilding>
     _controller = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
+    );
+
+    _blinkController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _blinkAnimation = Tween<double>(begin: 0.4, end: 1.0).animate(
+      CurvedAnimation(parent: _blinkController, curve: Curves.easeInOut),
     );
 
     _scaleAnimation = TweenSequence<double>([
@@ -327,6 +498,7 @@ class _ClickableBuildingState extends State<ClickableBuilding>
   @override
   void dispose() {
     _controller.dispose();
+    _blinkController.dispose();
     super.dispose();
   }
 
@@ -404,12 +576,34 @@ class _ClickableBuildingState extends State<ClickableBuilding>
             color: Colors.black,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Text(
-            widget.label,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Text(
+                widget.label,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (widget.showNotification)
+                Positioned(
+                  top: -8,
+                  left: -12,
+                  child: FadeTransition(
+                    opacity: _blinkAnimation,
+                    child: Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ],

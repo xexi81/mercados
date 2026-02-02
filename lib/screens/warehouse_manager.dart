@@ -53,21 +53,6 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
     }
   }
 
-  double _calculateMaxCapacity(int level) {
-    if (warehouseConfig == null) return 0.0;
-    return warehouseConfig!.capacityM3 + (level * 100);
-  }
-
-  double _calculateCurrentLoad(Map<String, dynamic> storage) {
-    double totalM3 = 0;
-    storage.forEach((materialId, data) {
-      final units = (data['units'] as num?)?.toDouble() ?? 0;
-      final m3PerUnit = (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
-      totalM3 += units * m3PerUnit;
-    });
-    return totalM3;
-  }
-
   Future<Map<String, dynamic>?> _getMaterialInfo(String materialId) async {
     try {
       final materialsJson = await rootBundle.loadString(
@@ -269,8 +254,13 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
             0;
         final Map<String, dynamic> storage =
             warehouseSlot['storage'] as Map<String, dynamic>? ?? {};
-        final double maxCapacity = _calculateMaxCapacity(warehouseLevel);
-        final double currentLoad = _calculateCurrentLoad(storage);
+        final double maxCapacity = WarehouseRepository.calculateRealCapacity(
+          warehouseConfig!,
+          warehouseLevel,
+        );
+        final double currentLoad = WarehouseRepository.calculateCurrentLoad(
+          storage,
+        );
         final double loadPercentage = maxCapacity > 0
             ? (currentLoad / maxCapacity).clamp(0.0, 1.0)
             : 0.0;

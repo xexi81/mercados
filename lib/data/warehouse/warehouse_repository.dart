@@ -128,6 +128,23 @@ class WarehouseRepository {
     return totalCost;
   }
 
+  /// Calculate capacity based on simple formula (Base + Level * 100)
+  /// Config matches logic in WarehouseManagerScreen
+  static double calculateRealCapacity(WarehouseModel warehouse, int level) {
+    return warehouse.capacityM3 + (level * 100);
+  }
+
+  /// Calculate current load from detailed storage map
+  static double calculateCurrentLoad(Map<String, dynamic> storage) {
+    double totalM3 = 0;
+    storage.forEach((materialId, data) {
+      final units = (data['units'] as num?)?.toDouble() ?? 0;
+      final m3PerUnit = (data['m3PerUnit'] as num?)?.toDouble() ?? 0;
+      totalM3 += units * m3PerUnit;
+    });
+    return totalM3;
+  }
+
   /// Clear cache (useful for testing or when data changes)
   static void clearCache() {
     _cachedWarehouses = null;

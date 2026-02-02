@@ -207,8 +207,24 @@ class _RetailSellingMaterialScreenState
       debugPrint('RetailSellingMaterial: _retailBuilding is null');
       return [];
     }
-    final allMaterials = _retailBuilding!.items;
-    debugPrint('RetailSellingMaterial: All building materials: $allMaterials');
+    final allMaterials = List<int>.from(_retailBuilding!.items);
+
+    // Sort logic: Materials with stock > 0 come first
+    allMaterials.sort((a, b) {
+      final stockA = _warehouseStock[a] ?? 0;
+      final stockB = _warehouseStock[b] ?? 0;
+
+      // If A has stock and B doesn't, A comes first
+      if (stockA > 0 && stockB <= 0) return -1;
+
+      // If B has stock and A doesn't, B comes first
+      if (stockB > 0 && stockA <= 0) return 1;
+
+      // Otherwise keep original order (by ID)
+      return a.compareTo(b);
+    });
+
+    debugPrint('RetailSellingMaterial: Sorted materials: $allMaterials');
     return allMaterials;
   }
 
