@@ -10,9 +10,9 @@ import 'package:industrial_app/screens/retail_screen.dart';
 import 'package:industrial_app/screens/user_data_screen.dart';
 import 'package:industrial_app/screens/warehouses_screen.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
-import 'markets_screen.dart';
 import 'shop_screen.dart';
 import 'factories_screen.dart';
+import 'materials_screen.dart'; // Add this
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -121,14 +121,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: ClickableBuilding(
                   width: 190, // Aumentado de 180
                   height: 150, // Aumentado de 100
-                  label: 'Mercado',
+                  label: 'Materiales',
                   imageAsset: 'assets/images/market-building.png',
                   enableDarken: false,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MarketsScreen(),
+                        builder: (context) => const MaterialsScreen(),
                       ),
                     );
                   },
