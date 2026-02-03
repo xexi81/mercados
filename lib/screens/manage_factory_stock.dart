@@ -149,7 +149,11 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
     }
   }
 
-  Future<void> _moveToWarehouse(MaterialModel material, int quantity) async {
+  Future<void> _moveToWarehouse(
+    MaterialModel material,
+    int quantity, {
+    double averagePrice = 0.0,
+  }) async {
     if (quantity <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -257,11 +261,25 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
           final storage =
               (slot['storage'] as Map<String, dynamic>?) ?? <String, dynamic>{};
           final materialIdStr = material.id.toString();
-          final prevUnits = (storage[materialIdStr]?['units'] ?? 0) as int;
+          final prevUnits = ((storage[materialIdStr]?['units'] as num?) ?? 0)
+              .toInt();
+          final prevAveragePrice =
+              ((storage[materialIdStr]?['averagePrice'] as num?) ?? 0.0)
+                  .toDouble();
           final m3PerUnit = material.unitVolumeM3;
+
+          // Calcular media ponderada del averagePrice
+          double newAveragePrice = averagePrice;
+          if (prevUnits > 0) {
+            newAveragePrice =
+                (prevUnits * prevAveragePrice + quantity * averagePrice) /
+                (prevUnits + quantity);
+          }
+
           storage[materialIdStr] = {
             'units': prevUnits + quantity,
             'm3PerUnit': m3PerUnit,
+            'averagePrice': newAveragePrice,
           };
           slot['storage'] = storage;
           warehouseUserData['slots'] = slots;
@@ -282,11 +300,12 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
               List<dynamic> storedMaterials =
                   factorySlot['storedMaterials'] ?? [];
               int index = storedMaterials.indexWhere(
-                (m) => m['id'] == material.id,
+                (m) => m['materialId'] == material.id,
               );
               if (index != -1) {
                 var storedMaterial = storedMaterials[index];
-                int currentQty = storedMaterial['quantity'] ?? 0;
+                int currentQty =
+                    (storedMaterial['quantity'] as num?)?.toInt() ?? 0;
                 int newQty = currentQty - quantity;
                 if (newQty <= 0) {
                   // Eliminar el material si la cantidad es 0 o menor
@@ -397,11 +416,35 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
             );
           }
 
-          final storedMaterials = slot['storedMaterials'];
+          final storedMaterialsData = slot['storedMaterials'];
 
-          if (storedMaterials == null ||
-              storedMaterials is! List ||
-              storedMaterials.isEmpty) {
+          // Handle both Map and List formats
+          List<MapEntry<int, int>> materialsList = [];
+          if (storedMaterialsData is Map) {
+            // If it's a Map (like storage format), convert to list of entries
+            storedMaterialsData.forEach((key, value) {
+              final materialId = int.tryParse(key.toString()) ?? 0;
+              final quantity = (value is Map)
+                  ? ((value['quantity'] as num?)?.toInt() ?? 0)
+                  : ((value as num?)?.toInt() ?? 0);
+              if (materialId > 0 && quantity > 0) {
+                materialsList.add(MapEntry(materialId, quantity));
+              }
+            });
+          } else if (storedMaterialsData is List) {
+            // If it's a List, extract materialId and quantity
+            for (var item in storedMaterialsData) {
+              if (item is Map) {
+                final materialId = (item['materialId'] as num?)?.toInt() ?? 0;
+                final quantity = (item['quantity'] as num?)?.toInt() ?? 0;
+                if (materialId > 0 && quantity > 0) {
+                  materialsList.add(MapEntry(materialId, quantity));
+                }
+              }
+            }
+          }
+
+          if (materialsList.isEmpty) {
             return const Center(
               child: Text(
                 'No hay materiales almacenados en la fábrica',
@@ -416,11 +459,11 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: storedMaterials.length,
+                    itemCount: materialsList.length,
                     itemBuilder: (context, index) {
-                      final storedMaterial = storedMaterials[index];
-                      final materialId = storedMaterial['id'] as int;
-                      final quantity = storedMaterial['quantity'] as int;
+                      final entry = materialsList[index];
+                      final materialId = entry.key;
+                      final quantity = entry.value;
 
                       final material = allMaterials.firstWhere(
                         (m) => m.id == materialId,
@@ -435,7 +478,26 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                         ),
                       );
 
-                      return _buildMaterialCard(material, quantity);
+                      // Obtener averagePrice del storedMaterial
+                      double storedAveragePrice = 0.0;
+                      if (storedMaterialsData is List) {
+                        for (var item in storedMaterialsData) {
+                          if (item is Map &&
+                              (item['materialId'] as num?)?.toInt() ==
+                                  materialId) {
+                            storedAveragePrice =
+                                ((item['averagePrice'] as num?) ?? 0.0)
+                                    .toDouble();
+                            break;
+                          }
+                        }
+                      }
+
+                      return _buildMaterialCard(
+                        material,
+                        quantity,
+                        averagePrice: storedAveragePrice,
+                      );
                     },
                   ),
                 ),
@@ -447,7 +509,11 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
     );
   }
 
-  Widget _buildMaterialCard(MaterialModel material, int availableQuantity) {
+  Widget _buildMaterialCard(
+    MaterialModel material,
+    int availableQuantity, {
+    double averagePrice = 0.0,
+  }) {
     // Initialize selected quantity if not set - do this once without calling setState
     selectedQuantities.putIfAbsent(material.id, () => 0);
 
@@ -524,6 +590,15 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                           fontSize: 12,
                         ),
                       ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Precio promedio: ${averagePrice.toStringAsFixed(2)} €',
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -587,7 +662,11 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                   : () {
                       final quantityToMove =
                           selectedQuantities[material.id]?.toInt() ?? 0;
-                      _moveToWarehouse(material, quantityToMove);
+                      _moveToWarehouse(
+                        material,
+                        quantityToMove,
+                        averagePrice: averagePrice,
+                      );
                     },
               gradientTop: isWarehouseFull
                   ? Colors.grey[600]!

@@ -40,6 +40,7 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
   int currentTier = 1;
   bool isLoading = true;
   String factoryStatus = 'en espera';
+  int factoryLevel = 1; // Level de la fábrica para multiplicar producción
 
   @override
   void initState() {
@@ -73,6 +74,7 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
 
           currentTier = (slot['currentTier'] as int?) ?? 1;
           factoryStatus = (slot['status'] as String?) ?? 'en espera';
+          factoryLevel = (slot['level'] as int?) ?? 1; // Obtener level del slot
         }
 
         await _loadWarehouseStock();
@@ -265,13 +267,18 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
 
     if (product == null) return;
 
-    final productionPerHour = 3600 / product.productionTimeSeconds;
+    final baseProductionPerHour = 3600 / product.productionTimeSeconds;
+    final productionPerHour =
+        baseProductionPerHour * factoryLevel; // Aplicar multiplicador
 
     // Calculate total production time
     final totalProductionSeconds = product.productionTimeSeconds * quantity;
-    final hours = totalProductionSeconds ~/ 3600;
-    final minutes = (totalProductionSeconds % 3600) ~/ 60;
-    final seconds = totalProductionSeconds % 60;
+    // Aplicar multiplicador de level: tiempo total / level (para producir más rápido)
+    final adjustedProductionSeconds = totalProductionSeconds / factoryLevel;
+
+    final hours = adjustedProductionSeconds.toInt() ~/ 3600;
+    final minutes = (adjustedProductionSeconds.toInt() % 3600) ~/ 60;
+    final seconds = adjustedProductionSeconds.toInt() % 60;
 
     String timeText = '';
     if (hours > 0) {
@@ -357,6 +364,8 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
               'materialId': material.id,
               'quantityPerHour': productionPerHour,
               'targetQuantity': quantity,
+              'totalProductionSeconds':
+                  adjustedProductionSeconds, // Ya con multiplicador aplicado
               'componentsNeeded': componentsNeededForFirestore,
             };
             factorySlots[slotIndex]['productionQueue'] = productionQueue;
@@ -505,9 +514,12 @@ class _ProductionQueueScreenState extends State<ProductionQueueScreen> {
         if (product != null) break;
       }
     }
-    final productionPerHour = product != null
-        ? (3600 / product.productionTimeSeconds).toStringAsFixed(2)
-        : '0';
+    final baseProductionPerHour = product != null
+        ? 3600 / product.productionTimeSeconds
+        : 0.0;
+    // Aplicar multiplicador del level de la fábrica
+    final productionPerHour = (baseProductionPerHour * factoryLevel)
+        .toStringAsFixed(2);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),

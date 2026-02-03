@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:industrial_app/data/factories/factory_slot_model.dart';
 import 'package:industrial_app/data/factories/factory_repository.dart';
 import 'package:industrial_app/data/factories/production_queue_prices_repository.dart';
@@ -21,6 +22,7 @@ class FactoryCard extends StatelessWidget {
   final FactorySlotModel slotConfig;
   final Map<String, dynamic>? firestoreData;
   final int userLevel;
+  final String? factoryName;
 
   const FactoryCard({
     Key? key,
@@ -28,11 +30,66 @@ class FactoryCard extends StatelessWidget {
     required this.slotConfig,
     required this.firestoreData,
     required this.userLevel,
+    this.factoryName,
   }) : super(key: key);
 
   bool get isUnlocked => firestoreData != null;
   bool get canUnlock => userLevel >= slotConfig.requiredLevel;
   bool get isLocked => !isUnlocked && !canUnlock;
+
+  /// Convierte startTime de Timestamp o int a millisegundos (int)
+  int? _getStartTimeMs(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is Timestamp) return value.millisecondsSinceEpoch;
+    return null;
+  }
+
+  /// Obtiene el nombre de la fábrica
+  String _getFactoryNameSync() {
+    if (factoryName != null && factoryName!.isNotEmpty) {
+      return factoryName!;
+    }
+    final factoryId = firestoreData?['factoryId'] as int?;
+    if (factoryId == null) return '';
+    return 'Fab. $factoryId';
+  }
+
+  /// Calcula el tiempo restante para la producción actual en formato "Xh Ym"
+  String _getRemainingProductionTime() {
+    final currentProduction = firestoreData?['currentProduction'];
+    if (currentProduction is! Map<String, dynamic>) return '';
+
+    final int? startTime = _getStartTimeMs(currentProduction['startTime']);
+    final totalProductionSeconds =
+        (currentProduction['totalProductionSeconds'] as num?)?.toDouble() ??
+        0.0;
+
+    if (startTime == null || totalProductionSeconds <= 0) return '';
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (now - startTime) / 1000;
+    final remainingSeconds = totalProductionSeconds - elapsedSeconds;
+
+    // Debug
+    debugPrint(
+      '[DEBUG] startTime: $startTime, now: $now, elapsed: $elapsedSeconds, total: $totalProductionSeconds, remaining: $remainingSeconds',
+    );
+
+    if (remainingSeconds <= 0) {
+      debugPrint('[DEBUG] Producción completada');
+      return '';
+    }
+
+    final hours = remainingSeconds ~/ 3600;
+    final minutes = ((remainingSeconds % 3600) ~/ 60).toInt();
+
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    } else {
+      return '${minutes}m';
+    }
+  }
 
   Future<void> _handleTierUpgrade(BuildContext context) async {
     try {
@@ -149,6 +206,101 @@ class FactoryCard extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Tier mejorado a $nextTier'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleLevelUpgrade(BuildContext context) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final currentLevel = (firestoreData?['level'] as int?) ?? 1;
+      final nextLevel = currentLevel + 1;
+      final upgradeCost = nextLevel * 100000;
+
+      if (context.mounted) {
+        final bool? success = await showDialog<bool>(
+          context: context,
+          builder: (context) => GenericPurchaseDialog(
+            title: 'MEJORAR NIVEL',
+            description:
+                '¿Deseas mejorar el nivel de la fábrica a nivel $nextLevel?',
+            price: upgradeCost,
+            priceType: UnlockCostType.money,
+            onConfirm: () async {
+              final userDocRef = FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid);
+              final factoriesDocRef = FirebaseFirestore.instance
+                  .collection('usuarios')
+                  .doc(user.uid)
+                  .collection('factories_users')
+                  .doc(user.uid);
+
+              await FirebaseFirestore.instance.runTransaction((
+                transaction,
+              ) async {
+                final userSnapshot = await transaction.get(userDocRef);
+                final factoriesSnapshot = await transaction.get(
+                  factoriesDocRef,
+                );
+
+                if (!userSnapshot.exists)
+                  throw Exception('Usuario no encontrado');
+                if (!factoriesSnapshot.exists)
+                  throw Exception('Datos de fábrica no encontrados');
+
+                // Verify funds
+                final userData = userSnapshot.data()!;
+                final currentMoney =
+                    (userData['dinero'] as num?)?.toDouble() ?? 0;
+
+                if (currentMoney < upgradeCost) {
+                  throw Exception('Dinero insuficiente');
+                }
+
+                // Update money
+                transaction.update(userDocRef, {
+                  'dinero': currentMoney - upgradeCost,
+                });
+
+                // Update factory level
+                final factoriesData = factoriesSnapshot.data()!;
+                List<dynamic> slots = List.from(factoriesData['slots'] ?? []);
+
+                final slotIndex = slots.indexWhere(
+                  (s) => s['slotId'] == slotId,
+                );
+                if (slotIndex != -1) {
+                  Map<String, dynamic> updatedSlot = Map<String, dynamic>.from(
+                    slots[slotIndex],
+                  );
+                  updatedSlot['level'] = nextLevel;
+
+                  slots[slotIndex] = updatedSlot;
+
+                  transaction.update(factoriesDocRef, {'slots': slots});
+                }
+              });
+            },
+          ),
+        );
+
+        if (success == true && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Nivel mejorado a $nextLevel'),
               backgroundColor: Colors.green,
             ),
           );
@@ -328,7 +480,7 @@ class FactoryCard extends StatelessWidget {
                       color: Colors.black.withOpacity(0.5),
                     ),
                     child: Text(
-                      'LVL ${slotConfig.requiredLevel}',
+                      'TIER ${slotConfig.requiredLevel}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
@@ -367,13 +519,53 @@ class FactoryCard extends StatelessWidget {
               if (isUnlocked && hasFactory && firestoreData!['status'] != null)
                 Positioned(
                   top: 8,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Text(
-                      firestoreData!['status'],
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                    ),
+                  left:
+                      84, // Empezar después del minicard de nivel (8 + 60 + 16 de gap)
+                  right: 8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _getFactoryNameSync(),
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              firestoreData!['status'],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_getRemainingProductionTime().isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            _getRemainingProductionTime(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
 
@@ -404,7 +596,7 @@ class FactoryCard extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'LVL ${firestoreData!['currentTier'] ?? 1}',
+                          'TIER ${firestoreData!['currentTier'] ?? 1}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -420,11 +612,11 @@ class FactoryCard extends StatelessWidget {
               if (isUnlocked && hasFactory)
                 _buildProductionMiniCards(context, factoryId),
 
-              // Stored materials minicard - below production cards, aligned left
+              // Storage and level upgrade minicards - below production cards
               if (isUnlocked && hasFactory && _hasStoredMaterials())
                 Positioned(
                   bottom: 5,
-                  left: 12,
+                  left: 22,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -463,6 +655,42 @@ class FactoryCard extends StatelessWidget {
                                 color: Colors.white,
                                 size: 30,
                               ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+              // Factory level upgrade minicard - 5px to the right of storage card
+              if (isUnlocked && hasFactory)
+                Positioned(
+                  bottom: 5,
+                  left: 82,
+                  child: GestureDetector(
+                    onTap: () => _handleLevelUpgrade(context),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'LVL ${firestoreData!['level'] ?? 1}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -582,6 +810,10 @@ class FactoryCard extends StatelessWidget {
                   ),
                 ),
               ),
+              // Mostrar barra de progreso si hay producción activa
+              if (status == 'fabricando' &&
+                  firestoreData?['currentProduction'] != null)
+                _buildProgressOverlay(firestoreData!['currentProduction']),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -592,6 +824,44 @@ class FactoryCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressOverlay(Map<String, dynamic> currentProduction) {
+    final int? startTime = _getStartTimeMs(currentProduction['startTime']);
+    final double totalProductionSeconds =
+        (currentProduction['totalProductionSeconds'] as num?)?.toDouble() ??
+        0.0;
+
+    if (startTime == null || totalProductionSeconds <= 0) {
+      return const SizedBox.shrink();
+    }
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (now - startTime) / 1000;
+    final progress = (elapsedSeconds / totalProductionSeconds).clamp(0.0, 1.0);
+
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: 4,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade700,
+          borderRadius: BorderRadius.circular(2),
+        ),
+        child: FractionallySizedBox(
+          alignment: Alignment.centerLeft,
+          widthFactor: progress,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.green.shade800,
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
         ),
       ),
@@ -627,6 +897,7 @@ class FactoryCard extends StatelessWidget {
               .snapshots(),
           builder: (context, factoriesSnapshot) {
             String? materialImagePath;
+            Map<String, dynamic>? queueData;
 
             if (factoriesSnapshot.hasData && factoriesSnapshot.data!.exists) {
               final factoriesData =
@@ -646,8 +917,9 @@ class FactoryCard extends StatelessWidget {
                   final queueKey = 'queue$queueSlot';
 
                   if (productionQueueData.containsKey(queueKey)) {
-                    final queueData = productionQueueData[queueKey];
-                    if (queueData is Map && queueData['materialId'] != null) {
+                    queueData = productionQueueData[queueKey];
+                    if (queueData is Map<String, dynamic> &&
+                        queueData['materialId'] != null) {
                       materialImagePath =
                           'assets/images/materials/${queueData['materialId']}.png';
                     }

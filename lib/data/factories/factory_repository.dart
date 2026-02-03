@@ -37,6 +37,18 @@ class FactoryRepository {
     }
   }
 
+  static FactoryModel? getFactoryByIdSync(int id) {
+    // Obtener del cache sin async (útil para UI que necesita sincronización)
+    if (_cachedFactories == null) {
+      return null;
+    }
+    try {
+      return _cachedFactories!.firstWhere((f) => f.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   static void clearCache() {
     _cachedFactories = null;
   }

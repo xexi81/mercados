@@ -40,11 +40,65 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
   int currentTier = 1;
   String factoryStatus = 'en espera';
   bool isLoading = true;
+  int factoryLevel = 1; // Level de la fábrica para multiplicar producción
 
   @override
   void initState() {
     super.initState();
+    _cleanupOldProduction();
     _loadData();
+  }
+
+  /// Limpia producciones con estructura antigua (compatibilidad con migración)
+  Future<void> _cleanupOldProduction() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final factoriesRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('factories_users')
+          .doc(user.uid);
+
+      final factoriesSnapshot = await factoriesRef.get();
+      if (!factoriesSnapshot.exists) return;
+
+      final factoriesData = factoriesSnapshot.data()!;
+      final slots = List<Map<String, dynamic>>.from(
+        factoriesData['slots'] ?? [],
+      );
+
+      bool needsUpdate = false;
+
+      for (int i = 0; i < slots.length; i++) {
+        final slot = slots[i];
+        final currentProduction = slot['currentProduction'];
+
+        // Si hay producción con estructura antigua, limpiarla
+        if (currentProduction is Map<String, dynamic>) {
+          // Estructura antigua tiene 'quantityPerHour' o 'producedQuantity'
+          if (currentProduction.containsKey('quantityPerHour') ||
+              currentProduction.containsKey('producedQuantity')) {
+            slots[i]['status'] = 'en espera';
+            slots[i]['currentProduction'] = null;
+            needsUpdate = true;
+          }
+          // Si tiene estructura nueva pero startTime es Timestamp (antigua), también limpiar
+          else if (currentProduction['startTime'] is! int) {
+            slots[i]['status'] = 'en espera';
+            slots[i]['currentProduction'] = null;
+            needsUpdate = true;
+          }
+        }
+      }
+
+      if (needsUpdate) {
+        await factoriesRef.update({'slots': slots});
+      }
+    } catch (e) {
+      debugPrint('Error cleaning up old production data: $e');
+    }
   }
 
   void _filterAvailableMaterials() {
@@ -208,11 +262,15 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
           );
           currentTier = (slot['currentTier'] as int?) ?? 1;
           factoryStatus = (slot['status'] as String?) ?? 'en espera';
+          factoryLevel = (slot['level'] as int?) ?? 1; // Obtener level del slot
         }
         await _loadWarehouseStock();
 
         // Cargar grados disponibles de warehouse una sola vez
         await _loadAvailableWarehouseGrades();
+
+        // Procesar colas finalizadas cuando entras a la pantalla
+        await _processCompletedProductionAndQueues();
       }
       if (mounted) {
         setState(() {
@@ -232,6 +290,157 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
     }
   }
 
+  /// Procesa la producción completada y mueve las colas automáticamente
+  Future<void> _processCompletedProductionAndQueues() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final factoriesRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .collection('factories_users')
+            .doc(user.uid);
+
+        final factoriesSnapshot = await transaction.get(factoriesRef);
+        if (!factoriesSnapshot.exists) return;
+
+        final factoriesData = factoriesSnapshot.data()!;
+        final factorySlots = List<Map<String, dynamic>>.from(
+          factoriesData['slots'] ?? [],
+        );
+
+        final slotIndex = factorySlots.indexWhere(
+          (s) => s['slotId'] == widget.slotId,
+        );
+        if (slotIndex == -1) return;
+
+        final slot = Map<String, dynamic>.from(factorySlots[slotIndex]);
+        final currentProduction =
+            slot['currentProduction'] as Map<String, dynamic>?;
+        final productionQueue =
+            slot['productionQueue'] as Map<String, dynamic>? ?? {};
+
+        // Verificar si hay producción completada
+        if (currentProduction != null) {
+          final int? startTime = currentProduction['startTime'] as int?;
+          final double totalProductionSeconds =
+              (currentProduction['totalProductionSeconds'] as num?)
+                  ?.toDouble() ??
+              0.0;
+
+          if (startTime != null && totalProductionSeconds > 0) {
+            final now = DateTime.now().millisecondsSinceEpoch;
+            final elapsedSeconds = (now - startTime) / 1000;
+
+            // Si la producción actual se completó
+            if (elapsedSeconds >= totalProductionSeconds) {
+              final targetQuantity =
+                  currentProduction['targetQuantity'] as int? ?? 0;
+              final materialId = currentProduction['materialId'] as int? ?? 0;
+
+              // Calcular averagePrice del material producido
+              double averagePrice = 0.0;
+
+              // Obtener el material producido
+              final producedMaterial = allMaterials
+                  .where((m) => m.id == materialId)
+                  .firstOrNull;
+
+              if (producedMaterial != null) {
+                if (producedMaterial.grade == 1) {
+                  // Si es grado 1, el averagePrice es basePrice * 0.5
+                  averagePrice = producedMaterial.basePrice * 0.5;
+                } else {
+                  // Si no es grado 1, calcular como suma de componentes
+                  double totalComponentCost = 0.0;
+                  for (var component in producedMaterial.components) {
+                    // Obtener el precio del componente desde allMaterials
+                    final componentMaterial = allMaterials
+                        .where((m) => m.id == component.materialId)
+                        .firstOrNull;
+                    final componentPrice = componentMaterial?.basePrice ?? 0.0;
+                    final componentCost =
+                        component.quantity * targetQuantity * componentPrice;
+                    totalComponentCost += componentCost;
+                  }
+
+                  if (targetQuantity > 0) {
+                    averagePrice = totalComponentCost / targetQuantity;
+                  }
+                }
+              }
+
+              // Mover producción completada a storedMaterials
+              List<dynamic> storedMaterials = List.from(
+                slot['storedMaterials'] ?? [],
+              );
+              storedMaterials.add({
+                'materialId': materialId,
+                'quantity': targetQuantity,
+                'averagePrice': averagePrice,
+              });
+
+              slot['storedMaterials'] = storedMaterials;
+
+              // Buscar la siguiente cola y moverla a currentProduction
+              bool foundNextQueue = false;
+              for (int i = 1; i <= 4; i++) {
+                final queueKey = 'queue$i';
+                if (productionQueue.containsKey(queueKey) &&
+                    productionQueue[queueKey] != null) {
+                  final queueData = productionQueue[queueKey];
+                  final newMaterialId = queueData['materialId'] as int?;
+                  final targetQty = queueData['targetQuantity'] as int?;
+
+                  if (newMaterialId != null && targetQty != null) {
+                    // Mover esta cola a currentProduction
+                    slot['currentProduction'] = {
+                      'materialId': newMaterialId,
+                      'targetQuantity': targetQty,
+                      'startTime': DateTime.now().millisecondsSinceEpoch,
+                      'totalProductionSeconds':
+                          queueData['totalProductionSeconds'] ?? 0,
+                    };
+
+                    // Eliminar esta cola y desplazar las siguientes
+                    productionQueue.remove(queueKey);
+                    for (int j = i + 1; j <= 4; j++) {
+                      final nextQueueKey = 'queue$j';
+                      final prevQueueKey = 'queue${j - 1}';
+                      if (productionQueue.containsKey(nextQueueKey)) {
+                        productionQueue[prevQueueKey] =
+                            productionQueue[nextQueueKey];
+                        productionQueue.remove(nextQueueKey);
+                      }
+                    }
+
+                    slot['productionQueue'] = productionQueue;
+                    slot['status'] = 'fabricando';
+                    foundNextQueue = true;
+                    break;
+                  }
+                }
+              }
+
+              // Si no hay más colas, establecer estado a 'en espera'
+              if (!foundNextQueue) {
+                slot['currentProduction'] = null;
+                slot['status'] = 'en espera';
+              }
+            }
+          }
+        }
+
+        factorySlots[slotIndex] = slot;
+        transaction.update(factoriesRef, {'slots': factorySlots});
+      });
+    } catch (e) {
+      debugPrint('Error processing completed production: $e');
+    }
+  }
+
   Future<DocumentSnapshot<Map<String, dynamic>>> _getFactoriesDoc() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -243,6 +452,14 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
         .collection('factories_users')
         .doc(user.uid)
         .get();
+  }
+
+  /// Convierte startTime de Timestamp o int a millisegundos (int)
+  int? _getStartTimeMs(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is Timestamp) return value.millisecondsSinceEpoch;
+    return null;
   }
 
   Future<void> _startProduction(MaterialModel material, int quantity) async {
@@ -309,13 +526,15 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
 
     if (product == null) return;
 
-    final productionPerHour = 3600 / product.productionTimeSeconds;
-
     // Calculate total production time
     final totalProductionSeconds = product.productionTimeSeconds * quantity;
-    final hours = totalProductionSeconds ~/ 3600;
-    final minutes = (totalProductionSeconds % 3600) ~/ 60;
-    final seconds = totalProductionSeconds % 60;
+
+    // Aplicar multiplicador de level: tiempo total / level (para producir más rápido)
+    final adjustedProductionSeconds = totalProductionSeconds / factoryLevel;
+
+    final hours = adjustedProductionSeconds.toInt() ~/ 3600;
+    final minutes = (adjustedProductionSeconds.toInt() % 3600) ~/ 60;
+    final seconds = adjustedProductionSeconds.toInt() % 60;
 
     String timeText = '';
     if (hours > 0) {
@@ -426,12 +645,13 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
 
           if (slotIndex != -1) {
             factorySlots[slotIndex]['status'] = 'fabricando';
+            final now = DateTime.now().millisecondsSinceEpoch;
             factorySlots[slotIndex]['currentProduction'] = {
               'materialId': material.id,
-              'quantityPerHour': productionPerHour,
               'targetQuantity': quantity,
-              'producedQuantity': 0,
-              'startTime': Timestamp.now(),
+              'startTime': now, // Timestamp en millisegundos
+              'totalProductionSeconds':
+                  adjustedProductionSeconds, // Duración total en segundos (ya con multiplicador)
             };
           }
 
@@ -513,10 +733,13 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
           }
           final int materialId = currentProduction['materialId'] ?? 0;
           final int targetQuantity = currentProduction['targetQuantity'] ?? 0;
-          final int producedQuantity =
-              currentProduction['producedQuantity'] ?? 0;
-          final double quantityPerHour =
-              (currentProduction['quantityPerHour'] as num?)?.toDouble() ?? 0.0;
+          final int? startTime = _getStartTimeMs(
+            currentProduction['startTime'],
+          );
+          final double totalProductionSeconds =
+              (currentProduction['totalProductionSeconds'] as num?)
+                  ?.toDouble() ??
+              0.0;
           final MaterialModel? material = allMaterials.isNotEmpty
               ? allMaterials.firstWhere(
                   (m) => m.id == materialId,
@@ -533,9 +756,42 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
                   ),
                 )
               : null;
-          final double progress = targetQuantity > 0
-              ? producedQuantity / targetQuantity
-              : 0.0;
+
+          // Calcular progreso y cantidad producida basándose en tiempo transcurrido
+          double progress = 0.0;
+          int producedQuantity = 0;
+          String estimatedTimeRemaining = '';
+
+          if (startTime != null && totalProductionSeconds > 0) {
+            final now = DateTime.now().millisecondsSinceEpoch;
+            final elapsedSeconds = (now - startTime) / 1000;
+            final remainingSeconds = totalProductionSeconds - elapsedSeconds;
+
+            // Si ya pasó el tiempo, mostrar 100%
+            if (remainingSeconds <= 0) {
+              progress = 1.0;
+              producedQuantity = targetQuantity;
+              estimatedTimeRemaining = 'Completado';
+            } else {
+              progress = (elapsedSeconds / totalProductionSeconds).clamp(
+                0.0,
+                1.0,
+              );
+              producedQuantity = (targetQuantity * progress).toInt();
+              // Calcular tiempo restante
+              final hours = remainingSeconds ~/ 3600;
+              final minutes = ((remainingSeconds % 3600) ~/ 60).toInt();
+              final seconds = (remainingSeconds % 60).toInt();
+              if (hours > 0) {
+                estimatedTimeRemaining = '${hours}h ${minutes}m ${seconds}s';
+              } else if (minutes > 0) {
+                estimatedTimeRemaining = '${minutes}m ${seconds}s';
+              } else {
+                estimatedTimeRemaining = '${seconds}s';
+              }
+            }
+          }
+
           return Scaffold(
             appBar: CustomGameAppBar(),
             backgroundColor: AppColors.surface,
@@ -602,7 +858,7 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Velocidad de producción: ${quantityPerHour.toStringAsFixed(2)} unidades/hora',
+                      'Tiempo restante: $estimatedTimeRemaining',
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 15,
@@ -677,9 +933,12 @@ class _FactoryProductionScreenState extends State<FactoryProductionScreen> {
         if (product != null) break;
       }
     }
-    final productionPerHour = product != null
-        ? (3600 / product.productionTimeSeconds).toStringAsFixed(2)
-        : '0';
+    final baseProductionPerHour = product != null
+        ? 3600 / product.productionTimeSeconds
+        : 0.0;
+    // Aplicar multiplicador del level de la fábrica
+    final productionPerHour = (baseProductionPerHour * factoryLevel)
+        .toStringAsFixed(2);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
