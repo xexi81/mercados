@@ -16,6 +16,8 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuZ2l6YWVnc3lyb3NscWdsbHNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODA4NjksImV4cCI6MjA4NTE1Njg2OX0.QuZfrFGkoDu7bhEBCItpVCQ05ceujM_gBsnE57AqJv4',
   );
 
+  // Supabase for Contracts will be directly instantiated in ContractsService
+
   runApp(const MyApp());
 }
 

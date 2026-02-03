@@ -10,6 +10,11 @@ import 'package:industrial_app/data/warehouse/warehouse_model.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
+import 'package:industrial_app/data/contracts/contract_model.dart';
+import 'package:industrial_app/services/contracts_service.dart';
+import 'package:industrial_app/data/experience/experience_service.dart';
+import 'package:industrial_app/data/locations/location_repository.dart';
+import 'package:industrial_app/data/locations/location_model.dart';
 
 class WarehouseManagerScreen extends StatefulWidget {
   final int warehouseId;
@@ -26,10 +31,14 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
   bool isLoading = true;
   Map<String, double> sellAmounts = {};
 
+  List<ContractModel> _locationContracts = [];
+  Map<String, int> _contractFulfillAmounts = {};
+
   @override
   void initState() {
     super.initState();
     _loadWarehouseData();
+    _loadLocationContracts();
   }
 
   Future<void> _loadWarehouseData() async {
@@ -66,6 +75,167 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
       );
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<String> _getLocationName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return 'Desconocido';
+
+      final doc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid)
+          .get();
+
+      if (!doc.exists) return 'Desconocido';
+
+      final slots = List<Map<String, dynamic>>.from(doc.data()?['slots'] ?? []);
+      final slot = slots.firstWhere(
+        (s) => s['warehouseId'] == widget.warehouseId,
+        orElse: () => {},
+      );
+
+      if (slot.isEmpty) return 'Desconocido';
+
+      final lat = (slot['latitude'] as num).toDouble();
+      final lng = (slot['longitude'] as num).toDouble();
+
+      final locations = await LocationsRepository.loadLocations();
+      final location = locations.firstWhere(
+        (l) => l.latitude == lat && l.longitude == lng,
+        orElse: () => LocationModel(
+          id: -1,
+          city: 'Desconocido',
+          latitude: lat,
+          longitude: lng,
+          countryIso: 'XX',
+          hasMarket: false,
+        ),
+      );
+      return location.city;
+    } catch (e) {
+      return 'Ubicación desconocida';
+    }
+  }
+
+  Future<void> _loadLocationContracts() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final cityName = await _getLocationName();
+      final contracts = await ContractsService.getAssignedToMeStream(
+        user.uid,
+      ).first;
+
+      if (mounted) {
+        setState(() {
+          _locationContracts = contracts
+              .where((c) => c.locationId == cityName)
+              .toList();
+          _contractFulfillAmounts = {for (var c in _locationContracts) c.id: 0};
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading location contracts: $e');
+    }
+  }
+
+  Future<void> _fulfillFromWarehouse(ContractModel contract) async {
+    final amount = _contractFulfillAmounts[contract.id] ?? 0;
+    if (amount <= 0) return;
+
+    final materialId = contract.materialId.toString();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      await ContractsService.updateFulfillment(contract.id, amount);
+
+      final warehouseRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid);
+
+      final userRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final warehouseSnap = await transaction.get(warehouseRef);
+        final userSnap = await transaction.get(userRef);
+
+        if (!warehouseSnap.exists) return;
+
+        final warehouseData = warehouseSnap.data()!;
+        final slots = List<Map<String, dynamic>>.from(
+          warehouseData['slots'] ?? [],
+        );
+        final slotIdx = slots.indexWhere(
+          (s) => s['warehouseId'] == widget.warehouseId,
+        );
+        if (slotIdx == -1) return;
+
+        final currentStorage = Map<String, dynamic>.from(
+          slots[slotIdx]['storage'] ?? {},
+        );
+        if (!currentStorage.containsKey(materialId)) return;
+
+        final matData = Map<String, dynamic>.from(currentStorage[materialId]);
+        final currentUnits = (matData['units'] as num).toInt();
+
+        if (currentUnits < amount) {
+          throw Exception('No tienes suficientes unidades en el almacén');
+        }
+
+        if (currentUnits == amount) {
+          currentStorage.remove(materialId);
+        } else {
+          matData['units'] = currentUnits - amount;
+          currentStorage[materialId] = matData;
+        }
+
+        slots[slotIdx]['storage'] = currentStorage;
+        transaction.update(warehouseRef, {'slots': slots});
+
+        final bids = await ContractsService.getBidsForContractStream(
+          contract.id,
+        ).first;
+        final acceptedBid = bids.firstWhere((b) => b.bidderId == user.uid);
+        final moneyGained = amount * acceptedBid.pricePerUnit;
+
+        final currentMoney =
+            (userSnap.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
+        final currentXp =
+            (userSnap.data()?['experience'] as num?)?.toInt() ?? 0;
+
+        final m3PerUnit = (matData['m3PerUnit'] as num).toDouble();
+        final totalM3 = amount * m3PerUnit;
+        final materialInfo = await _getMaterialInfo(materialId);
+        final grade = materialInfo?['grade'] as int? ?? 1;
+
+        final xpGained = ExperienceService.calculatePurchaseXp(totalM3, grade);
+
+        transaction.update(userRef, {
+          'dinero': currentMoney + moneyGained,
+          'experience': currentXp + xpGained,
+        });
+      });
+
+      _loadWarehouseData();
+      _loadLocationContracts();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Movidas $amount unidades al contrato')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al cumplir contrato: $e')));
     }
   }
 
@@ -363,6 +533,170 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Contracts section
+                  if (_locationContracts.isNotEmpty) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B).withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFF4A90E2).withOpacity(0.5),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF4A90E2).withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.assignment,
+                                color: Color(0xFF4A90E2),
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Contratos en esta Ubicación',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ..._locationContracts.map((contract) {
+                            final materialId = contract.materialId.toString();
+                            final inWarehouseUnits =
+                                (storage[materialId]?['units'] as num?)
+                                    ?.toInt() ??
+                                0;
+                            final hasMaterial = inWarehouseUnits > 0;
+
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Contrato #${contract.id.substring(0, 8)}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Faltan: ${contract.remainingQuantity} uds',
+                                              style: const TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (hasMaterial)
+                                        Text(
+                                          'En almacén: $inWarehouseUnits',
+                                          style: const TextStyle(
+                                            color: AppColors.secondary,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  if (hasMaterial) ...[
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Slider(
+                                            value:
+                                                (_contractFulfillAmounts[contract
+                                                            .id] ??
+                                                        0)
+                                                    .toDouble(),
+                                            min: 0,
+                                            max: inWarehouseUnits
+                                                .clamp(
+                                                  0,
+                                                  contract.remainingQuantity,
+                                                )
+                                                .toDouble(),
+                                            divisions: inWarehouseUnits.clamp(
+                                              1,
+                                              contract.remainingQuantity,
+                                            ),
+                                            onChanged: (val) => setState(
+                                              () =>
+                                                  _contractFulfillAmounts[contract
+                                                      .id] = val
+                                                      .toInt(),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${_contractFulfillAmounts[contract.id] ?? 0}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    IndustrialButton(
+                                      label: 'Entregar para Contrato',
+                                      gradientTop: const Color(0xFF4A90E2),
+                                      gradientBottom: const Color(0xFF357ABD),
+                                      borderColor: const Color(0xFF2E5F8D),
+                                      onPressed:
+                                          (_contractFulfillAmounts[contract
+                                                      .id] ??
+                                                  0) >
+                                              0
+                                          ? () =>
+                                                _fulfillFromWarehouse(contract)
+                                          : null,
+                                      width: double.infinity,
+                                    ),
+                                  ] else ...[
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'No tienes este material en el almacén',
+                                      style: TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                   // Stored materials section
                   Container(
                     width: double.infinity,

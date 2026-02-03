@@ -13,6 +13,8 @@ import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:industrial_app/widgets/celebration_dialog.dart';
+import 'package:industrial_app/data/contracts/contract_model.dart';
+import 'package:industrial_app/services/contracts_service.dart';
 
 class LoadManagerScreen extends StatefulWidget {
   final int fleetId;
@@ -56,6 +58,8 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   List<Map<String, dynamic>> warehouseSlots = [];
   Map<String, double> transferToWarehouseAmounts = {};
   Map<String, double> transferToTruckAmounts = {};
+  List<ContractModel> _locationContracts = [];
+  Map<String, int> _contractUnloadAmounts = {};
 
   @override
   void initState() {
@@ -139,6 +143,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
           if (isAtMarket) {
             await _loadMaterialCategories();
           }
+          await _loadLocationContracts();
         }
       }
     } catch (e) {
@@ -238,6 +243,127 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       return location.city;
     } catch (e) {
       return 'Ubicación desconocida';
+    }
+  }
+
+  Future<void> _loadLocationContracts() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || currentLocation == null) return;
+
+    try {
+      final cityName = await _getLocationName();
+      final contracts = await ContractsService.getAssignedToMeStream(
+        user.uid,
+      ).first;
+
+      setState(() {
+        _locationContracts = contracts
+            .where((c) => c.locationId == cityName)
+            .toList();
+        _contractUnloadAmounts = {for (var c in _locationContracts) c.id: 0};
+      });
+    } catch (e) {
+      debugPrint('Error loading location contracts: $e');
+    }
+  }
+
+  Future<void> _unloadToContract(ContractModel contract) async {
+    final amount = _contractUnloadAmounts[contract.id] ?? 0;
+    if (amount <= 0) return;
+
+    final materialId = contract.materialId.toString();
+    if (truckLoad == null || !truckLoad!.containsKey(materialId)) return;
+
+    final truckMaterial = truckLoad![materialId] as Map<String, dynamic>;
+    final truckUnits = (truckMaterial['units'] as num).toInt();
+
+    if (amount > truckUnits) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No tienes suficientes unidades en el camión'),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      await ContractsService.updateFulfillment(contract.id, amount);
+
+      final fleetRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('fleet_users')
+          .doc(user.uid);
+
+      final userRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final fleetSnap = await transaction.get(fleetRef);
+        final userSnap = await transaction.get(userRef);
+
+        if (!fleetSnap.exists) return;
+
+        final fleetData = fleetSnap.data()!;
+        final slots = List<Map<String, dynamic>>.from(fleetData['slots'] ?? []);
+        final slotIdx = slots.indexWhere((s) => s['fleetId'] == widget.fleetId);
+        if (slotIdx == -1) return;
+
+        final currentLoad = Map<String, dynamic>.from(
+          slots[slotIdx]['truckLoad'] ?? {},
+        );
+        final matData = Map<String, dynamic>.from(currentLoad[materialId]);
+        final currentUnits = (matData['units'] as num).toInt();
+
+        if (currentUnits <= amount) {
+          currentLoad.remove(materialId);
+        } else {
+          matData['units'] = currentUnits - amount;
+          currentLoad[materialId] = matData;
+        }
+
+        slots[slotIdx]['truckLoad'] = currentLoad;
+        transaction.update(fleetRef, {'slots': slots});
+
+        final bids = await ContractsService.getBidsForContractStream(
+          contract.id,
+        ).first;
+        final acceptedBid = bids.firstWhere((b) => b.bidderId == user.uid);
+        final moneyGained = amount * acceptedBid.pricePerUnit;
+
+        final currentMoney =
+            (userSnap.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
+        final currentXp =
+            (userSnap.data()?['experience'] as num?)?.toInt() ?? 0;
+
+        final m3PerUnit = (matData['m3PerUnit'] as num).toDouble();
+        final totalM3 = amount * m3PerUnit;
+        final materialInfo = await _getMaterialInfo(materialId);
+        final grade = materialInfo?['grade'] as int? ?? 1;
+
+        final xpGained = ExperienceService.calculatePurchaseXp(totalM3, grade);
+
+        transaction.update(userRef, {
+          'dinero': currentMoney + moneyGained,
+          'experience': currentXp + xpGained,
+        });
+      });
+
+      await _loadFleetData();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Descargadas $amount unidades para el contrato'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al cumplir contrato: $e')));
     }
   }
 
@@ -2356,6 +2482,159 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
               // Warehouse materials section - only show if at HQ
               if (warehouseSection.isNotEmpty) const SizedBox(height: 20),
               ...warehouseSection,
+              // Contracts section
+              if (_locationContracts.isNotEmpty &&
+                  fleetStatus != 'en marcha') ...[
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(15, 23, 42, 0.8),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.secondary.withOpacity(0.5),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Contratos en esta ubicación',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ..._locationContracts.map((contract) {
+                        final matId = contract.materialId.toString();
+                        final hasMaterial =
+                            truckLoad?.containsKey(matId) ?? false;
+                        final truckUnits = hasMaterial
+                            ? (truckLoad![matId]['units'] as num).toInt()
+                            : 0;
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.black26,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  FutureBuilder<Map<String, dynamic>?>(
+                                    future: _getMaterialInfo(matId),
+                                    builder: (context, snap) {
+                                      final info = snap.data;
+                                      return snap.hasData
+                                          ? Image.asset(
+                                              'assets/images/materials/${info!['id']}.png',
+                                              width: 40,
+                                            )
+                                          : const Icon(
+                                              Icons.inventory,
+                                              color: Colors.white,
+                                            );
+                                    },
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Contrato #${contract.id.substring(0, 8)}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Faltan: ${contract.remainingQuantity} uds',
+                                          style: const TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (hasMaterial)
+                                    Text(
+                                      'En camión: $truckUnits',
+                                      style: const TextStyle(
+                                        color: AppColors.secondary,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              if (hasMaterial) ...[
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Slider(
+                                        value:
+                                            (_contractUnloadAmounts[contract
+                                                        .id] ??
+                                                    0)
+                                                .toDouble(),
+                                        min: 0,
+                                        max: truckUnits
+                                            .clamp(
+                                              0,
+                                              contract.remainingQuantity,
+                                            )
+                                            .toDouble(),
+                                        divisions: truckUnits.clamp(
+                                          1,
+                                          contract.remainingQuantity,
+                                        ),
+                                        onChanged: (val) => setState(
+                                          () =>
+                                              _contractUnloadAmounts[contract
+                                                  .id] = val
+                                                  .toInt(),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '${_contractUnloadAmounts[contract.id] ?? 0}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                IndustrialButton(
+                                  label: 'Descargar para Contrato',
+                                  gradientTop: const Color(0xFF4A90E2),
+                                  gradientBottom: const Color(0xFF357ABD),
+                                  borderColor: const Color(0xFF2E5F8D),
+                                  onPressed:
+                                      (_contractUnloadAmounts[contract.id] ??
+                                              0) >
+                                          0
+                                      ? () => _unloadToContract(contract)
+                                      : null,
+                                  width: double.infinity,
+                                ),
+                              ],
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         ),

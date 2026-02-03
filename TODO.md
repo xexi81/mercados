@@ -55,6 +55,7 @@ Este documento detalla las funcionalidades, mejoras y correcciones pendientes pa
     - [ ] Reorganización de carpetas.
     - [ ] Refactorización de métodos y funciones redundantes.
     - [ ] Optimización general de pantallas.
+    - [ ] Prevenir apertura de múltiples modales al hacer doble clic en edificios.
 
 13. **⚖️ Balanceo de Economía**
     - [ ] Revisar que todo material tenga ciclo completo (fabricación -> venta).
