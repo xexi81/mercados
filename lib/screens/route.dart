@@ -11,6 +11,7 @@ import 'package:industrial_app/data/locations/distance_calculator.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'package:industrial_app/data/fleet/fleet_status.dart';
 import 'package:industrial_app/services/fleet_simulation_service.dart';
+import 'package:industrial_app/services/contracts_service.dart';
 
 class RouteScreen extends StatefulWidget {
   final int fleetId;
@@ -26,6 +27,7 @@ class _RouteScreenState extends State<RouteScreen> {
   LocationModel? _headquarterLocation;
   List<LocationModel> _marketLocations = [];
   LocationModel? _selectedMarketDestination;
+  int? _selectedContractDestinationIndex;
   bool _isLoading = true;
   Map<String, dynamic>? _fleetData;
 
@@ -623,45 +625,327 @@ class _RouteScreenState extends State<RouteScreen> {
   }
 
   Widget _buildContractsPlaceholder() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.2)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.assignment,
-            color: Colors.white.withOpacity(0.5),
-            size: 50,
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _getAvailableContractsForCargo(),
+      builder: (context, snapshot) {
+        final contracts = snapshot.data ?? [];
+
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.3)),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/routes/market.png'),
+              fit: BoxFit.cover,
+              onError: null,
+            ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.4),
+                  Colors.black.withOpacity(0.8),
+                ],
+              ),
+            ),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Contratos',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.7),
-                    fontWeight: FontWeight.bold,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'Contratos',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Próximamente...',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.5),
+                const SizedBox(height: 16),
+                if (contracts.isNotEmpty)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonFormField<int>(
+                      value: _selectedContractDestinationIndex,
+                      hint: const Text(
+                        'Seleccionar contrato',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      dropdownColor: AppColors.surface,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.white),
+                      items: List.generate(
+                        contracts.length,
+                        (index) => DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(
+                            '${contracts[index]['locationName']} (${(contracts[index]['distance'] as double).toStringAsFixed(1)} km)',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedContractDestinationIndex = value;
+                        });
+                      },
+                    ),
+                  )
+                else
+                  Text(
+                    'No tienes contratos con cargo disponible',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
                   ),
+                const SizedBox(height: 16),
+                IndustrialButton(
+                  label: 'INICIAR RUTA',
+                  width: double.infinity,
+                  height: 50,
+                  gradientTop: _selectedContractDestinationIndex != null
+                      ? Colors.blue[400]!
+                      : Colors.grey[400]!,
+                  gradientBottom: _selectedContractDestinationIndex != null
+                      ? Colors.blue[900]!
+                      : Colors.grey[700]!,
+                  borderColor: _selectedContractDestinationIndex != null
+                      ? Colors.blue[700]!
+                      : Colors.grey[600]!,
+                  onPressed: _selectedContractDestinationIndex != null
+                      ? () => _initiateRoute(
+                          contracts[_selectedContractDestinationIndex!]['location']
+                              as LocationModel,
+                        )
+                      : null,
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+  Future<List<Map<String, dynamic>>> _getAvailableContractsForCargo() async {
+    final user = FirebaseAuth.instance.currentUser;
+    debugPrint('🔍 [CONTRACTS] Current user: ${user?.uid}');
+    debugPrint('🔍 [CONTRACTS] Fleet data exists: ${_fleetData != null}');
+    if (user == null || _fleetData == null) return [];
+
+    try {
+      // Get assigned contracts for the user from Supabase
+      final contractsData = await ContractsService.client
+          .from('contracts')
+          .select()
+          .eq('assignee_id', user.uid)
+          .eq('status', 'ACCEPTED');
+
+      debugPrint(
+        '🔍 [CONTRACTS] Found ${contractsData.length} assigned contracts',
+      );
+
+      if (contractsData.isEmpty) {
+        debugPrint('🔍 [CONTRACTS] No assigned contracts found');
+        return [];
+      }
+
+      // Get the truck load for this fleet
+      final slots = _fleetData!['slots'] as List<dynamic>? ?? [];
+      debugPrint('🔍 [CONTRACTS] Total slots: ${slots.length}');
+      debugPrint('🔍 [CONTRACTS] Looking for fleetId: ${widget.fleetId}');
+
+      final targetSlot =
+          slots.firstWhere(
+                (s) => s['fleetId'] == widget.fleetId,
+                orElse: () => null,
+              )
+              as Map<String, dynamic>?;
+
+      if (targetSlot == null) {
+        debugPrint('🔍 [CONTRACTS] Target slot not found');
+        return [];
+      }
+
+      final truckLoad = targetSlot['truckLoad'] as Map<String, dynamic>? ?? {};
+      debugPrint('🔍 [CONTRACTS] Truck load keys: ${truckLoad.keys.toList()}');
+      debugPrint('🔍 [CONTRACTS] Truck load: $truckLoad');
+
+      // Get all available locations
+      final allLocations = await LocationsRepository.loadLocations();
+      debugPrint(
+        '🔍 [CONTRACTS] Total locations available: ${allLocations.length}',
+      );
+      debugPrint(
+        '🔍 [CONTRACTS] Available cities: ${allLocations.map((l) => l.city).toList()}',
+      );
+
+      final availableContracts = <Map<String, dynamic>>[];
+
+      for (var contractRow in contractsData) {
+        final contractData = contractRow as Map<String, dynamic>;
+
+        // Safe casting for material_id
+        final materialIdRaw = contractData['material_id'];
+        final materialId = materialIdRaw is int
+            ? materialIdRaw
+            : (materialIdRaw is double
+                  ? materialIdRaw.toInt()
+                  : int.tryParse(materialIdRaw.toString()));
+
+        final locationId = contractData['location_id'] as String?;
+        final creatorId = contractData['creator_id'] as String?;
+
+        debugPrint(
+          '🔍 [CONTRACTS] Checking contract: materialId=$materialId, locationId=$locationId, creatorId=$creatorId',
+        );
+        debugPrint('🔍 [CONTRACTS]   Contract data: $contractData');
+
+        // Check if truck has this material loaded
+        if (materialId != null &&
+            truckLoad.containsKey(materialId.toString())) {
+          final materialLoad = truckLoad[materialId.toString()];
+
+          // The material load is a Map with {m3PerUnit, averagePrice, units}
+          int quantity = 0;
+          if (materialLoad is Map<String, dynamic>) {
+            final unitsRaw = materialLoad['units'];
+            quantity = unitsRaw is int
+                ? unitsRaw
+                : (unitsRaw is double
+                      ? unitsRaw.toInt()
+                      : int.tryParse(unitsRaw.toString()) ?? 0);
+          }
+
+          debugPrint(
+            '🔍 [CONTRACTS]   Material $materialId found in truck with quantity: $quantity',
+          );
+
+          if (quantity > 0) {
+            // Find the location
+            try {
+              LocationModel? location;
+
+              // If location_id is "Sede Principal", get the creator's headquarter
+              if (locationId?.toLowerCase() == 'sede principal' ||
+                  locationId?.toLowerCase() == 'sede') {
+                debugPrint(
+                  '🔍 [CONTRACTS]   Getting creator headquarter for creatorId: $creatorId',
+                );
+
+                // Get creator's headquarter from Firebase
+                final creatorDoc = await FirebaseFirestore.instance
+                    .collection('usuarios')
+                    .doc(creatorId)
+                    .get();
+
+                final creatorData = creatorDoc.data();
+                final creatorHqId = creatorData?['headquarter_id']?.toString();
+
+                debugPrint(
+                  '🔍 [CONTRACTS]   Creator headquarter_id: $creatorHqId',
+                );
+
+                if (creatorHqId != null) {
+                  try {
+                    location = allLocations.firstWhere(
+                      (l) => l.id.toString() == creatorHqId,
+                    );
+                    debugPrint(
+                      '🔍 [CONTRACTS]   Found creator headquarter: ${location?.city}',
+                    );
+                  } catch (_) {
+                    debugPrint(
+                      '🔍 [CONTRACTS]   Creator headquarter not found',
+                    );
+                  }
+                }
+              } else {
+                debugPrint(
+                  '🔍 [CONTRACTS]   Looking for location with city: "$locationId"',
+                );
+                try {
+                  location = allLocations.firstWhere(
+                    (l) => l.city.toLowerCase() == locationId?.toLowerCase(),
+                  );
+                } catch (_) {
+                  debugPrint('🔍 [CONTRACTS]   Location city not found');
+                }
+              }
+
+              if (location == null) {
+                debugPrint('🔍 [CONTRACTS]   Location is null');
+                continue;
+              }
+
+              debugPrint('🔍 [CONTRACTS]   Location found: ${location.city}');
+
+              // Check if we're not already at this location
+              if (_currentLocation != null &&
+                  (_currentLocation!.latitude != location.latitude ||
+                      _currentLocation!.longitude != location.longitude)) {
+                final distance = DistanceCalculator.calculateDistance(
+                  _currentLocation!.latitude,
+                  _currentLocation!.longitude,
+                  location.latitude,
+                  location.longitude,
+                );
+
+                debugPrint(
+                  '🔍 [CONTRACTS]   Added to available contracts. Distance: $distance km',
+                );
+                availableContracts.add({
+                  'locationName': location.city,
+                  'distance': distance,
+                  'location': location,
+                });
+              } else {
+                debugPrint(
+                  '🔍 [CONTRACTS]   Already at this location, skipping',
+                );
+              }
+            } catch (e) {
+              debugPrint('🔍 [CONTRACTS]   Error finding location: $e');
+            }
+          } else {
+            debugPrint('🔍 [CONTRACTS]   Material quantity is 0');
+          }
+        } else {
+          debugPrint(
+            '🔍 [CONTRACTS]   Material $materialId NOT in truck. Available materials: ${truckLoad.keys}',
+          );
+        }
+      }
+
+      debugPrint(
+        '🔍 [CONTRACTS] Total available contracts: ${availableContracts.length}',
+      );
+      return availableContracts;
+    } catch (e) {
+      debugPrint('❌ [CONTRACTS] Error loading contracts: $e');
+      return [];
+    }
   }
 }
