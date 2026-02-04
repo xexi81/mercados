@@ -74,7 +74,9 @@ class _ContractsScreenState extends State<ContractsScreen> {
                 color: AppColors.surface,
                 child: const TabBar(
                   isScrollable: true,
-                  indicatorColor: AppColors.primary,
+                  indicatorColor: Colors.amber,
+                  labelColor: Colors.amber,
+                  unselectedLabelColor: Colors.white70,
                   tabs: [
                     Tab(text: 'Mis Contratos'),
                     Tab(text: 'Asignados'),
@@ -115,8 +117,12 @@ class _ContractsScreenState extends State<ContractsScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: AppColors.primary,
-          child: const Icon(Icons.description, color: Colors.white),
+          backgroundColor: Colors.orangeAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.white, width: 1),
+          ),
+          child: Icon(Icons.description, color: AppColors.surface, size: 32),
           onPressed: () async {
             await Navigator.push(
               context,
@@ -757,7 +763,7 @@ class _ContractCard extends StatelessWidget {
                                 contract.status == ContractStatus.accepted ||
                                         contract.status ==
                                             ContractStatus.fulfilled
-                                    ? 'P. ACORDADO: ${contract.acceptedPrice ?? (material!.basePrice * 1.5).toInt()} €'
+                                    ? 'P. ACORDADO: ${contract.acceptedPrice ?? 0} €'
                                     : 'P. BASE: ${material!.basePrice} €',
                                 style: GoogleFonts.montserrat(
                                   color: AppColors.secondary,
@@ -874,6 +880,7 @@ class _ContractCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     _BidsList(
+                      key: ValueKey(contract.id),
                       contractId: contract.id,
                       onRefresh: onRefresh,
                       userHq: userHq,
@@ -1120,12 +1127,13 @@ class _StatusBadge extends StatelessWidget {
   }
 }
 
-class _BidsList extends StatelessWidget {
+class _BidsList extends StatefulWidget {
   final String contractId;
   final VoidCallback onRefresh;
   final LocationModel? userHq;
   final String currentUserId;
   const _BidsList({
+    super.key,
     required this.contractId,
     required this.onRefresh,
     this.userHq,
@@ -1133,9 +1141,14 @@ class _BidsList extends StatelessWidget {
   });
 
   @override
+  State<_BidsList> createState() => _BidsListState();
+}
+
+class _BidsListState extends State<_BidsList> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ContractBidModel>>(
-      stream: ContractsService.getBidsForContractStream(contractId),
+      stream: ContractsService.getBidsForContractStream(widget.contractId),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return const Text(
@@ -1154,10 +1167,13 @@ class _BidsList extends StatelessWidget {
               .map(
                 (bid) => _BidderRow(
                   bid: bid,
-                  contractId: contractId,
-                  onRefresh: onRefresh,
-                  userHq: userHq,
-                  currentUserId: currentUserId,
+                  contractId: widget.contractId,
+                  onRefresh: () {
+                    widget.onRefresh();
+                    setState(() {});
+                  },
+                  userHq: widget.userHq,
+                  currentUserId: widget.currentUserId,
                 ),
               )
               .toList(),
