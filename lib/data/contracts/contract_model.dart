@@ -72,6 +72,13 @@ class ContractModel {
 
   bool get isFulfilled => fulfilledQuantity >= quantity;
 
+  bool get isExpired {
+    final start = acceptedAt ?? createdAt;
+    final deadline = start.add(Duration(days: deadlineDays));
+    final now = DateTime.now();
+    return now.isAfter(deadline);
+  }
+
   String get remainingTime {
     final start = acceptedAt ?? createdAt;
     final deadline = start.add(Duration(days: deadlineDays));

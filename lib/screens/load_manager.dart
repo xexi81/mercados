@@ -256,10 +256,49 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         user.uid,
       ).first;
 
+      final filteredContracts = <ContractModel>[];
+
+      for (var contract in contracts) {
+        String? contractCity = contract.locationId;
+
+        // Si es "Sede Principal", buscar la sede del creador en Firebase
+        if (contractCity == 'Sede Principal') {
+          try {
+            final creatorDoc = await FirebaseFirestore.instance
+                .collection('usuarios')
+                .doc(contract.creatorId)
+                .get();
+
+            final rawHqId = creatorDoc.data()?['headquarter_id'];
+            final hqId = rawHqId?.toString();
+
+            if (hqId != null && hqId.isNotEmpty) {
+              // Buscar la ubicación de esta HQ
+              final locations = await LocationsRepository.loadLocations();
+
+              final hqLocation = locations
+                  .where((l) => l.id.toString() == hqId)
+                  .firstOrNull;
+
+              if (hqLocation != null) {
+                contractCity = hqLocation.city;
+              }
+            }
+          } catch (e) {
+            debugPrint('🔍 [CONTRACTS] Error resolving Sede Principal: $e');
+          }
+        }
+
+        if (contractCity == cityName) {
+          filteredContracts.add(contract);
+        }
+      }
+
       setState(() {
-        _locationContracts = contracts
-            .where((c) => c.locationId == cityName)
-            .toList();
+        _locationContracts = filteredContracts;
+        debugPrint(
+          '🔍 [CONTRACTS] Filtered contracts count: ${_locationContracts.length}',
+        );
         _contractUnloadAmounts = {for (var c in _locationContracts) c.id: 0};
       });
     } catch (e) {
@@ -270,6 +309,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
   Future<void> _unloadToContract(ContractModel contract) async {
     final amount = _contractUnloadAmounts[contract.id] ?? 0;
     if (amount <= 0) return;
+
+    // Verificar si el contrato ha expirado
+    if (contract.isExpired) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Este contrato ha expirado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     final materialId = contract.materialId.toString();
     if (truckLoad == null || !truckLoad!.containsKey(materialId)) return;
@@ -286,10 +336,31 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
       return;
     }
 
+    if (amount > contract.remainingQuantity) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No puedes entregar más que la cantidad pendiente'),
+        ),
+      );
+      return;
+    }
+
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return;
 
+      // Get current experience to check for level up
+      final userDocBefore = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .get();
+      final currentXpBefore =
+          (userDocBefore.data()?['experience'] as num?)?.toInt() ?? 0;
+      final oldLevel = ExperienceService.getLevelFromExperience(
+        currentXpBefore,
+      );
+
+      // Update fulfillment in Supabase
       await ContractsService.updateFulfillment(contract.id, amount);
 
       final fleetRef = FirebaseFirestore.instance
@@ -302,12 +373,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
           .collection('usuarios')
           .doc(user.uid);
 
+      // Track new XP for level check
+      int newXp = 0;
+
+      // Firestore transaction to update truck load and user money/experience
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         final fleetSnap = await transaction.get(fleetRef);
         final userSnap = await transaction.get(userRef);
 
-        if (!fleetSnap.exists) return;
+        if (!fleetSnap.exists || !userSnap.exists) return;
 
+        // Update fleet truck load
         final fleetData = fleetSnap.data()!;
         final slots = List<Map<String, dynamic>>.from(fleetData['slots'] ?? []);
         final slotIdx = slots.indexWhere((s) => s['fleetId'] == widget.fleetId);
@@ -329,41 +405,172 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         slots[slotIdx]['truckLoad'] = currentLoad;
         transaction.update(fleetRef, {'slots': slots});
 
-        final bids = await ContractsService.getBidsForContractStream(
-          contract.id,
-        ).first;
-        final acceptedBid = bids.firstWhere((b) => b.bidderId == user.uid);
-        final moneyGained = amount * acceptedBid.pricePerUnit;
-
-        final currentMoney =
-            (userSnap.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
-        final currentXp =
-            (userSnap.data()?['experience'] as num?)?.toInt() ?? 0;
+        // Calculate money and experience using contractFulfilled rules
+        final moneyGained = (amount * (contract.acceptedPrice ?? 0)).toDouble();
 
         final m3PerUnit = (matData['m3PerUnit'] as num).toDouble();
         final totalM3 = amount * m3PerUnit;
         final materialInfo = await _getMaterialInfo(materialId);
         final grade = materialInfo?['grade'] as int? ?? 1;
 
-        final xpGained = ExperienceService.calculatePurchaseXp(totalM3, grade);
+        // Check if this completes the contract
+        final willCompleteContract =
+            (contract.fulfilledQuantity + amount) >= contract.quantity;
+
+        // XP base usando contractFulfilled rules
+        int xpGained = ExperienceService.calculateContractFulfilledXp(
+          totalM3,
+          grade,
+          onTime: willCompleteContract,
+        );
+
+        // Update user money and experience
+        final currentMoney =
+            (userSnap.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
+        final currentXp =
+            (userSnap.data()?['experience'] as num?)?.toInt() ?? 0;
+
+        newXp = currentXp + xpGained;
 
         transaction.update(userRef, {
           'dinero': currentMoney + moneyGained,
-          'experience': currentXp + xpGained,
+          'experience': newXp,
         });
       });
 
-      await _loadFleetData();
+      // Check for level up
+      final newLevel = ExperienceService.getLevelFromExperience(newXp);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
 
+      // Reload data
+      // Clear the slider value BEFORE reloading to avoid constraint violations
+      _contractUnloadAmounts[contract.id] = 0;
+
+      await _loadFleetData();
+      await _loadLocationContracts();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Descargadas $amount unidades para el contrato'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al cumplir contrato: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Widget _buildContractUnloadButton(ContractModel contract) {
+    final amount = _contractUnloadAmounts[contract.id] ?? 0;
+    final isEnabled = amount > 0 && contract.acceptedPrice != null;
+
+    return IndustrialButton(
+      label: 'Descargar',
+      width: double.infinity,
+      height: 40,
+      fontSize: 14,
+      gradientTop: isEnabled ? Colors.green[400]! : Colors.grey[600]!,
+      gradientBottom: isEnabled ? Colors.green[700]! : Colors.grey[800]!,
+      borderColor: isEnabled ? Colors.green[600]! : Colors.grey[700]!,
+      onPressed: isEnabled ? () => _showUnloadDialog(contract) : null,
+    );
+  }
+
+  Future<void> _showUnloadDialog(ContractModel contract) async {
+    final amount = _contractUnloadAmounts[contract.id] ?? 0;
+    if (amount <= 0) return;
+
+    // Verificar si el contrato ha expirado
+    if (contract.isExpired) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Descargadas $amount unidades para el contrato'),
+        const SnackBar(
+          content: Text('Este contrato ha expirado'),
+          backgroundColor: Colors.red,
         ),
       );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error al cumplir contrato: $e')));
+      return;
+    }
+
+    final materialId = contract.materialId.toString();
+    final truckMaterial = truckLoad?[materialId] as Map<String, dynamic>?;
+    if (truckMaterial == null) return;
+
+    // Check amount doesn't exceed remaining quantity
+    if (amount > contract.remainingQuantity) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No puedes entregar más que la cantidad pendiente'),
+        ),
+      );
+      return;
+    }
+
+    // Calculate money and experience using contractFulfilled rules
+    final moneyAmount = (amount * contract.acceptedPrice!).toInt();
+    final m3PerUnit = (truckMaterial['m3PerUnit'] as num).toDouble();
+    final totalM3 = amount * m3PerUnit;
+    final materialInfo = await _getMaterialInfo(materialId);
+    final materialGrade = materialInfo?['grade'] as int? ?? 1;
+
+    // XP base usando contractFulfilled rules
+    int xpAmount = ExperienceService.calculateContractFulfilledXp(
+      totalM3,
+      materialGrade,
+    );
+
+    // Si esto completa el contrato, agregar bonus
+    final willCompleteContract =
+        (contract.fulfilledQuantity + amount) >= contract.quantity;
+    int bonusXp = 0;
+    if (willCompleteContract) {
+      // Bonus = quantity × baseXpPerM3[grade] × onTimeBonusPercent / 100
+      // Necesitamos acceder a las reglas, pero calculateContractFulfilledXp ya lo hace interno
+      // Calcular el bonus manualmente: baseXpPerM3 × cantidad × onTimeBonus%
+      // El calculateContractFulfilledXp con onTime=true incluye el bonus automáticamente
+      int xpWithBonus = ExperienceService.calculateContractFulfilledXp(
+        totalM3,
+        materialGrade,
+        onTime: true,
+      );
+      bonusXp = xpWithBonus - xpAmount;
+      xpAmount = xpWithBonus;
+    }
+
+    if (!mounted) return;
+
+    final xpDisplay = willCompleteContract
+        ? '$xpAmount XP (incluye +$bonusXp por completar a tiempo)'
+        : '$xpAmount XP';
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'Descargar Contrato',
+        description:
+            '¿Deseas descargar $amount unidades?\n\nImporte: ${moneyAmount.toStringAsFixed(2)} €\nExperiencia: $xpDisplay',
+        price: moneyAmount,
+        priceType: UnlockCostType.money,
+        onConfirm: () async {},
+      ),
+    );
+
+    if (confirmed == true) {
+      await _unloadToContract(contract);
     }
   }
 
@@ -479,7 +686,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             '¿Deseas mover $unitsToTransfer unidades de ${materialInfo?['name'] ?? materialId} al almacén?\n\nVolumen: ${totalM3.toStringAsFixed(2)} m³',
         price: 0, // No cost for moving
         priceType: UnlockCostType.money,
-        onConfirm: () async => Navigator.of(context).pop(true),
+        onConfirm: () async {},
       ),
     );
 
@@ -739,7 +946,7 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
             '¿Deseas cargar $unitsToTransfer unidades de ${materialInfo?['name'] ?? materialId} en el camión?\n\nVolumen: ${actualM3.toStringAsFixed(2)} m³',
         price: 0, // No cost for moving
         priceType: UnlockCostType.money,
-        onConfirm: () async => Navigator.of(context).pop(true),
+        onConfirm: () async {},
       ),
     );
 
@@ -2488,149 +2695,327 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(15, 23, 42, 0.8),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.secondary.withOpacity(0.5),
+                      color: const Color.fromRGBO(255, 255, 255, 0.3),
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Contratos en esta ubicación',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(height: 12),
-                      ..._locationContracts.map((contract) {
-                        final matId = contract.materialId.toString();
-                        final hasMaterial =
-                            truckLoad?.containsKey(matId) ?? false;
-                        final truckUnits = hasMaterial
-                            ? (truckLoad![matId]['units'] as num).toInt()
-                            : 0;
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _locationContracts.length,
+                        itemBuilder: (context, index) {
+                          final contract = _locationContracts[index];
+                          final matId = contract.materialId.toString();
+                          final hasMaterial =
+                              truckLoad?.containsKey(matId) ?? false;
+                          final truckUnits = hasMaterial
+                              ? (truckLoad![matId]['units'] as num).toInt()
+                              : 0;
+                          final canDeliver = hasMaterial && truckUnits > 0;
 
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  FutureBuilder<Map<String, dynamic>?>(
-                                    future: _getMaterialInfo(matId),
-                                    builder: (context, snap) {
-                                      final info = snap.data;
-                                      return snap.hasData
-                                          ? Image.asset(
-                                              'assets/images/materials/${info!['id']}.png',
-                                              width: 40,
-                                            )
-                                          : const Icon(
-                                              Icons.inventory,
-                                              color: Colors.white,
-                                            );
-                                    },
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    const Color.fromRGBO(30, 50, 80, 1),
+                                    const Color.fromRGBO(20, 35, 60, 1),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: canDeliver
+                                      ? Colors.white.withOpacity(0.6)
+                                      : Colors.grey.withOpacity(0.3),
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: canDeliver
+                                        ? Colors.amber.withOpacity(0.2)
+                                        : Colors.transparent,
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
                                   ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(14),
+                                child: Column(
+                                  children: [
+                                    Stack(
                                       children: [
-                                        Text(
-                                          'Contrato #${contract.id.substring(0, 8)}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                FutureBuilder<
+                                                  Map<String, dynamic>?
+                                                >(
+                                                  future: _getMaterialInfo(
+                                                    matId,
+                                                  ),
+                                                  builder: (context, snap) {
+                                                    final info = snap.data;
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.black26,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            6,
+                                                          ),
+                                                      child: snap.hasData
+                                                          ? Image.asset(
+                                                              'assets/images/materials/${info!['id']}.png',
+                                                              width: 44,
+                                                              height: 44,
+                                                            )
+                                                          : const Icon(
+                                                              Icons.inventory,
+                                                              color: Colors
+                                                                  .white70,
+                                                              size: 28,
+                                                            ),
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(width: 14),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      FutureBuilder<
+                                                        DocumentSnapshot
+                                                      >(
+                                                        future: FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                              'usuarios',
+                                                            )
+                                                            .doc(
+                                                              contract
+                                                                  .creatorId,
+                                                            )
+                                                            .get(),
+                                                        builder: (context, snap) {
+                                                          final userData =
+                                                              snap.data?.data()
+                                                                  as Map<
+                                                                    String,
+                                                                    dynamic
+                                                                  >?;
+                                                          final displayName =
+                                                              (userData?['empresa']
+                                                                      ?.toString()
+                                                                      .isNotEmpty ==
+                                                                  true)
+                                                              ? userData!['empresa']
+                                                              : (userData?['nickname']
+                                                                        ?.toString()
+                                                                        .isNotEmpty ==
+                                                                    true)
+                                                              ? userData!['nickname']
+                                                              : (userData?['nombre']
+                                                                        ?.toString()
+                                                                        .isNotEmpty ==
+                                                                    true)
+                                                              ? userData!['nombre']
+                                                              : 'Usuario';
+
+                                                          return Text(
+                                                            displayName ??
+                                                                'Usuario',
+                                                            style:
+                                                                const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 13,
+                                                                  letterSpacing:
+                                                                      0.3,
+                                                                ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        'Pendiente: ${contract.remainingQuantity} ud',
+                                                        style: const TextStyle(
+                                                          color: Colors.white70,
+                                                          fontSize: 11,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                        'Precio: ${contract.acceptedPrice ?? 0}€/ud',
+                                                        style: const TextStyle(
+                                                          color: Colors.white70,
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'Faltan: ${contract.remainingQuantity} uds',
-                                          style: const TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 12,
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Text(
+                                            contract.remainingTime,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 9,
+                                              letterSpacing: 0.2,
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  if (hasMaterial)
-                                    Text(
-                                      'En camión: $truckUnits',
-                                      style: const TextStyle(
-                                        color: AppColors.secondary,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              if (hasMaterial) ...[
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Slider(
-                                        value:
-                                            (_contractUnloadAmounts[contract
-                                                        .id] ??
-                                                    0)
-                                                .toDouble(),
-                                        min: 0,
-                                        max: truckUnits
-                                            .clamp(
-                                              0,
-                                              contract.remainingQuantity,
-                                            )
-                                            .toDouble(),
-                                        divisions: truckUnits.clamp(
-                                          1,
-                                          contract.remainingQuantity,
+                                    if (hasMaterial) ...[
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black26,
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
-                                        onChanged: (val) => setState(
-                                          () =>
-                                              _contractUnloadAmounts[contract
-                                                  .id] = val
-                                                  .toInt(),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 10,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Entregar:',
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.2,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Slider(
+                                                    value:
+                                                        (_contractUnloadAmounts[contract
+                                                                    .id] ??
+                                                                0)
+                                                            .toDouble(),
+                                                    min: 0,
+                                                    max: truckUnits
+                                                        .clamp(
+                                                          0,
+                                                          contract
+                                                              .remainingQuantity,
+                                                        )
+                                                        .toDouble(),
+                                                    divisions: truckUnits.clamp(
+                                                      1,
+                                                      contract
+                                                          .remainingQuantity,
+                                                    ),
+                                                    activeColor: Colors.white,
+                                                    inactiveColor: Colors.grey
+                                                        .withOpacity(0.3),
+                                                    onChanged: (val) => setState(
+                                                      () =>
+                                                          _contractUnloadAmounts[contract
+                                                              .id] = val
+                                                              .toInt(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${_contractUnloadAmounts[contract.id] ?? 0}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${_contractUnloadAmounts[contract.id] ?? 0}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                                      const SizedBox(height: 10),
+                                      _buildContractUnloadButton(contract),
+                                    ] else
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 8,
+                                            horizontal: 12,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.red.withOpacity(
+                                                0.3,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'No tienes este material en el camión',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
-                                IndustrialButton(
-                                  label: 'Descargar para Contrato',
-                                  gradientTop: const Color(0xFF4A90E2),
-                                  gradientBottom: const Color(0xFF357ABD),
-                                  borderColor: const Color(0xFF2E5F8D),
-                                  onPressed:
-                                      (_contractUnloadAmounts[contract.id] ??
-                                              0) >
-                                          0
-                                      ? () => _unloadToContract(contract)
-                                      : null,
-                                  width: double.infinity,
-                                ),
-                              ],
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

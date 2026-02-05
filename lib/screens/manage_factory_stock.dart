@@ -12,6 +12,8 @@ import 'package:industrial_app/data/materials/material_model.dart';
 
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/widgets/confirmation_dialog.dart';
+import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
+import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 
 class ManageFactoryStockScreen extends StatefulWidget {
   final int slotId;
@@ -198,173 +200,245 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
       );
     }
 
-    // Build confirmation message
-    String message =
-        '¿Mover ${quantity} unidades de ${material.name} al almacén?';
+    // Calculate manufacturing cost for grade 1 materials
+    int manufacturingCost = 0;
+    if (material.grade == 1) {
+      manufacturingCost = (quantity * averagePrice).toInt();
+    }
 
-    final bool? confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) =>
-          ConfirmationDialog(title: 'Confirmar acción', message: message),
-    );
+    // Show appropriate dialog based on material grade
+    if (material.grade == 1 && manufacturingCost > 0) {
+      // For grade 1, check money BEFORE showing dialog
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid)
+            .get();
+        final currentMoney = ((userDoc.data()?['dinero'] as num?) ?? 0).toInt();
 
-    if (confirmed == true) {
-      try {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user == null) return;
-
-        int newLevel = 0;
-        int oldLevel = 0;
-        int xpToAdd = 0;
-        await FirebaseFirestore.instance.runTransaction((transaction) async {
-          // Referencia al usuario
-          final userRef = FirebaseFirestore.instance
-              .collection('usuarios')
-              .doc(user.uid);
-
-          // Referencia a la subcolección warehouse_users
-          final warehouseUserRef = userRef
-              .collection('warehouse_users')
-              .doc(user.uid);
-
-          // PRIMERO: todas las lecturas
-          final warehouseUserSnap = await transaction.get(warehouseUserRef);
-          final userSnapshot = await transaction.get(userRef);
-          // Leer factories_users
-          final factoriesUserRef = userRef
-              .collection('factories_users')
-              .doc(user.uid);
-          final factoriesUserSnap = await transaction.get(factoriesUserRef);
-
-          // Procesar datos de warehouse
-          Map<String, dynamic> warehouseUserData = warehouseUserSnap.exists
-              ? Map<String, dynamic>.from(warehouseUserSnap.data() as Map)
-              : {'slots': []};
-
-          List slots = warehouseUserData['slots'] ?? [];
-          Map<String, dynamic>? slot = slots
-              .cast<Map<String, dynamic>?>()
-              .firstWhere(
-                (s) => s != null && s['warehouseId'] == material.grade,
-                orElse: () => null,
-              );
-          if (slot == null) {
-            slot = {
-              'warehouseId': material.grade,
-              'warehouseLevel': 1,
-              'storage': <String, dynamic>{},
-            };
-            slots.add(slot);
-          }
-
-          // Actualizar el stock en el almacén
-          final storage =
-              (slot['storage'] as Map<String, dynamic>?) ?? <String, dynamic>{};
-          final materialIdStr = material.id.toString();
-          final prevUnits = ((storage[materialIdStr]?['units'] as num?) ?? 0)
-              .toInt();
-          final prevAveragePrice =
-              ((storage[materialIdStr]?['averagePrice'] as num?) ?? 0.0)
-                  .toDouble();
-          final m3PerUnit = material.unitVolumeM3;
-
-          // Calcular media ponderada del averagePrice
-          double newAveragePrice = averagePrice;
-          if (prevUnits > 0) {
-            newAveragePrice =
-                (prevUnits * prevAveragePrice + quantity * averagePrice) /
-                (prevUnits + quantity);
-          }
-
-          storage[materialIdStr] = {
-            'units': prevUnits + quantity,
-            'm3PerUnit': m3PerUnit,
-            'averagePrice': newAveragePrice,
-          };
-          slot['storage'] = storage;
-          warehouseUserData['slots'] = slots;
-          transaction.set(warehouseUserRef, warehouseUserData);
-
-          // RESTAR stock en factories_users
-          if (factoriesUserSnap.exists) {
-            Map<String, dynamic> factoriesUserData = Map<String, dynamic>.from(
-              factoriesUserSnap.data() as Map,
+        if (currentMoney < manufacturingCost) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'No tienes suficiente dinero. Necesitas $manufacturingCost, tienes $currentMoney',
+                ),
+                backgroundColor: Colors.red,
+              ),
             );
-            List<dynamic> factorySlots = factoriesUserData['slots'] ?? [];
-            // Buscar el slot correspondiente
-            var factorySlot = factorySlots.firstWhere(
-              (s) => s['slotId'] == widget.slotId,
+          }
+          return;
+        }
+      }
+
+      // Show purchase dialog for grade 1 materials
+      final bool? confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => GenericPurchaseDialog(
+          title: 'Costes de Fabricación',
+          description:
+              '¿Deseas mover ${quantity} unidades de ${material.name} al almacén?\n\nSe te cobrarán los gastos de fabricación.',
+          price: manufacturingCost,
+          priceType: UnlockCostType.money,
+          onConfirm: () => _executeWarehouseTransfer(
+            material,
+            quantity,
+            averagePrice,
+            manufacturingCost,
+          ),
+        ),
+      );
+      return;
+    } else {
+      String message =
+          '¿Mover ${quantity} unidades de ${material.name} al almacén?';
+
+      final bool? confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) =>
+            ConfirmationDialog(title: 'Confirmar acción', message: message),
+      );
+
+      if (confirmed == true) {
+        await _executeWarehouseTransfer(material, quantity, averagePrice, 0);
+      }
+    }
+  }
+
+  Future<void> _executeWarehouseTransfer(
+    MaterialModel material,
+    int quantity,
+    double averagePrice,
+    int manufacturingCost,
+  ) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      int newLevel = 0;
+      int oldLevel = 0;
+      int xpToAdd = 0;
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        // Referencia al usuario
+        final userRef = FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(user.uid);
+
+        // Referencia a la subcolección warehouse_users
+        final warehouseUserRef = userRef
+            .collection('warehouse_users')
+            .doc(user.uid);
+
+        // PRIMERO: todas las lecturas
+        final warehouseUserSnap = await transaction.get(warehouseUserRef);
+        final userSnapshot = await transaction.get(userRef);
+        // Leer factories_users
+        final factoriesUserRef = userRef
+            .collection('factories_users')
+            .doc(user.uid);
+        final factoriesUserSnap = await transaction.get(factoriesUserRef);
+
+        // Procesar datos de warehouse
+        Map<String, dynamic> warehouseUserData = warehouseUserSnap.exists
+            ? Map<String, dynamic>.from(warehouseUserSnap.data() as Map)
+            : {'slots': []};
+
+        List slots = warehouseUserData['slots'] ?? [];
+        Map<String, dynamic>? slot = slots
+            .cast<Map<String, dynamic>?>()
+            .firstWhere(
+              (s) => s != null && s['warehouseId'] == material.grade,
               orElse: () => null,
             );
-            if (factorySlot != null) {
-              List<dynamic> storedMaterials =
-                  factorySlot['storedMaterials'] ?? [];
-              int index = storedMaterials.indexWhere(
-                (m) => m['materialId'] == material.id,
-              );
-              if (index != -1) {
-                var storedMaterial = storedMaterials[index];
-                int currentQty =
-                    (storedMaterial['quantity'] as num?)?.toInt() ?? 0;
-                int newQty = currentQty - quantity;
-                if (newQty <= 0) {
-                  // Eliminar el material si la cantidad es 0 o menor
-                  storedMaterials.removeAt(index);
-                } else {
-                  storedMaterial['quantity'] = newQty;
-                  storedMaterials[index] = storedMaterial;
-                }
-              }
-              factorySlot['storedMaterials'] = storedMaterials;
-            }
-            factoriesUserData['slots'] = factorySlots;
-            transaction.set(factoriesUserRef, factoriesUserData);
-          }
+        if (slot == null) {
+          slot = {
+            'warehouseId': material.grade,
+            'warehouseLevel': 1,
+            'storage': <String, dynamic>{},
+          };
+          slots.add(slot);
+        }
 
-          // Añadir experiencia al usuario y comprobar subida de nivel
-          final totalVolume = quantity * material.unitVolumeM3;
-          xpToAdd = ExperienceService.calculateProduceXp(
-            totalVolume,
-            material.grade,
-          );
-          final currentXp = (userSnapshot.data()?['experience'] as int?) ?? 0;
-          oldLevel = ExperienceService.getLevelFromExperience(currentXp);
-          final newXp = currentXp + xpToAdd;
-          newLevel = ExperienceService.getLevelFromExperience(newXp);
-          transaction.update(userRef, {'experience': newXp});
-        });
+        // Actualizar el stock en el almacén
+        final storage =
+            (slot['storage'] as Map<String, dynamic>?) ?? <String, dynamic>{};
+        final materialIdStr = material.id.toString();
+        final prevUnits = ((storage[materialIdStr]?['units'] as num?) ?? 0)
+            .toInt();
+        final prevAveragePrice =
+            ((storage[materialIdStr]?['averagePrice'] as num?) ?? 0.0)
+                .toDouble();
+        final m3PerUnit = material.unitVolumeM3;
 
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '${quantity} unidades de ${material.name} movidas al almacén',
-              ),
-              backgroundColor: Colors.green,
-            ),
-          );
-          // Reset selected quantity for this material y recalc capacity
-          selectedQuantities[material.id] = 0;
-          capacitiesByGrade[material.grade] = await _calculateWarehouseCapacity(
-            material.grade,
-          );
-          setState(() {});
+        // Calcular media ponderada del averagePrice
+        double newAveragePrice = averagePrice;
+        if (prevUnits > 0) {
+          newAveragePrice =
+              (prevUnits * prevAveragePrice + quantity * averagePrice) /
+              (prevUnits + quantity);
+        }
 
-          // Mostrar dialogo de subida de nivel si corresponde
-          if (newLevel > oldLevel) {
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        storage[materialIdStr] = {
+          'units': prevUnits + quantity,
+          'm3PerUnit': m3PerUnit,
+          'averagePrice': newAveragePrice,
+        };
+        slot['storage'] = storage;
+        warehouseUserData['slots'] = slots;
+        transaction.set(warehouseUserRef, warehouseUserData);
+
+        // RESTAR stock en factories_users
+        if (factoriesUserSnap.exists) {
+          Map<String, dynamic> factoriesUserData = Map<String, dynamic>.from(
+            factoriesUserSnap.data() as Map,
+          );
+          List<dynamic> factorySlots = factoriesUserData['slots'] ?? [];
+          // Buscar el slot correspondiente
+          var factorySlot = factorySlots.firstWhere(
+            (s) => s['slotId'] == widget.slotId,
+            orElse: () => null,
+          );
+          if (factorySlot != null) {
+            List<dynamic> storedMaterials =
+                factorySlot['storedMaterials'] ?? [];
+            int index = storedMaterials.indexWhere(
+              (m) => m['materialId'] == material.id,
             );
+            if (index != -1) {
+              var storedMaterial = storedMaterials[index];
+              int currentQty =
+                  (storedMaterial['quantity'] as num?)?.toInt() ?? 0;
+              int newQty = currentQty - quantity;
+              if (newQty <= 0) {
+                // Eliminar el material si la cantidad es 0 o menor
+                storedMaterials.removeAt(index);
+              } else {
+                storedMaterial['quantity'] = newQty;
+                storedMaterials[index] = storedMaterial;
+              }
+            }
+            factorySlot['storedMaterials'] = storedMaterials;
           }
+          factoriesUserData['slots'] = factorySlots;
+          transaction.set(factoriesUserRef, factoriesUserData);
         }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+
+        // Añadir experiencia al usuario y comprobar subida de nivel
+        final totalVolume = quantity * material.unitVolumeM3;
+        xpToAdd = ExperienceService.calculateProduceXp(
+          totalVolume,
+          material.grade,
+        );
+        final currentXp = (userSnapshot.data()?['experience'] as int?) ?? 0;
+        oldLevel = ExperienceService.getLevelFromExperience(currentXp);
+        final newXp = currentXp + xpToAdd;
+        newLevel = ExperienceService.getLevelFromExperience(newXp);
+
+        // Restar dinero si hay coste de fabricación
+        if (manufacturingCost > 0) {
+          final currentMoney = ((userSnapshot.data()?['dinero'] as num?) ?? 0)
+              .toInt();
+          final newMoney = currentMoney - manufacturingCost;
+          transaction.update(userRef, {
+            'experience': newXp,
+            'dinero': newMoney,
+          });
+        } else {
+          transaction.update(userRef, {'experience': newXp});
+        }
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${quantity} unidades de ${material.name} movidas al almacén',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Reset selected quantity for this material y recalc capacity
+        selectedQuantities[material.id] = 0;
+        capacitiesByGrade[material.grade] = await _calculateWarehouseCapacity(
+          material.grade,
+        );
+        setState(() {});
+
+        // Mostrar dialogo de subida de nivel si corresponde
+        if (newLevel > oldLevel) {
+          showDialog(
+            context: context,
+            builder: (context) =>
+                CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
           );
         }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
       }
     }
   }

@@ -11,9 +11,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
+import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
 import 'package:industrial_app/data/locations/distance_calculator.dart';
+import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
 import 'new_contract_screen.dart';
 
 class ContractsScreen extends StatefulWidget {
@@ -881,7 +883,7 @@ class _ContractCard extends StatelessWidget {
                     const SizedBox(height: 12),
                     _BidsList(
                       key: ValueKey(contract.id),
-                      contractId: contract.id,
+                      contract: contract,
                       onRefresh: onRefresh,
                       userHq: userHq,
                       currentUserId: currentUserId,
@@ -986,6 +988,19 @@ class _ContractCard extends StatelessWidget {
                       height: 45,
                     ),
                   ],
+                  if (contract.isExpired &&
+                      contract.status == ContractStatus.accepted) ...[
+                    const SizedBox(height: 16),
+                    IndustrialButton(
+                      label: 'DEVOLVER DINERO Y ELIMINAR',
+                      onPressed: () => _showReturnMoneyConfirmation(context),
+                      gradientTop: Colors.redAccent,
+                      gradientBottom: const Color(0xFFB71C1C),
+                      borderColor: const Color(0xFF7F0000),
+                      fontSize: 12,
+                      height: 45,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -993,6 +1008,46 @@ class _ContractCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showReturnMoneyConfirmation(BuildContext context) {
+    final notDeliveredUnits = contract.remainingQuantity;
+    final totalRefund = notDeliveredUnits * (contract.acceptedPrice ?? 0);
+
+    showDialog(
+      context: context,
+      builder: (context) => GenericPurchaseDialog(
+        title: 'Devolver Dinero',
+        description:
+            'El contrato ha caducado.\n\nSe devolverán: $notDeliveredUnits UD × ${contract.acceptedPrice} €/UD',
+        price: totalRefund,
+        priceType: UnlockCostType.money,
+        onConfirm: () async {
+          await _returnMoneyAndDeleteContract();
+          if (context.mounted) Navigator.pop(context);
+          onRefresh();
+        },
+      ),
+    );
+  }
+
+  Future<void> _returnMoneyAndDeleteContract() async {
+    try {
+      final notDeliveredUnits = contract.remainingQuantity;
+      final totalRefund = notDeliveredUnits * (contract.acceptedPrice ?? 0);
+
+      // Add money back to assignee
+      final assigneeRef = FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(contract.assigneeId);
+
+      await assigneeRef.update({'dinero': FieldValue.increment(totalRefund)});
+
+      // Delete contract from Supabase
+      await ContractsService.cancelContract(contract.id);
+    } catch (e) {
+      print('Error returning money: $e');
+    }
   }
 
   void _showCancelConfirmation(BuildContext context) {
@@ -1128,13 +1183,13 @@ class _StatusBadge extends StatelessWidget {
 }
 
 class _BidsList extends StatefulWidget {
-  final String contractId;
+  final ContractModel contract;
   final VoidCallback onRefresh;
   final LocationModel? userHq;
   final String currentUserId;
   const _BidsList({
     super.key,
-    required this.contractId,
+    required this.contract,
     required this.onRefresh,
     this.userHq,
     required this.currentUserId,
@@ -1148,7 +1203,7 @@ class _BidsListState extends State<_BidsList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ContractBidModel>>(
-      stream: ContractsService.getBidsForContractStream(widget.contractId),
+      stream: ContractsService.getBidsForContractStream(widget.contract.id),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return const Text(
@@ -1167,7 +1222,7 @@ class _BidsListState extends State<_BidsList> {
               .map(
                 (bid) => _BidderRow(
                   bid: bid,
-                  contractId: widget.contractId,
+                  contract: widget.contract,
                   onRefresh: () {
                     widget.onRefresh();
                     setState(() {});
@@ -1185,14 +1240,14 @@ class _BidsListState extends State<_BidsList> {
 
 class _BidderRow extends StatelessWidget {
   final ContractBidModel bid;
-  final String contractId;
+  final ContractModel contract;
   final VoidCallback onRefresh;
   final LocationModel? userHq;
   final String currentUserId;
 
   const _BidderRow({
     required this.bid,
-    required this.contractId,
+    required this.contract,
     required this.onRefresh,
     this.userHq,
     required this.currentUserId,
@@ -1284,12 +1339,27 @@ class _BidderRow extends StatelessWidget {
               IndustrialButton(
                 label: 'ACEPTAR PUJA',
                 onPressed: () async {
-                  await ContractsService.acceptBid(
-                    contractId,
-                    bid.bidderId,
-                    bid.pricePerUnit,
+                  final totalCost = contract.quantity * bid.pricePerUnit;
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => GenericPurchaseDialog(
+                      title: 'Aceptar Puja',
+                      description:
+                          '¿Deseas aceptar esta puja?\n\nSe te cobrará: ${contract.quantity} UD × ${bid.pricePerUnit} €/UD = $totalCost €',
+                      price: totalCost,
+                      priceType: UnlockCostType.money,
+                      onConfirm: () async {},
+                    ),
                   );
-                  onRefresh();
+
+                  if (confirmed == true) {
+                    await ContractsService.acceptBid(
+                      contract.id,
+                      bid.bidderId,
+                      bid.pricePerUnit,
+                    );
+                    onRefresh();
+                  }
                 },
                 gradientTop: AppColors.secondary,
                 gradientBottom: const Color(0xFF2E7D32),

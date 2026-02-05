@@ -533,6 +533,8 @@ class ParkingFleetCard extends StatelessWidget {
         .doc(user.uid);
 
     int cost = 0;
+    int lossAmount = 0;
+
     await FirebaseFirestore.instance.runTransaction((transaction) async {
       final fleetSnapshot = await transaction.get(fleetDocRef);
       if (!fleetSnapshot.exists) return;
@@ -544,28 +546,53 @@ class ParkingFleetCard extends StatelessWidget {
 
       final slot = slots[slotIndex];
       final existingCost = slot['accidentCost'] as int? ?? 0;
+      final existingLoss = slot['accidentalLoss'] as int? ?? 0;
 
       if (existingCost > 0) {
         cost = existingCost;
+        lossAmount = existingLoss;
       } else {
+        // Calcular costo de reparación
         final random = Random();
         cost = (truckSellValue * random.nextDouble() * 0.2).round();
+
+        // Calcular pérdida de carga
+        final Map<String, dynamic>? truckLoadMap =
+            slot['truckLoad'] as Map<String, dynamic>?;
+        int loadAmount = 0;
+        if (truckLoadMap != null && truckLoadMap.isNotEmpty) {
+          for (final material in truckLoadMap.values) {
+            if (material is Map<String, dynamic>) {
+              final units = (material['units'] as num?)?.toInt() ?? 0;
+              loadAmount += units;
+            }
+          }
+        }
+
+        final String loadType = slot['loadType'] as String? ?? 'STANDARD';
+        final lossPercent = loadType == 'GEMS'
+            ? random.nextDouble()
+            : random.nextDouble() * 0.2;
+        lossAmount = (loadAmount * lossPercent).round();
+
+        // Guardar ambos valores
         slots[slotIndex]['accidentCost'] = cost;
+        slots[slotIndex]['accidentalLoss'] = lossAmount;
         transaction.update(fleetDocRef, {'slots': slots});
+
+        debugPrint('===== GUARDADO DE ACCIDENTE =====');
+        debugPrint('Accident Cost guardado: $cost');
+        debugPrint('Accidental Loss guardado: $lossAmount');
+        debugPrint('==================================');
       }
     });
 
     if (cost == 0) return; // Something went wrong
 
-    // Assume load data is in firestoreData
-    final loadAmount = firestoreData?['loadAmount'] as int? ?? 0;
-    final loadType = firestoreData?['loadType'] as String? ?? 'STANDARD';
-
-    final random = Random();
-    final lossPercent = loadType == 'GEMS'
-        ? random.nextDouble()
-        : random.nextDouble() * 0.2;
-    final lossAmount = (loadAmount * lossPercent).round();
+    // Obtener datos de carga para mostrar en dialog
+    final Map<String, dynamic>? truckLoadMap =
+        firestoreData?['truckLoad'] as Map<String, dynamic>?;
+    final String loadType = firestoreData?['loadType'] as String? ?? 'STANDARD';
 
     final bool? confirmed = await showDialog<bool>(
       context: context,
@@ -616,16 +643,99 @@ class ParkingFleetCard extends StatelessWidget {
       if (slotIndex == -1) throw Exception('Slot no encontrado');
 
       final slot = slots[slotIndex];
-      final currentLoadAmount = slot['loadAmount'] as int? ?? 0;
 
-      // Deduct money
-      transaction.update(userDocRef, {'dinero': currentMoney - cost});
+      // Update load - reducir units en cada material
+      final Map<String, dynamic>? truckLoadMap =
+          slot['truckLoad'] as Map<String, dynamic>?;
+      final updatedTruckLoad = Map<String, dynamic>.from(truckLoadMap ?? {});
+      int remainingLoss = lossAmount;
 
-      // Update load
-      final newLoadAmount = max(0, currentLoadAmount - lossAmount);
-      slots[slotIndex]['loadAmount'] = newLoadAmount;
-      slots[slotIndex]['status'] = FleetStatus.enMarcha.value;
+      for (final materialId in updatedTruckLoad.keys) {
+        if (remainingLoss <= 0) break;
+
+        final material = updatedTruckLoad[materialId] as Map<String, dynamic>;
+        final currentUnits = (material['units'] as num?)?.toInt() ?? 0;
+        final unitsToRemove = min(remainingLoss, currentUnits);
+
+        updatedTruckLoad[materialId] = {
+          ...material,
+          'units': currentUnits - unitsToRemove,
+        };
+
+        remainingLoss -= unitsToRemove;
+      }
+
+      // Calcular el valor ponderado de la carga restante
+      int remainingValue = 0;
+      int totalRemainingUnits = 0;
+      Map<String, int> materialAveragePrices =
+          {}; // Para guardar averagePrice anterior
+
+      for (final material in updatedTruckLoad.values) {
+        if (material is Map<String, dynamic>) {
+          final remainingUnits = (material['units'] as num?)?.toInt() ?? 0;
+          final averagePrice = (material['averagePrice'] as num?)?.toInt() ?? 0;
+          remainingValue += remainingUnits * averagePrice;
+          totalRemainingUnits += remainingUnits;
+        }
+      }
+
+      // Distribuir el costo de reparación por unidad de carga restante
+      // newAveragePrice = oldAveragePrice + (accidentCost / totalRemainingUnits)
+      if (totalRemainingUnits > 0) {
+        final costPerUnit = cost / totalRemainingUnits;
+
+        for (final materialId in updatedTruckLoad.keys) {
+          final material = updatedTruckLoad[materialId] as Map<String, dynamic>;
+          final remainingUnits = (material['units'] as num?)?.toInt() ?? 0;
+          final oldAveragePrice =
+              (material['averagePrice'] as num?)?.toInt() ?? 0;
+
+          if (remainingUnits > 0) {
+            final newAveragePrice =
+                (oldAveragePrice + costPerUnit).round() as int;
+
+            updatedTruckLoad[materialId] = {
+              ...material,
+              'averagePrice': newAveragePrice,
+            };
+
+            debugPrint(
+              'Material $materialId: $oldAveragePrice + $costPerUnit = $newAveragePrice',
+            );
+          }
+        }
+
+        debugPrint('===== DISTRIBUCIÓN DE COSTO EN CARGA =====');
+        debugPrint('Valor carga (sin costo): $remainingValue');
+        debugPrint('Costo reparación distribuido: $cost');
+        debugPrint('Unidades restantes: $totalRemainingUnits');
+        debugPrint(
+          'Costo por unidad: ${(cost / totalRemainingUnits).toStringAsFixed(2)}',
+        );
+        debugPrint('Nuevo averagePrice = anterior + $costPerUnit');
+        debugPrint('==========================================');
+      }
+
+      // Deduct money for accident cost pero sumar valor de carga restante
+      final finalMoney = currentMoney - cost + remainingValue;
+      transaction.update(userDocRef, {'dinero': finalMoney});
+
+      slots[slotIndex]['truckLoad'] = updatedTruckLoad;
+      slots[slotIndex]['status'] = 'en destino';
       slots[slotIndex]['accidentCost'] = 0;
+      slots[slotIndex]['accidentalLoss'] = 0;
+
+      // Logs de confirmación
+      debugPrint('===== REINICIO DE FLOTA COMPLETADO =====');
+      debugPrint('Dinero anterior: $currentMoney');
+      debugPrint('Dinero por reparación: -$cost');
+      debugPrint('Valor de carga restante: +$remainingValue');
+      debugPrint('Dinero final: $finalMoney');
+      debugPrint('Carga perdida: $lossAmount');
+      debugPrint('accidentCost puesto a 0');
+      debugPrint('accidentalLoss puesto a 0');
+      debugPrint('=========================================');
 
       transaction.update(fleetDocRef, {'slots': slots});
     });
