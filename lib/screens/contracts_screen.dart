@@ -12,10 +12,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:industrial_app/widgets/industrial_button.dart';
 import 'package:industrial_app/widgets/custom_game_appbar.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
+import 'package:industrial_app/widgets/confirmation_dialog.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
 import 'package:industrial_app/data/locations/distance_calculator.dart';
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
+import 'package:collection/collection.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'new_contract_screen.dart';
 
 class ContractsScreen extends StatefulWidget {
@@ -635,77 +639,17 @@ class _ContractCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Info del creador y Status
+                  // Parte superior: Info a la izquierda, Status a la derecha
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Nombre y Sede del creador (Top-Left)
-                      FutureBuilder<DocumentSnapshot>(
-                        future: FirebaseFirestore.instance
-                            .collection('usuarios')
-                            .doc(
-                              contract.status == ContractStatus.accepted ||
-                                      contract.status ==
-                                          ContractStatus.fulfilled
-                                  ? contract.assigneeId
-                                  : contract.creatorId,
-                            )
-                            .get(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return const SizedBox.shrink();
-                          final userData =
-                              snapshot.data?.data() as Map<String, dynamic>?;
-
-                          // Jerarquía: Empresa > Nickname > Nombre
-                          final name =
-                              (userData?['empresa']?.toString().isNotEmpty ==
-                                  true)
-                              ? userData!['empresa']
-                              : (userData?['nickname']?.toString().isNotEmpty ==
-                                    true)
-                              ? userData!['nickname']
-                              : (userData?['nombre']?.toString().isNotEmpty ==
-                                    true)
-                              ? userData!['nombre']
-                              : 'Usuario';
-
-                          final hqId = userData?['headquarter_id'];
-
-                          final bool isAssignee =
-                              contract.status == ContractStatus.accepted ||
-                              contract.status == ContractStatus.fulfilled;
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                (isAssignee
-                                        ? 'ASIGNADO: $name'
-                                        : name.toString())
-                                    .toUpperCase(),
-                                style: GoogleFonts.orbitron(
-                                  color: isAssignee
-                                      ? AppColors.secondary
-                                      : Colors.white,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                              if (hqId != null)
-                                _CityText(
-                                  cityId: hqId.toString(),
-                                  userHq:
-                                      (isAssignee
-                                              ? contract.assigneeId
-                                              : contract.creatorId) !=
-                                          currentUserId
-                                      ? userHq
-                                      : null,
-                                ),
-                            ],
-                          );
-                        },
+                      // Info del creador, asignado y ubicación (Top-Left)
+                      Expanded(
+                        child: _ContractHeaderInfo(
+                          contract: contract,
+                          currentUserId: currentUserId,
+                        ),
                       ),
                       // Status (Top-Right)
                       _StatusBadge(status: contract.status),
@@ -1134,9 +1078,222 @@ class _ContractCard extends StatelessWidget {
     );
   }
 
-  void _moveStockToWarehouse(BuildContext context) {
-    // Implementation for moving stock
-    ContractsService.moveStockToWarehouse(contract.id, contract.pendingStock);
+  Future<void> _moveStockToWarehouse(BuildContext context) async {
+    // Validate that warehouse exists and has capacity
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuario no autenticado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      print('📦 [MOVE STOCK] Starting moveStockToWarehouse');
+
+      // Get material info to check grade
+      final materialsJson = await rootBundle.loadString(
+        'assets/data/materials.json',
+      );
+      final materialsData = json.decode(materialsJson);
+      final materials = materialsData['materials'] as List;
+      final materialInfo = materials.firstWhere(
+        (m) => m['id'].toString() == contract.materialId.toString(),
+        orElse: () => null,
+      );
+
+      if (materialInfo == null) {
+        print('📦 [MOVE STOCK] Material not found: ${contract.materialId}');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No se pudo obtener información del material'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      final materialGrade = materialInfo['grade'] as int? ?? 1;
+      final m3PerUnit =
+          (materialInfo['unitVolumeM3'] as num?)?.toDouble() ?? 1.0;
+      final requiredM3 = contract.pendingStock * m3PerUnit;
+
+      print(
+        '📦 [MOVE STOCK] Material: ${materialInfo['name']}, Grade: $materialGrade, Stock: ${contract.pendingStock}, m3PerUnit: $m3PerUnit, TotalM3Needed: $requiredM3',
+      );
+
+      // Get warehouse data
+      final warehouseDoc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid)
+          .get();
+
+      if (!warehouseDoc.exists ||
+          (warehouseDoc.data()?['slots'] as List?)?.isEmpty == true) {
+        print('📦 [MOVE STOCK] No warehouse found');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No tienes un almacén configurado'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Get warehouse info
+      final warehouseJson = await rootBundle.loadString(
+        'assets/data/warehouse.json',
+      );
+      final warehouseData = json.decode(warehouseJson);
+      final warehouses = warehouseData['warehouses'] as List;
+
+      final warehouseSlots = List<Map<String, dynamic>>.from(
+        warehouseDoc.data()?['slots'] ?? [],
+      );
+
+      print('📦 [MOVE STOCK] Found ${warehouseSlots.length} warehouse slots');
+
+      // Find a suitable warehouse slot with enough capacity and compatible grade
+      bool foundWarehouse = false;
+      for (final slot in warehouseSlots) {
+        final warehouseId = slot['warehouseId'] as int?;
+        if (warehouseId == null) continue;
+
+        final warehouse = warehouses.firstWhere(
+          (w) => w['id'] == warehouseId,
+          orElse: () => null,
+        );
+        if (warehouse == null) {
+          print('📦 [MOVE STOCK] Warehouse $warehouseId not found in config');
+          continue;
+        }
+
+        // Check grade compatibility - warehouse grade must be >= material grade
+        final warehouseGrade = warehouse['grade'] as int? ?? 1;
+        print(
+          '📦 [MOVE STOCK] Checking warehouse ID $warehouseId - Grade: $warehouseGrade vs Material Grade: $materialGrade',
+        );
+
+        if (warehouseGrade < materialGrade) {
+          print(
+            '📦 [MOVE STOCK] Skipping warehouse $warehouseId - grade too low',
+          );
+          continue; // Skip warehouse if it doesn't support this material grade
+        }
+
+        final level =
+            slot['level'] as int? ?? slot['warehouseLevel'] as int? ?? 1;
+        final baseCapacity =
+            (warehouse['capacity_m3'] as num?)?.toDouble() ?? 0;
+        final totalCapacity = baseCapacity + (level * 100);
+
+        print(
+          '📦 [MOVE STOCK] Warehouse $warehouseId - Level: $level, BaseCapacity: $baseCapacity, TotalCapacity: $totalCapacity',
+        );
+
+        final storage = slot['storage'] as Map<String, dynamic>? ?? {};
+        double currentUsage = 0;
+        storage.forEach((matId, matData) {
+          final units = (matData['units'] as num?)?.toDouble() ?? 0;
+          final m3 = (matData['m3PerUnit'] as num?)?.toDouble() ?? 0;
+          currentUsage += units * m3;
+          print(
+            '📦 [MOVE STOCK]   - Material $matId: $units units × $m3 m3/unit = ${units * m3} m3',
+          );
+        });
+
+        final availableCapacity = totalCapacity - currentUsage;
+
+        print(
+          '📦 [MOVE STOCK] Current usage: $currentUsage m3, Available: $availableCapacity m3, Needed: $requiredM3 m3',
+        );
+
+        if (availableCapacity >= requiredM3) {
+          print('📦 [MOVE STOCK] Found suitable warehouse: ID $warehouseId');
+          foundWarehouse = true;
+          break;
+        }
+      }
+
+      if (!foundWarehouse) {
+        print(
+          '📦 [MOVE STOCK] No suitable warehouse found for grade $materialGrade',
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'No tienes un almacén de grado $materialGrade con espacio suficiente',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // If validation passed, show confirmation dialog
+      print(
+        '📦 [MOVE STOCK] Validation passed, showing confirmation dialog...',
+      );
+
+      final materialName =
+          materialInfo['name'] as String? ?? 'Material desconocido';
+      final message =
+          '¿Mover ${contract.pendingStock} unidades de $materialName (${requiredM3.toStringAsFixed(1)} m³) al almacén?';
+
+      if (context.mounted) {
+        final bool? confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => ConfirmationDialog(
+            title: 'Confirmar movimiento',
+            message: message,
+          ),
+        );
+
+        if (confirmed != true) {
+          print('📦 [MOVE STOCK] Confirmation cancelled by user');
+          return;
+        }
+      }
+
+      // Move stock after confirmation
+      print('📦 [MOVE STOCK] Moving stock...');
+      await ContractsService.moveStockToWarehouse(
+        contract.id,
+        contract.pendingStock,
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Stock movido al almacén correctamente'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Refresh the contracts list to reflect the changes
+        onRefresh();
+      }
+      print('📦 [MOVE STOCK] Stock moved successfully');
+    } catch (e) {
+      print('📦 [MOVE STOCK] Error: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al mover stock: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
 
@@ -1340,6 +1497,45 @@ class _BidderRow extends StatelessWidget {
                 label: 'ACEPTAR PUJA',
                 onPressed: () async {
                   final totalCost = contract.quantity * bid.pricePerUnit;
+                  print('💰 [CONTRACTS SCREEN] Accept bid pressed');
+                  print('💰 [CONTRACTS SCREEN] contractId: ${contract.id}');
+                  print('💰 [CONTRACTS SCREEN] bidderId: ${bid.bidderId}');
+                  print('💰 [CONTRACTS SCREEN] totalCost: $totalCost');
+
+                  // Check if user has enough money
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user == null) {
+                    print('💰 [CONTRACTS SCREEN] User is null');
+                    return;
+                  }
+
+                  // Force refresh from server, not from cache
+                  final userDoc = await FirebaseFirestore.instance
+                      .collection('usuarios')
+                      .doc(user.uid)
+                      .get(GetOptions(source: Source.server));
+
+                  final currentMoney =
+                      (userDoc.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
+                  print(
+                    '💰 [CONTRACTS SCREEN] User current money (from server): $currentMoney',
+                  );
+
+                  if (currentMoney < totalCost) {
+                    print('💰 [CONTRACTS SCREEN] Not enough money');
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'No tienes suficiente dinero. Necesitas $totalCost € y solo tienes ${currentMoney.toStringAsFixed(2)} €',
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    return;
+                  }
+
                   final confirmed = await showDialog<bool>(
                     context: context,
                     builder: (context) => GenericPurchaseDialog(
@@ -1353,12 +1549,30 @@ class _BidderRow extends StatelessWidget {
                   );
 
                   if (confirmed == true) {
-                    await ContractsService.acceptBid(
-                      contract.id,
-                      bid.bidderId,
-                      bid.pricePerUnit,
+                    print(
+                      '💰 [CONTRACTS SCREEN] Dialog confirmed, calling acceptBid',
                     );
-                    onRefresh();
+                    try {
+                      await ContractsService.acceptBid(
+                        contract.id,
+                        bid.bidderId,
+                        bid.pricePerUnit,
+                      );
+                      print('💰 [CONTRACTS SCREEN] acceptBid completed');
+                      onRefresh();
+                    } catch (e) {
+                      print('💰 [CONTRACTS SCREEN] Error: $e');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error al aceptar puja: $e'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  } else {
+                    print('💰 [CONTRACTS SCREEN] Dialog cancelled');
                   }
                 },
                 gradientTop: AppColors.secondary,
@@ -1565,5 +1779,178 @@ class _BidDialogState extends State<_BidDialog> {
         ),
       ),
     );
+  }
+}
+
+class _ContractHeaderInfo extends StatelessWidget {
+  final ContractModel contract;
+  final String currentUserId;
+
+  const _ContractHeaderInfo({
+    required this.contract,
+    required this.currentUserId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _loadContractInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+
+        final info = snapshot.data!;
+        final creatorName = info['creator'] as String;
+        final assigneeName = info['assignee'] as String;
+        final location = info['location'] as String;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Creador
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Creador: ',
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white60,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  TextSpan(
+                    text: creatorName,
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 3),
+
+            // Asignado
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Asignado: ',
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white60,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  if (assigneeName.isNotEmpty)
+                    TextSpan(
+                      text: assigneeName,
+                      style: GoogleFonts.orbitron(
+                        color: AppColors.secondary,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 3),
+
+            // Ubicación
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Ubicación: ',
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white60,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  TextSpan(
+                    text: location,
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> _loadContractInfo() async {
+    // Cargar datos del creador
+    final creatorDoc = await FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(contract.creatorId)
+        .get();
+    final creatorData = creatorDoc.data();
+    final creatorName = (creatorData?['empresa']?.toString().isNotEmpty == true)
+        ? creatorData!['empresa']
+        : (creatorData?['nickname']?.toString().isNotEmpty == true)
+        ? creatorData!['nickname']
+        : (creatorData?['nombre']?.toString().isNotEmpty == true)
+        ? creatorData!['nombre']
+        : 'Usuario';
+
+    // Cargar datos del asignado (solo si existe assigneeId)
+    String assigneeName = '';
+    if (contract.assigneeId != null) {
+      final assigneeDoc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(contract.assigneeId!)
+          .get();
+      final assigneeData = assigneeDoc.data();
+      assigneeName = (assigneeData?['empresa']?.toString().isNotEmpty == true)
+          ? assigneeData!['empresa']
+          : (assigneeData?['nickname']?.toString().isNotEmpty == true)
+          ? assigneeData!['nickname']
+          : (assigneeData?['nombre']?.toString().isNotEmpty == true)
+          ? assigneeData!['nombre']
+          : 'Sin asignar';
+    }
+
+    // Cargar ubicación
+    String locationName = 'Desconocida';
+    if (contract.locationId == 'Sede principal' ||
+        contract.locationId?.toLowerCase() == 'sede principal') {
+      // Buscar la ciudad del creador
+      final creatorHqId = creatorData?['headquarter_id']?.toString();
+      if (creatorHqId != null) {
+        final locations = await LocationsRepository.loadLocations();
+        final location = locations.firstWhereOrNull(
+          (l) => l.id.toString() == creatorHqId,
+        );
+        locationName = location?.city ?? creatorHqId;
+      }
+    } else {
+      // Búsqueda normal por locationId
+      final locations = await LocationsRepository.loadLocations();
+      final location = locations.firstWhereOrNull(
+        (l) => l.id.toString() == contract.locationId,
+      );
+      locationName = location?.city ?? contract.locationId ?? 'Desconocida';
+    }
+
+    return {
+      'creator': creatorName,
+      'assignee': assigneeName,
+      'location': locationName,
+    };
   }
 }

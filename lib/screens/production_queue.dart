@@ -1,4 +1,3 @@
-import 'package:industrial_app/widgets/celebration_dialog.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

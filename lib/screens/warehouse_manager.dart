@@ -15,6 +15,7 @@ import 'package:industrial_app/services/contracts_service.dart';
 import 'package:industrial_app/data/experience/experience_service.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
+import 'package:industrial_app/widgets/celebration_dialog.dart';
 
 class WarehouseManagerScreen extends StatefulWidget {
   final int warehouseId;
@@ -78,46 +79,30 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
     }
   }
 
-  Future<String> _getLocationName() async {
+  Future<String?> _getUserHeadquarterId() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) return 'Desconocido';
+      if (user == null) {
+        debugPrint('📦 [WAREHOUSE] No user logged in');
+        return null;
+      }
 
       final doc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid)
-          .collection('warehouse_users')
-          .doc(user.uid)
           .get();
 
-      if (!doc.exists) return 'Desconocido';
+      if (!doc.exists) {
+        debugPrint('📦 [WAREHOUSE] User document not found');
+        return null;
+      }
 
-      final slots = List<Map<String, dynamic>>.from(doc.data()?['slots'] ?? []);
-      final slot = slots.firstWhere(
-        (s) => s['warehouseId'] == widget.warehouseId,
-        orElse: () => {},
-      );
-
-      if (slot.isEmpty) return 'Desconocido';
-
-      final lat = (slot['latitude'] as num).toDouble();
-      final lng = (slot['longitude'] as num).toDouble();
-
-      final locations = await LocationsRepository.loadLocations();
-      final location = locations.firstWhere(
-        (l) => l.latitude == lat && l.longitude == lng,
-        orElse: () => LocationModel(
-          id: -1,
-          city: 'Desconocido',
-          latitude: lat,
-          longitude: lng,
-          countryIso: 'XX',
-          hasMarket: false,
-        ),
-      );
-      return location.city;
-    } catch (e) {
-      return 'Ubicación desconocida';
+      final hqId = doc.data()?['headquarter_id'];
+      return hqId?.toString();
+    } catch (e, st) {
+      debugPrint('📦 [WAREHOUSE] Error in _getUserHeadquarterId: $e');
+      debugPrint('📦 [WAREHOUSE] Stack: $st');
+      return null;
     }
   }
 
@@ -126,16 +111,56 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
     if (user == null) return;
 
     try {
-      final cityName = await _getLocationName();
+      final userHqId = await _getUserHeadquarterId();
+
+      if (userHqId == null) {
+        if (mounted) {
+          setState(() {
+            _locationContracts = [];
+          });
+        }
+        return;
+      }
+
       final contracts = await ContractsService.getAssignedToMeStream(
         user.uid,
       ).first;
 
+      final filteredContracts = <ContractModel>[];
+
+      for (var contract in contracts) {
+        String? contractLocationId = contract.locationId;
+
+        // Si es "Sede Principal", buscar la sede del creador en Firebase
+        if (contractLocationId != null &&
+            (contractLocationId.toLowerCase() == 'sede principal' ||
+                contractLocationId.toLowerCase() == 'sede')) {
+          try {
+            final creatorDoc = await FirebaseFirestore.instance
+                .collection('usuarios')
+                .doc(contract.creatorId)
+                .get();
+
+            final rawHqId = creatorDoc.data()?['headquarter_id'];
+            final hqId = rawHqId?.toString();
+
+            if (hqId != null && hqId.isNotEmpty) {
+              contractLocationId = hqId;
+            }
+          } catch (e) {
+            // Error resolving Sede Principal, skip contract
+          }
+        }
+
+        // Comparar locationIds con la sede del usuario
+        if (contractLocationId == userHqId) {
+          filteredContracts.add(contract);
+        }
+      }
+
       if (mounted) {
         setState(() {
-          _locationContracts = contracts
-              .where((c) => c.locationId == cityName)
-              .toList();
+          _locationContracts = filteredContracts;
           _contractFulfillAmounts = {for (var c in _locationContracts) c.id: 0};
         });
       }
@@ -148,11 +173,132 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
     final amount = _contractFulfillAmounts[contract.id] ?? 0;
     if (amount <= 0) return;
 
+    // Verificar si el contrato ha sido cancelado
+    if (contract.status == 'cancelled') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No puedes entregar en un contrato cancelado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Verificar si el contrato ha expirado
+    if (contract.isExpired) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Este contrato ha expirado'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final materialId = contract.materialId.toString();
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
     try {
+      // Load warehouse data to verify material exists
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final warehouseDoc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .collection('warehouse_users')
+          .doc(user.uid)
+          .get();
+
+      if (!warehouseDoc.exists) return;
+
+      final warehouseData = warehouseDoc.data()!;
+      final slots = List<Map<String, dynamic>>.from(
+        warehouseData['slots'] ?? [],
+      );
+      final slotIdx = slots.indexWhere(
+        (s) => s['warehouseId'] == widget.warehouseId,
+      );
+      if (slotIdx == -1) return;
+
+      final warehouseSlot = slots[slotIdx];
+      final slotStorage =
+          warehouseSlot['storage'] as Map<String, dynamic>? ?? {};
+
+      // Verify warehouse has enough material
+      if (!slotStorage.containsKey(materialId)) return;
+
+      final warehouseUnits =
+          (slotStorage[materialId]['units'] as num?)?.toInt() ?? 0;
+      if (amount > warehouseUnits) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No tienes suficientes unidades en el almacén'),
+          ),
+        );
+        return;
+      }
+
+      if (amount > contract.remainingQuantity) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No puedes entregar más que la cantidad pendiente'),
+          ),
+        );
+        return;
+      }
+
+      // Calculate money and XP for dialog
+      final moneyAmount = amount * (contract.acceptedPrice ?? 0);
+
+      final matData = slotStorage[materialId] as Map<String, dynamic>;
+      final m3PerUnit = (matData['m3PerUnit'] as num).toDouble();
+      final totalM3 = amount * m3PerUnit;
+      final materialInfo = await _getMaterialInfo(materialId);
+      final grade = materialInfo?['grade'] as int? ?? 1;
+
+      // Check if this completes the contract
+      final willCompleteContract =
+          (contract.fulfilledQuantity + amount) >= contract.quantity;
+
+      int xpGained = ExperienceService.calculateContractFulfilledXp(
+        totalM3,
+        grade,
+        onTime: willCompleteContract,
+      );
+
+      final xpDisplay = willCompleteContract
+          ? '+$xpGained XP (Completado)'
+          : '+$xpGained XP';
+
+      // Show generic dialog
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => GenericPurchaseDialog(
+          title: 'Entregar Contrato',
+          description:
+              '¿Deseas entregar $amount unidades?\n\nImporte: ${moneyAmount.toStringAsFixed(2)} €\nExperiencia: $xpDisplay',
+          price: moneyAmount,
+          priceType: UnlockCostType.money,
+          onConfirm: () async {},
+        ),
+      );
+
+      if (confirmed != true) return;
+
+      // Get current experience to check for level up
+      final userDocBefore = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .get();
+      final currentXpBefore =
+          (userDocBefore.data()?['experience'] as num?)?.toInt() ?? 0;
+      final oldLevel = ExperienceService.getLevelFromExperience(
+        currentXpBefore,
+      );
+
+      // Update fulfillment in Supabase
       await ContractsService.updateFulfillment(contract.id, amount);
 
       final warehouseRef = FirebaseFirestore.instance
@@ -164,6 +310,9 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
       final userRef = FirebaseFirestore.instance
           .collection('usuarios')
           .doc(user.uid);
+
+      // Track new XP for level check
+      int newXp = 0;
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         final warehouseSnap = await transaction.get(warehouseRef);
@@ -185,8 +334,10 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
         );
         if (!currentStorage.containsKey(materialId)) return;
 
-        final matData = Map<String, dynamic>.from(currentStorage[materialId]);
-        final currentUnits = (matData['units'] as num).toInt();
+        final updatedMatData = Map<String, dynamic>.from(
+          currentStorage[materialId],
+        );
+        final currentUnits = (updatedMatData['units'] as num).toInt();
 
         if (currentUnits < amount) {
           throw Exception('No tienes suficientes unidades en el almacén');
@@ -195,47 +346,60 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
         if (currentUnits == amount) {
           currentStorage.remove(materialId);
         } else {
-          matData['units'] = currentUnits - amount;
-          currentStorage[materialId] = matData;
+          updatedMatData['units'] = currentUnits - amount;
+          currentStorage[materialId] = updatedMatData;
         }
 
         slots[slotIdx]['storage'] = currentStorage;
         transaction.update(warehouseRef, {'slots': slots});
-
-        final bids = await ContractsService.getBidsForContractStream(
-          contract.id,
-        ).first;
-        final acceptedBid = bids.firstWhere((b) => b.bidderId == user.uid);
-        final moneyGained = amount * acceptedBid.pricePerUnit;
 
         final currentMoney =
             (userSnap.data()?['dinero'] as num?)?.toDouble() ?? 0.0;
         final currentXp =
             (userSnap.data()?['experience'] as num?)?.toInt() ?? 0;
 
-        final m3PerUnit = (matData['m3PerUnit'] as num).toDouble();
-        final totalM3 = amount * m3PerUnit;
-        final materialInfo = await _getMaterialInfo(materialId);
-        final grade = materialInfo?['grade'] as int? ?? 1;
-
-        final xpGained = ExperienceService.calculatePurchaseXp(totalM3, grade);
+        newXp = currentXp + xpGained;
 
         transaction.update(userRef, {
-          'dinero': currentMoney + moneyGained,
-          'experience': currentXp + xpGained,
+          'dinero': currentMoney + moneyAmount,
+          'experience': newXp,
         });
       });
 
-      _loadWarehouseData();
-      _loadLocationContracts();
+      // Check for level up
+      final newLevel = ExperienceService.getLevelFromExperience(newXp);
+      if (newLevel > oldLevel && mounted) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              CelebrationDialog(bodyText: '¡Nivel $newLevel alcanzado!'),
+        );
+      }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Movidas $amount unidades al contrato')),
-      );
+      // Clear the slider value BEFORE reloading
+      _contractFulfillAmounts[contract.id] = 0;
+
+      // Reload all data
+      await _loadWarehouseData();
+      await _loadLocationContracts();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Entregadas $amount unidades al contrato'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error al cumplir contrato: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al cumplir contrato: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -533,170 +697,6 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Contracts section
-                  if (_locationContracts.isNotEmpty) ...[
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B).withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: const Color(0xFF4A90E2).withOpacity(0.5),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF4A90E2).withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.assignment,
-                                color: Color(0xFF4A90E2),
-                                size: 20,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Contratos en esta Ubicación',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          ..._locationContracts.map((contract) {
-                            final materialId = contract.materialId.toString();
-                            final inWarehouseUnits =
-                                (storage[materialId]?['units'] as num?)
-                                    ?.toInt() ??
-                                0;
-                            final hasMaterial = inWarehouseUnits > 0;
-
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.blueGrey.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Contrato #${contract.id.substring(0, 8)}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Faltan: ${contract.remainingQuantity} uds',
-                                              style: const TextStyle(
-                                                color: Colors.white70,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (hasMaterial)
-                                        Text(
-                                          'En almacén: $inWarehouseUnits',
-                                          style: const TextStyle(
-                                            color: AppColors.secondary,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  if (hasMaterial) ...[
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Slider(
-                                            value:
-                                                (_contractFulfillAmounts[contract
-                                                            .id] ??
-                                                        0)
-                                                    .toDouble(),
-                                            min: 0,
-                                            max: inWarehouseUnits
-                                                .clamp(
-                                                  0,
-                                                  contract.remainingQuantity,
-                                                )
-                                                .toDouble(),
-                                            divisions: inWarehouseUnits.clamp(
-                                              1,
-                                              contract.remainingQuantity,
-                                            ),
-                                            onChanged: (val) => setState(
-                                              () =>
-                                                  _contractFulfillAmounts[contract
-                                                      .id] = val
-                                                      .toInt(),
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          '${_contractFulfillAmounts[contract.id] ?? 0}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    IndustrialButton(
-                                      label: 'Entregar para Contrato',
-                                      gradientTop: const Color(0xFF4A90E2),
-                                      gradientBottom: const Color(0xFF357ABD),
-                                      borderColor: const Color(0xFF2E5F8D),
-                                      onPressed:
-                                          (_contractFulfillAmounts[contract
-                                                      .id] ??
-                                                  0) >
-                                              0
-                                          ? () =>
-                                                _fulfillFromWarehouse(contract)
-                                          : null,
-                                      width: double.infinity,
-                                    ),
-                                  ] else ...[
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      'No tienes este material en el almacén',
-                                      style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
                   // Stored materials section
                   Container(
                     width: double.infinity,
@@ -914,6 +914,365 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  // Contracts section
+                  if (_locationContracts.isNotEmpty) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(15, 23, 42, 0.8),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color.fromRGBO(255, 255, 255, 0.3),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Contratos en esta ubicación',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(height: 12),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _locationContracts.length,
+                            itemBuilder: (context, index) {
+                              final contract = _locationContracts[index];
+                              final matId = contract.materialId.toString();
+                              final hasMaterial =
+                                  (storage?.containsKey(matId) ?? false);
+                              final warehouseUnits = hasMaterial
+                                  ? (storage![matId]['units'] as num).toInt()
+                                  : 0;
+                              final canFulfill =
+                                  hasMaterial && warehouseUnits > 0;
+
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        const Color.fromRGBO(30, 50, 80, 1),
+                                        const Color.fromRGBO(20, 35, 60, 1),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: canFulfill
+                                          ? Colors.white.withOpacity(0.6)
+                                          : Colors.grey.withOpacity(0.3),
+                                      width: 1.5,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: canFulfill
+                                            ? Colors.amber.withOpacity(0.2)
+                                            : Colors.transparent,
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(14),
+                                    child: Column(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    FutureBuilder<
+                                                      Map<String, dynamic>?
+                                                    >(
+                                                      future: _getMaterialInfo(
+                                                        matId,
+                                                      ),
+                                                      builder: (context, snap) {
+                                                        final info = snap.data;
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            color:
+                                                                Colors.black26,
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  8,
+                                                                ),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                6,
+                                                              ),
+                                                          child: snap.hasData
+                                                              ? Image.asset(
+                                                                  'assets/images/materials/${info!['id']}.png',
+                                                                  width: 44,
+                                                                  height: 44,
+                                                                )
+                                                              : const Icon(
+                                                                  Icons
+                                                                      .inventory,
+                                                                  color: Colors
+                                                                      .white70,
+                                                                  size: 28,
+                                                                ),
+                                                        );
+                                                      },
+                                                    ),
+                                                    const SizedBox(width: 14),
+                                                    Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          FutureBuilder<
+                                                            DocumentSnapshot
+                                                          >(
+                                                            future: FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                  'usuarios',
+                                                                )
+                                                                .doc(
+                                                                  contract
+                                                                      .creatorId,
+                                                                )
+                                                                .get(),
+                                                            builder: (context, snap) {
+                                                              final userData =
+                                                                  snap.data
+                                                                          ?.data()
+                                                                      as Map<
+                                                                        String,
+                                                                        dynamic
+                                                                      >?;
+                                                              final displayName =
+                                                                  (userData?['empresa']
+                                                                          ?.toString()
+                                                                          .isNotEmpty ==
+                                                                      true)
+                                                                  ? userData!['empresa']
+                                                                  : (userData?['nickname']
+                                                                            ?.toString()
+                                                                            .isNotEmpty ==
+                                                                        true)
+                                                                  ? userData!['nickname']
+                                                                  : (userData?['nombre']
+                                                                            ?.toString()
+                                                                            .isNotEmpty ==
+                                                                        true)
+                                                                  ? userData!['nombre']
+                                                                  : 'Usuario';
+
+                                                              return Text(
+                                                                displayName ??
+                                                                    'Usuario',
+                                                                style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 13,
+                                                                  letterSpacing:
+                                                                      0.3,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 4,
+                                                          ),
+                                                          Text(
+                                                            'Pendiente: ${contract.remainingQuantity} ud',
+                                                            style:
+                                                                const TextStyle(
+                                                                  color: Colors
+                                                                      .white70,
+                                                                  fontSize: 11,
+                                                                ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 2,
+                                                          ),
+                                                          Text(
+                                                            'Precio: ${contract.acceptedPrice ?? 0}€/ud',
+                                                            style:
+                                                                const TextStyle(
+                                                                  color: Colors
+                                                                      .white70,
+                                                                  fontSize: 10,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Text(
+                                                contract.remainingTime,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 9,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if (hasMaterial) ...[
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.black26,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 10,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  'Entregar:',
+                                                  style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 0.2,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Slider(
+                                                        value:
+                                                            (_contractFulfillAmounts[contract
+                                                                        .id] ??
+                                                                    0)
+                                                                .toDouble(),
+                                                        min: 0,
+                                                        max: warehouseUnits
+                                                            .clamp(
+                                                              0,
+                                                              contract
+                                                                  .remainingQuantity,
+                                                            )
+                                                            .toDouble(),
+                                                        divisions: warehouseUnits
+                                                            .clamp(
+                                                              0,
+                                                              contract
+                                                                  .remainingQuantity,
+                                                            ),
+                                                        label:
+                                                            '${_contractFulfillAmounts[contract.id] ?? 0}',
+                                                        activeColor:
+                                                            Colors.white,
+                                                        inactiveColor: Colors
+                                                            .white
+                                                            .withOpacity(0.3),
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            _contractFulfillAmounts[contract
+                                                                .id] = value
+                                                                .toInt();
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 12),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 12,
+                                                            vertical: 6,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white
+                                                            .withOpacity(0.1),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              6,
+                                                            ),
+                                                        border: Border.all(
+                                                          color: Colors.white
+                                                              .withOpacity(0.6),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        '${_contractFulfillAmounts[contract.id] ?? 0}',
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 12),
+                                                IndustrialButton(
+                                                  label: 'Entregar',
+                                                  gradientTop: const Color(
+                                                    0xFF22C55E,
+                                                  ),
+                                                  gradientBottom: const Color(
+                                                    0xFF16A34A,
+                                                  ),
+                                                  borderColor: const Color(
+                                                    0xFF15803D,
+                                                  ),
+                                                  onPressed:
+                                                      ((_contractFulfillAmounts[contract
+                                                                  .id] ??
+                                                              0) >
+                                                          0)
+                                                      ? () =>
+                                                            _fulfillFromWarehouse(
+                                                              contract,
+                                                            )
+                                                      : null,
+                                                  width: double.infinity,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

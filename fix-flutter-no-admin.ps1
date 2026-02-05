@@ -20,41 +20,44 @@ $content = Get-Content $gradlePropertiesPath -Raw
 if ($content -notmatch "flutter.useSymlinks=false") {
     # Agregar flutter.useSymlinks
     Add-Content -Path $gradlePropertiesPath -Value "flutter.useSymlinks=false"
-    Write-Host "✓ Agregado flutter.useSymlinks=false" -ForegroundColor Green
+    Write-Host "Agregado flutter.useSymlinks=false" -ForegroundColor Green
 } else {
-    Write-Host "○ flutter.useSymlinks ya configurado" -ForegroundColor Yellow
+    Write-Host "flutter.useSymlinks ya configurado" -ForegroundColor Yellow
 }
 
 if ($content -notmatch "systemProp.javax.net.ssl.trustStoreType") {
     # Agregar propiedades SSL
     Add-Content -Path $gradlePropertiesPath -Value "systemProp.javax.net.ssl.trustStoreType=Windows-ROOT"
     Add-Content -Path $gradlePropertiesPath -Value "systemProp.javax.net.ssl.trustStore=NONE"
-    Write-Host "✓ Agregadas propiedades SSL" -ForegroundColor Green
+    Write-Host "Agregadas propiedades SSL" -ForegroundColor Green
 } else {
-    Write-Host "○ Propiedades SSL ya configuradas" -ForegroundColor Yellow
+    Write-Host "Propiedades SSL ya configuradas" -ForegroundColor Yellow
 }
 
 # Modificar org.gradle.jvmargs si existe
-$lines = Get-Content $gradlePropertiesPath
+$lines = @(Get-Content $gradlePropertiesPath)
 $newLines = @()
 $jvmargsUpdated = $false
+
 foreach ($line in $lines) {
     if ($line -match "^org.gradle.jvmargs=" -and $line -notmatch "javax.net.ssl.trustStore") {
         $newLine = $line.TrimEnd() + " -Djavax.net.ssl.trustStore=NONE -Djavax.net.ssl.trustStoreType=Windows-ROOT"
         $newLines += $newLine
         $jvmargsUpdated = $true
-    } else {
+    }
+    else {
         $newLines += $line
     }
 }
 
 if ($jvmargsUpdated) {
     $newLines | Set-Content $gradlePropertiesPath
-    Write-Host "✓ Actualizado org.gradle.jvmargs" -ForegroundColor Green
-} else {
-    Write-Host "○ org.gradle.jvmargs ya configurado" -ForegroundColor Yellow
+    Write-Host "Actualizado org.gradle.jvmargs" -ForegroundColor Green
+}
+else {
+    Write-Host "org.gradle.jvmargs ya configurado" -ForegroundColor Yellow
 }
 
-Write-Host "`n✓ Configuración completada!" -ForegroundColor Green
-Write-Host "`nAhora puedes ejecutar:" -ForegroundColor Cyan
+Write-Host "Configuracion completada!" -ForegroundColor Green
+Write-Host "Ahora puedes ejecutar:" -ForegroundColor Cyan
 Write-Host "  flutter run --no-pub" -ForegroundColor White

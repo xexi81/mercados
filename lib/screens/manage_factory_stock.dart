@@ -166,6 +166,10 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
       return;
     }
 
+    // Recalculate warehouse capacity before moving to ensure accuracy
+    final updatedCapacity = await _calculateWarehouseCapacity(material.grade);
+    capacitiesByGrade[material.grade] = updatedCapacity;
+
     // Check warehouse capacity
     final capacityData =
         capacitiesByGrade[material.grade] ?? {'capacity': 0.0, 'used': 0.0};
@@ -177,27 +181,31 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
     if (requiredCapacity > availableCapacity) {
       final maxQuantity = (availableCapacity / material.unitVolumeM3).floor();
       if (maxQuantity <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'No hay espacio suficiente en el almacén de grado ${material.grade}',
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'No hay espacio suficiente en el almacén de grado ${material.grade}. Capacidad: ${usedCapacity.toStringAsFixed(1)}/${totalCapacity.toStringAsFixed(1)} m³',
+              ),
+              backgroundColor: Colors.red,
             ),
-            backgroundColor: Colors.red,
-          ),
-        );
+          );
+        }
         return;
       }
 
       // Adjust quantity to maximum possible
       quantity = maxQuantity;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Cantidad ajustada al máximo posible: $quantity unidades',
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Cantidad ajustada al máximo posible: $quantity unidades (${(quantity * material.unitVolumeM3).toStringAsFixed(1)} m³)',
+            ),
+            backgroundColor: Colors.orange,
           ),
-          backgroundColor: Colors.orange,
-        ),
-      );
+        );
+      }
     }
 
     // Calculate manufacturing cost for grade 1 materials
@@ -233,7 +241,7 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
       }
 
       // Show purchase dialog for grade 1 materials
-      final bool? confirmed = await showDialog<bool>(
+      await showDialog<bool>(
         context: context,
         builder: (context) => GenericPurchaseDialog(
           title: 'Costes de Fabricación',
@@ -605,7 +613,13 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
         : availableQuantity;
 
     final isWarehouseFull = maxToMove <= 0;
-    final currentValue = selectedQuantities[material.id]?.toInt() ?? 0;
+
+    // Ensure currentValue doesn't exceed maxToMove
+    var currentValue = selectedQuantities[material.id]?.toInt() ?? 0;
+    if (currentValue > maxToMove) {
+      currentValue = maxToMove;
+      selectedQuantities[material.id] = currentValue.toDouble();
+    }
 
     return Card(
       color: AppColors.surface,
@@ -712,22 +726,36 @@ class _ManageFactoryStockScreenState extends State<ManageFactoryStockScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Slider(
-              value: currentValue.toDouble(),
-              min: 0,
-              max: maxToMove.toDouble(),
-              divisions: maxToMove > 0 ? maxToMove : 1,
-              label: currentValue.toString(),
-              onChanged: isWarehouseFull
-                  ? null
-                  : (value) {
-                      setState(() {
-                        selectedQuantities[material.id] = value;
-                      });
-                    },
-              activeColor: isWarehouseFull ? Colors.grey : Colors.green,
-              inactiveColor: Colors.grey[600],
-            ),
+            if (!isWarehouseFull)
+              Slider(
+                value: currentValue.toDouble(),
+                min: 0,
+                max: (maxToMove > 0 ? maxToMove : 1).toDouble(),
+                divisions: maxToMove > 0 ? maxToMove : 1,
+                label: currentValue.toString(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedQuantities[material.id] = value;
+                  });
+                },
+                activeColor: Colors.green,
+                inactiveColor: Colors.grey[600],
+              )
+            else
+              Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Colors.grey[700]!, width: 1),
+                ),
+                child: Center(
+                  child: Text(
+                    'Almacén lleno',
+                    style: TextStyle(color: Colors.grey[500], fontSize: 14),
+                  ),
+                ),
+              ),
             const SizedBox(height: 12),
             IndustrialButton(
               label: isWarehouseFull ? 'ALMACÉN LLENO' : 'Mover al Almacén',

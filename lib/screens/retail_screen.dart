@@ -180,7 +180,7 @@ class _RetailScreenState extends State<RetailScreen> {
                   ),
                 ),
               )
-            else if (isOccupied && firestoreData != null)
+            else if (isOccupied)
               Positioned.fill(
                 child: Transform.scale(
                   scale: 1.4,

@@ -874,7 +874,7 @@ class _RouteScreenState extends State<RouteScreen> {
                       (l) => l.id.toString() == creatorHqId,
                     );
                     debugPrint(
-                      '🔍 [CONTRACTS]   Found creator headquarter: ${location?.city}',
+                      '🔍 [CONTRACTS]   Found creator headquarter: ${location.city}',
                     );
                   } catch (_) {
                     debugPrint(

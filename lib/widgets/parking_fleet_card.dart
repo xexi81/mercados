@@ -8,10 +8,8 @@ import 'package:industrial_app/theme/app_colors.dart';
 import 'package:industrial_app/data/fleet/fleet_model.dart';
 import 'package:industrial_app/data/locations/location_model.dart';
 import 'package:industrial_app/data/locations/location_repository.dart';
-import 'package:industrial_app/data/locations/distance_calculator.dart';
 
 import 'package:industrial_app/data/fleet/unlock_cost_type.dart';
-import 'package:industrial_app/data/fleet/fleet_status.dart';
 import 'package:industrial_app/widgets/generic_purchase_dialog.dart';
 import 'package:industrial_app/data/fleet/fleet_service.dart';
 import 'package:industrial_app/data/fleet_level/fleet_level.dart';
