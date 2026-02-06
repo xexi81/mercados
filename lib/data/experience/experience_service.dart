@@ -96,6 +96,12 @@ class ExperienceService {
     return penalty;
   }
 
+  /// Devuelve el porcentaje de bonus por completar a tiempo un contrato.
+  static int getOnTimeBonusPercent() {
+    if (_accountRules == null) return 10; // Default if rules not loaded
+    return _accountRules!.onTimeBonusPercent;
+  }
+
   /// Devuelve el XP base por m³ para venta retail por grado.
   static double getRetailSaleXpPerM3(int grade) {
     if (_accountRules == null) return 0.0;

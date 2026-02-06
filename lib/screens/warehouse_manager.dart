@@ -262,11 +262,28 @@ class _WarehouseManagerScreenState extends State<WarehouseManagerScreen> {
       final willCompleteContract =
           (contract.fulfilledQuantity + amount) >= contract.quantity;
 
+      // XP base para esta entrega (sin bonus)
       int xpGained = ExperienceService.calculateContractFulfilledXp(
         totalM3,
         grade,
-        onTime: willCompleteContract,
+        onTime: false,
       );
+
+      // Si completa el contrato, agregar bonus basado en la experiencia total
+      if (willCompleteContract) {
+        final totalContractM3 = contract.quantity * m3PerUnit;
+        final totalContractXpBase =
+            ExperienceService.calculateContractFulfilledXp(
+              totalContractM3,
+              grade,
+              onTime: false,
+            );
+        // Bonus adicional: totalContractXpBase * onTimeBonusPercent / 100
+        final onTimeBonusPercent = ExperienceService.getOnTimeBonusPercent();
+        final bonusXp = (totalContractXpBase * onTimeBonusPercent / 100)
+            .round();
+        xpGained += bonusXp;
+      }
 
       final xpDisplay = willCompleteContract
           ? '+$xpGained XP (Completado)'

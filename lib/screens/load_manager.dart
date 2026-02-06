@@ -417,12 +417,28 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         final willCompleteContract =
             (contract.fulfilledQuantity + amount) >= contract.quantity;
 
-        // XP base usando contractFulfilled rules
+        // XP base para esta entrega (sin bonus)
         int xpGained = ExperienceService.calculateContractFulfilledXp(
           totalM3,
           grade,
-          onTime: willCompleteContract,
+          onTime: false,
         );
+
+        // Si completa el contrato, agregar bonus basado en la experiencia total
+        if (willCompleteContract) {
+          final totalContractM3 = contract.quantity * m3PerUnit;
+          final totalContractXpBase =
+              ExperienceService.calculateContractFulfilledXp(
+                totalContractM3,
+                grade,
+                onTime: false,
+              );
+          // Bonus adicional: totalContractXpBase * onTimeBonusPercent / 100
+          final onTimeBonusPercent = ExperienceService.getOnTimeBonusPercent();
+          final bonusXp = (totalContractXpBase * onTimeBonusPercent / 100)
+              .round();
+          xpGained += bonusXp;
+        }
 
         // Update user money and experience
         final currentMoney =
@@ -527,10 +543,11 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
     final materialInfo = await _getMaterialInfo(materialId);
     final materialGrade = materialInfo?['grade'] as int? ?? 1;
 
-    // XP base usando contractFulfilled rules
+    // XP base para esta entrega (sin bonus)
     int xpAmount = ExperienceService.calculateContractFulfilledXp(
       totalM3,
       materialGrade,
+      onTime: false,
     );
 
     // Si esto completa el contrato, agregar bonus
@@ -538,17 +555,17 @@ class _LoadManagerScreenState extends State<LoadManagerScreen> {
         (contract.fulfilledQuantity + amount) >= contract.quantity;
     int bonusXp = 0;
     if (willCompleteContract) {
-      // Bonus = quantity × baseXpPerM3[grade] × onTimeBonusPercent / 100
-      // Necesitamos acceder a las reglas, pero calculateContractFulfilledXp ya lo hace interno
-      // Calcular el bonus manualmente: baseXpPerM3 × cantidad × onTimeBonus%
-      // El calculateContractFulfilledXp con onTime=true incluye el bonus automáticamente
-      int xpWithBonus = ExperienceService.calculateContractFulfilledXp(
-        totalM3,
-        materialGrade,
-        onTime: true,
-      );
-      bonusXp = xpWithBonus - xpAmount;
-      xpAmount = xpWithBonus;
+      // Bonus = totalContractM3 × baseXpPerM3[grade] × onTimeBonusPercent / 100
+      final totalContractM3 = contract.quantity * m3PerUnit;
+      final totalContractXpBase =
+          ExperienceService.calculateContractFulfilledXp(
+            totalContractM3,
+            materialGrade,
+            onTime: false,
+          );
+      final onTimeBonusPercent = ExperienceService.getOnTimeBonusPercent();
+      bonusXp = (totalContractXpBase * onTimeBonusPercent / 100).round();
+      xpAmount += bonusXp;
     }
 
     if (!mounted) return;
