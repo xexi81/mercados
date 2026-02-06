@@ -20,6 +20,74 @@ class _AssociationDetailsPageState extends State<AssociationDetailsPage> {
   List<AssociationMemberModel> _members = [];
   bool _isLoading = true;
 
+  Future<void> _showDescriptionDialog() async {
+    final controller = TextEditingController(
+      text: _association?.description ?? '',
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        title: Text(
+          'Descripción de la Asociación',
+          style: GoogleFonts.orbitron(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: TextField(
+          controller: controller,
+          maxLines: 5,
+          style: GoogleFonts.inter(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: 'Descripción...',
+            hintStyle: GoogleFonts.inter(color: Colors.white38),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.05),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.purpleAccent),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cerrar', style: TextStyle(color: Colors.grey)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getLanguageEmoji(String languageCode) {
+    const languageFlags = {
+      'es': '🇪🇸',
+      'en': '🇬🇧',
+      'fr': '🇫🇷',
+      'de': '🇩🇪',
+      'it': '🇮🇹',
+      'pt': '🇵🇹',
+    };
+    return languageFlags[languageCode] ?? '🌐';
+  }
+
+  double _getExperienceProgress() {
+    if (_association == null) return 0;
+
+    final currentLevel = _association!.level;
+    final nextLevelRequirement = _association!.experiencePool;
+
+    // Obtener experiencia requerida para el siguiente nivel
+    // Por ahora usamos un valor calculado, en el futuro lo obtendremos del JSON
+    final experienceForNextLevel = (currentLevel * 10000).toDouble();
+
+    if (experienceForNextLevel <= 0) return 0;
+    return (nextLevelRequirement / experienceForNextLevel).clamp(0.0, 1.0);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -77,64 +145,92 @@ class _AssociationDetailsPageState extends State<AssociationDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Banner de asociación
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.purple.withOpacity(0.3),
-                            Colors.blue.withOpacity(0.2),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.purpleAccent.withOpacity(0.3),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Nivel ${_association!.level}',
-                                style: GoogleFonts.orbitron(
-                                  color: Colors.amber,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '👥 ${_members.length}',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
+                    // Encabezado: Nombre + Bandera de idioma
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
                             _association!.name,
                             style: GoogleFonts.orbitron(
                               color: Colors.white,
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
                             ),
                           ),
-                          if (_association!.description != null) ...[
-                            const SizedBox(height: 8),
-                            Text(
-                              _association!.description!,
-                              style: GoogleFonts.inter(
-                                color: Colors.white70,
-                                fontSize: 14,
+                        ),
+                        Text(
+                          _getLanguageEmoji(_association!.language),
+                          style: const TextStyle(fontSize: 32),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Nivel y Progress bar de experiencia
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.amber.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'NIVEL ${_association!.level}',
+                            style: GoogleFonts.orbitron(
+                              color: Colors.amber,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: LinearProgressIndicator(
+                              value: _getExperienceProgress(),
+                              minHeight: 8,
+                              backgroundColor: Colors.white.withOpacity(0.1),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.amber.withOpacity(0.8),
                               ),
                             ),
-                          ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Experiencia: ${_association!.experiencePool.toStringAsFixed(0)}',
+                            style: GoogleFonts.inter(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Botón para ver/editar descripción
+                    ElevatedButton.icon(
+                      onPressed: _showDescriptionDialog,
+                      icon: const Icon(Icons.description_outlined),
+                      label: const Text('Ver Descripción'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent.withOpacity(0.3),
+                        foregroundColor: Colors.purpleAccent,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            color: Colors.purpleAccent.withOpacity(0.5),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -172,7 +268,7 @@ class _AssociationDetailsPageState extends State<AssociationDetailsPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    '${_association!.moneyPool.toStringAsFixed(0)}€',
+                                    _association!.moneyPool.toStringAsFixed(0),
                                     style: GoogleFonts.orbitron(
                                       color: Colors.greenAccent,
                                       fontSize: 18,
@@ -189,26 +285,9 @@ class _AssociationDetailsPageState extends State<AssociationDetailsPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    '${_association!.gemsPool.toStringAsFixed(0)}',
+                                    _association!.gemsPool.toStringAsFixed(0),
                                     style: GoogleFonts.orbitron(
                                       color: Colors.cyanAccent,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    '⭐',
-                                    style: GoogleFonts.inter(fontSize: 24),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    '${_association!.experiencePool}',
-                                    style: GoogleFonts.orbitron(
-                                      color: Colors.yellowAccent,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),

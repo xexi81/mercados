@@ -5,9 +5,31 @@ Este documento detalla las funcionalidades, mejoras y correcciones pendientes pa
 ## 📋 Lista de Tareas
 
 1.  **👥 Sistema de Asociaciones**
+    - [x] Crear y configurar modelos de datos de asociaciones
+    - [x] Crear asociaciones (creación con costo dinero)
+    - [x] Buscar y filtrar asociaciones por idioma
+    - [x] Solicitar unirse a asociaciones
+    - [x] Sistema de 15 niveles con progresión de miembros y costos
+    - [x] Detalles de asociación (mostrar bolsa, miembros, nivel)
+    - [ ] **Gestión de Solicitudes**
+      - [ ] Aceptar/rechazar solicitudes de unión
+      - [ ] Página de revisión de solicitudes pendientes
+    - [ ] **Gestión de Miembros**
+      - [ ] Promover miembros a admin
+      - [ ] Despromover admin a miembro
+      - [ ] Expulsar miembros de la asociación
+      - [ ] Ver lista de miembros con roles y opciones
+    - [ ] **Gestión de Asociación (creador/admin)**
+      - [ ] Editar descripción de la asociación
+      - [ ] Mejorar de nivel (desbloquear siguiente nivel)
+      - [ ] Eliminar/disolver asociación (solo creador)
+      - [ ] Ver contribuciones de miembros
+    - [ ] **Acciones de Miembros**
+      - [ ] Salirse de la asociación
+    - [ ] **Chat de Asociación**
+      - [ ] Chat privado entre miembros de la asociación
+      - [ ] Sistema de notificaciones para solicitudes
     - [ ] Arreglar chats comunes y de asociación.
-    - [ ] Implementar creación de asociaciones e invitaciones de usuarios.
-    - [ ] Niveles de asociación para aumentar el límite de miembros.
 
 2.  **🛒 Monetización In-game**
     - [ ] Crear tienda para visualización de vídeos publicitarios.
