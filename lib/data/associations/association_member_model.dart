@@ -29,6 +29,7 @@ class AssociationMemberModel {
   final AssociationRole role;
   final MemberStatus status;
   final DateTime joinedAt;
+  final Map<String, bool> permissions;
 
   AssociationMemberModel({
     required this.id,
@@ -37,6 +38,7 @@ class AssociationMemberModel {
     required this.role,
     this.status = MemberStatus.active,
     required this.joinedAt,
+    this.permissions = const {},
   });
 
   factory AssociationMemberModel.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class AssociationMemberModel {
       joinedAt: json['joined_at'] != null
           ? DateTime.parse(json['joined_at'] as String)
           : DateTime.now(),
+      permissions: Map<String, bool>.from(json['permissions'] as Map? ?? {}),
     );
   }
 
@@ -59,5 +62,26 @@ class AssociationMemberModel {
     'role': role.toJson(),
     'status': status.toJson(),
     'joined_at': joinedAt.toIso8601String(),
+    'permissions': permissions,
   };
+
+  AssociationMemberModel copyWith({
+    String? id,
+    String? associationId,
+    String? userId,
+    AssociationRole? role,
+    MemberStatus? status,
+    DateTime? joinedAt,
+    Map<String, bool>? permissions,
+  }) {
+    return AssociationMemberModel(
+      id: id ?? this.id,
+      associationId: associationId ?? this.associationId,
+      userId: userId ?? this.userId,
+      role: role ?? this.role,
+      status: status ?? this.status,
+      joinedAt: joinedAt ?? this.joinedAt,
+      permissions: permissions ?? this.permissions,
+    );
+  }
 }
